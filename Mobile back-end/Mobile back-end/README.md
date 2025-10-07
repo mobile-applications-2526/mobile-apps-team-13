@@ -15,14 +15,14 @@ De database connection string is te vinden in de `appsettings.Development.json` 
 
 De database migraties zijn te vinden in de `Migrations` folder. Deze migraties worden gebruikt om de database structuur bij te werken naar de laatste versie. Om de migraties toe te passen, gebruik de volgende command in de terminal:
 ```bash
-dotnet ef database update --project Mobile-back-end/Mobile-back-end.csproj
+dotnet ef database update --project 'Mobile back-end/Mobile back-end.csproj'
 ```
 
 ### Nieuwe migratie aanmaken
 
 Een nieuwe migratie aanmaken kan met de volgende command:
 ```bash
-dotnet ef migrations add <NaamVanDeMigratie> --project Mobile-back-end/Mobile-back-end.csproj
+dotnet ef migrations add <NaamVanDeMigratie> --project 'Mobile back-end/Mobile back-end.csproj'
 ```
 
 Dit moet enkel wanneer er wijzigingen zijn in de database structuur, zoals het toevoegen van een nieuwe tabel of het wijzigen van een kolom. Zolang er geen wijzingen zijn in de DataContext klasse, is het niet nodig om een nieuwe migratie aan te maken.
@@ -31,7 +31,7 @@ Dit moet enkel wanneer er wijzigingen zijn in de database structuur, zoals het t
 
 De back-end kan gerund worden met de volgende command:
 ```bash
-dotnet run --project Mobile-back-end/Mobile-back-end.csproj
+dotnet run --project 'Mobile back-end/Mobile back-end.csproj'
 ```
 
 De back-end zal dan starten op `https://localhost:5001` en `http://localhost:5000`. De Swagger UI is te vinden op `https://localhost:5001/swagger` of `http://localhost:5000/swagger`.
@@ -42,7 +42,7 @@ De back-end runt standaard in Development mode.
 
 De back-end kan gedeployed worden naar productie met de volgende command:
 ```bash
-dotnet publish -c Release --project Mobile-back-end/Mobile-back-end.csproj
+dotnet publish -c Release --project 'Mobile back-end/Mobile back-end.csproj'
 ```
 
 Dit zal een release build maken van de back-end in de `bin/Release/net9.0/publish` folder. Deze folder kan dan geüpload worden naar een server of cloud provider naar keuze.

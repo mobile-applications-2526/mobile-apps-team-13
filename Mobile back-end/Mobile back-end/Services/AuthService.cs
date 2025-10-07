@@ -56,7 +56,10 @@ public class AuthService(
                 UserName = newUser.Username,
                 Email = newUser.Email,
                 Role = Roles.User,
-                NormalizedEmail = newUser.Email.ToUpper()
+                NormalizedEmail = newUser.Email.ToUpper(),
+                NormalizedUserName = newUser.Username.ToUpper(),
+                PhoneNumber = newUser.PhoneNumber,
+                PhoneNumberConfirmed = newUser.PhoneNumber != null
             };
 
             var result = await userManager.CreateAsync(user,

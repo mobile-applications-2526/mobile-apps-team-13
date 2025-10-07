@@ -13,6 +13,7 @@ public class AuthController(AuthService authService) : ControllerBase
 {
     // route: api/auth/register
     [HttpPost("register")]
+    [AllowAnonymous]
     public async Task<ActionResult> Register([FromBody] RegisterUser command)
     {
         try
@@ -28,6 +29,7 @@ public class AuthController(AuthService authService) : ControllerBase
     
     // route: api/auth/login
     [HttpPost("login")]
+    [AllowAnonymous]
     public async Task<ActionResult> Login([FromBody] LoginUser command)
     {
         try

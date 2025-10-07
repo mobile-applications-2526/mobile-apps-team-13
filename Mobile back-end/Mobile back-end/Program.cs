@@ -145,9 +145,6 @@ namespace Mobile_back_end
                 app.UseSwaggerUI();
             }
             
-            // nog aan te passen, is gewoon efkes om cors miserie te vermijden
-            app.UseCors(policy => policy.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin().AllowCredentials());
-            
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

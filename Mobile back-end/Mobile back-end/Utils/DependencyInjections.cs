@@ -16,6 +16,7 @@ public static class DependencyInjections
         services.AddScoped<UserRepository>();
         
         // Services
+        services.AddScoped<TokenService>();
         services.AddScoped<AuthService>();
 
         // Unit of Work
