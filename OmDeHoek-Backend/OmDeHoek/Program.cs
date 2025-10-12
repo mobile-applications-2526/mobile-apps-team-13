@@ -56,6 +56,7 @@ namespace OmDeHoek
             }).AddJsonOptions(opt =>
             {
                 opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
             
             builder.Services.AddIdentity<User, IdentityRole>(

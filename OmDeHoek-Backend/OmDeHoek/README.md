@@ -18,6 +18,10 @@ De database migraties zijn te vinden in de `Migrations` folder. Deze migraties w
 dotnet ef database update --project 'OmDeHoek/OmDeHoek.csproj'
 ```
 
+In de `program.cs` file is de migratie ook automatisch ingesteld bij het opstarten van de applicatie. Dit betekent dat wanneer de applicatie gestart wordt, de nieuwste migraties automatisch toegepast worden op de bestaande databank indien nodig.
+
+**LET OP!** Dit gebeurt enkel als de databank al bestaat. Indien de databank nog niet bestaat, zal deze niet automatisch aangemaakt worden, en moeten de migraties manueel toegepast worden met bovenstaande command.
+
 ### Nieuwe migratie aanmaken
 
 Een nieuwe migratie aanmaken kan met de volgende command:

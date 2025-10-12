@@ -18,7 +18,6 @@ public class GemeenteRepository(DataContext context) : GenericRepository<Gemeent
     public virtual async Task<IEnumerable<Gemeente>> GetAllAsync()
     {
         return await DbSet
-            .Include(g => g.DeelGemeentes)
             .Include(g => g.Postcodes)
             .ToListAsync();
     }

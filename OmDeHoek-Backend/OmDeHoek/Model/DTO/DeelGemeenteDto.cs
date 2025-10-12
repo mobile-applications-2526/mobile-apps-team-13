@@ -10,7 +10,7 @@ public class DeelGemeenteDto
     
     public GemeenteDto? Gemeente { get; set; }
     
-    public List<BuurtDto> Buurten { get; set; } = new();
+    public List<BuurtDto> Buurten { get; set; } = [];
     
     public DeelGemeenteDto() 
     {
@@ -29,7 +29,7 @@ public class DeelGemeenteDto
         // Loop protection: Indien de gemeente dit DeelGemeenteDto aanmaakt, mag deze geen GemeenteDto meer aanmaken
         if (!negeerGemeente && deelGemeente.Gemeente != null)
         {
-            Gemeente = new GemeenteDto(deelGemeente.Gemeente, taal);
+            Gemeente = new GemeenteDto(deelGemeente.Gemeente, taal, negeerDeelGemeenten: true);
         }
         // Loop protection: Indien de buurt dit DeelGemeenteDto aanmaakt, mag deze geen BuurtDto's meer aanmaken
         if(!negeerBuurten)

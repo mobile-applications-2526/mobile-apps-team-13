@@ -41,7 +41,7 @@ public class DataContext : IdentityUserContext<User>
             entity.HasKey(p => new {p.Code, p.NisCodeGemeente});
 
             entity.HasOne(p => p.Gemeente)
-                .WithMany()
+                .WithMany(g => g.Postcodes)
                 .HasForeignKey(p => p.NisCodeGemeente)
                 .OnDelete(DeleteBehavior.Cascade);
         });
