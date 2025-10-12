@@ -1,6 +1,0 @@
-@Mobile_back_end_HostAddress = http://localhost:5058
-
-GET {{Mobile_back_end_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

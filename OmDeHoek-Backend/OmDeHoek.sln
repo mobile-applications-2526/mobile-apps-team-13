@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmDeHoek", "OmDeHoek\OmDeHoek.csproj", "{7FC8EAB4-21ED-42BF-861B-D5E59BEC5CAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmDeHoek.Tests", "OmDeHoek.Tests\OmDeHoek.Tests.csproj", "{B58924F3-FC64-4810-9A15-1962F35C8145}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7FC8EAB4-21ED-42BF-861B-D5E59BEC5CAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FC8EAB4-21ED-42BF-861B-D5E59BEC5CAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FC8EAB4-21ED-42BF-861B-D5E59BEC5CAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FC8EAB4-21ED-42BF-861B-D5E59BEC5CAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B58924F3-FC64-4810-9A15-1962F35C8145}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B58924F3-FC64-4810-9A15-1962F35C8145}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B58924F3-FC64-4810-9A15-1962F35C8145}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B58924F3-FC64-4810-9A15-1962F35C8145}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

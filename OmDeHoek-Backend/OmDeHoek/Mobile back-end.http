@@ -1,0 +1,6 @@
+@OmDeHoek_HostAddress = http://localhost:5058
+
+GET {{OmDeHoek_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
