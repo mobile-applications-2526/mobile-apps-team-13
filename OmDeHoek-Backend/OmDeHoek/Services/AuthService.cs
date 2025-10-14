@@ -19,7 +19,7 @@ public class AuthService(
     {
         try
         {
-            uow.StartTransaction();
+            await uow.StartTransaction();
             
             if (String.IsNullOrWhiteSpace(newUser.Username))
             {
@@ -59,7 +59,8 @@ public class AuthService(
                 NormalizedEmail = newUser.Email.ToUpper(),
                 NormalizedUserName = newUser.Username.ToUpper(),
                 PhoneNumber = newUser.PhoneNumber,
-                PhoneNumberConfirmed = newUser.PhoneNumber != null
+                PhoneNumberConfirmed = newUser.PhoneNumber != null,
+                BirthDate = newUser.BirthDate
             };
 
             var result = await userManager.CreateAsync(user,
