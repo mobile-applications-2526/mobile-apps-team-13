@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OmDeHoek.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6b0721eaa5a92e6a75bb7ec79ce9cc0e158d1a70")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f87e9fdaf7613dc33fb53d6e2d7fa6baa2245a88")]
 [assembly: System.Reflection.AssemblyProductAttribute("OmDeHoek.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OmDeHoek.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

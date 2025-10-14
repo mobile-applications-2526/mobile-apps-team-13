@@ -6,6 +6,7 @@ namespace OmDeHoek.Model.Entities;
 public class User : IdentityUser, IDataBaseEntity<User>
 {
     public Roles Role { get; set; }
+    public DateOnly BirthDate { get; set; }
     public List<Adres> Adressen { get; set; } = new();
     
     public User() : base(){}
@@ -13,10 +14,12 @@ public class User : IdentityUser, IDataBaseEntity<User>
     public User(
         string username,
         string email,
+        DateOnly birthDate,
         string? phoneNumber = null,
         Roles role = Roles.User
     ) : base()
     {
+        BirthDate = birthDate;
         UserName = username;
         NormalizedUserName = username.ToUpper();
         Email = email;

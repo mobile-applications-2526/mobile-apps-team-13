@@ -9,6 +9,7 @@ public class UserDto
     public string Email { get; set; }
     public string? PhoneNumber { get; set; }
     public string Role { get; set; }
+    public DateOnly BirthDate { get; set; }
     public List<Adres> Adressen { get; set; } = new();
     
     public UserDto() { }
@@ -21,6 +22,7 @@ public class UserDto
         PhoneNumber = user.PhoneNumber;
         Role = user.Role.ToString();
         Adressen = user.Adressen;
+        BirthDate = user.BirthDate;
     }
     
 }
