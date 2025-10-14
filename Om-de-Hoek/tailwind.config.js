@@ -9,21 +9,15 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#606c38',
-          dark: '#283618',
-        },
-        secondary: {
-          DEFAULT: '#dda15e',
-          dark: '#bc6c25',
+          DEFAULT: '#2548BC',
         },
         background: {
-          DEFAULT: '#fefae0',
-          card: '#f5ebd0',
+          DEFAULT: '#FFFFFF',
         },
         text: {
-          DEFAULT: '#283618',
-          secondary: '#606c38',
-          light: '#fefae0',
+          DEFAULT: '#000000',
+          secondary: '#828282',
+          light: '#FFFFFF',
         },
       },
     },
