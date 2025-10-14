@@ -7,7 +7,7 @@ public class User : IdentityUser, IDataBaseEntity<User>
 {
     public Roles Role { get; set; }
     public DateOnly BirthDate { get; set; }
-    public List<Adres> Adressen { get; set; } = new();
+    public List<Adres> Adressen { get; set; } = [];
     
     public User() : base(){}
     
