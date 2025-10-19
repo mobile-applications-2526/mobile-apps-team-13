@@ -1,4 +1,6 @@
-﻿namespace OmDeHoek.Tests.Model.Entities;
+﻿using System;
+
+namespace OmDeHoek.Tests.Model.Entities;
 
 public class AdresTest
 {
