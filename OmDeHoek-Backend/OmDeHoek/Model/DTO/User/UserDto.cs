@@ -10,7 +10,7 @@ public class UserDto
     public string? PhoneNumber { get; set; }
     public string Role { get; set; }
     public DateOnly BirthDate { get; set; }
-    public List<Adres> Adressen { get; set; } = new();
+    public List<Adres> Adressen { get; set; } = [];
     
     public UserDto() { }
     

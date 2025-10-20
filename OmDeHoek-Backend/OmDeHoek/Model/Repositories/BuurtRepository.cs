@@ -12,6 +12,8 @@ public class BuurtRepository(DataContext context) : GenericRepository<Buurt>(con
             .Include(b => b.DeelGemeente)
             .ThenInclude(dg => dg.Gemeente)
             .ThenInclude(b => b.Postcodes)
+            .Include(b => b.Bewoners)
+            .ThenInclude(ub => ub.User)
             .FirstOrDefaultAsync(b => b.StatistischeSectorCode == code);
     }
     

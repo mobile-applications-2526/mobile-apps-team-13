@@ -21,11 +21,12 @@ public static class DataSeeder
         public List<DeelGemeente> DeelGemeentes { get; set; } = new();
         public List<Buurt> Buurten { get; set; } = new();
         public List<Postcode> Postcodes { get; set; } = new();
+        public List<UserBuurt> UserBuurten { get; set; } = new();
 
         public SeedData() {}
     }
 
-    public static void EnsureUniqueIds<T, Q>(IEnumerable<T> list, Func<T, Q> idSelector, string entityName = nameof(T))
+    private static void EnsureUniqueIds<T, Q>(IEnumerable<T> list, Func<T, Q> idSelector, string entityName = nameof(T))
     {
         var idSet = new HashSet<Q>();
         foreach (var item in list)
@@ -59,6 +60,7 @@ public static class DataSeeder
         EnsureUniqueIds(seedData.DeelGemeentes, dg => dg.Nis6Code, nameof(DeelGemeente));
         EnsureUniqueIds(seedData.Buurten, b => b.StatistischeSectorCode, nameof(Buurt));
         EnsureUniqueIds(seedData.Postcodes, p => new {p.Code, p.NisCodeGemeente}, nameof(Postcode));
+        EnsureUniqueIds(seedData.UserBuurten, ub => new {ub.UserId, ub.SectorCodeBuurt}, nameof(UserBuurt));
         
         ConsoleUtils.LogInfo("All PKs are unique in seed data.");
         
@@ -67,7 +69,7 @@ public static class DataSeeder
     
     private static bool AddOrUpdate<T>(DbSet<T> set, List<T> items) where T: class, IDataBaseEntity<T>
     {
-        if (set == null)
+        if (set is null)
         {
             ConsoleUtils.LogError($"No Database of type {typeof(T)} found");
             return false;
@@ -126,6 +128,7 @@ public static class DataSeeder
         anyChanges |= AddOrUpdate(ctx.DeelGemeentes, data.DeelGemeentes);
         anyChanges |= AddOrUpdate(ctx.Buurten, data.Buurten);
         anyChanges |= AddOrUpdate(ctx.Postcodes, data.Postcodes);
+        anyChanges |= AddOrUpdate(ctx.UserBuurten, data.UserBuurten);
         
         if (anyChanges)
         {

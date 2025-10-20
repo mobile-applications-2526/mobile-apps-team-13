@@ -12,6 +12,7 @@ public class DataContext : IdentityUserContext<User>
     public DbSet<DeelGemeente> DeelGemeentes { get; set; }
     public DbSet<Buurt> Buurten { get; set; }
     public DbSet<Postcode> Postcodes { get; set; }
+    public DbSet<UserBuurt> UserBuurten { get; set; }
     
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
@@ -86,6 +87,21 @@ public class DataContext : IdentityUserContext<User>
             entity.HasOne(b => b.DeelGemeente)
                 .WithMany(dg => dg.Buurten)
                 .HasForeignKey(b => b.Nis6DeelGemeente)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<UserBuurt>(entity =>
+        {
+            entity.HasKey(ub => new {ub.UserId, ub.SectorCodeBuurt});
+            
+            entity.HasOne(ub => ub.User)
+                .WithMany(u => u.Buurten)
+                .HasForeignKey(ub => ub.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            entity.HasOne(ub => ub.Buurt)
+                .WithMany(b => b.Bewoners)
+                .HasForeignKey(ub => ub.SectorCodeBuurt)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }

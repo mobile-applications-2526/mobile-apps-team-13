@@ -19,6 +19,8 @@ public class Buurt : IDataBaseEntity<Buurt>
     [MaxLength(9)]
     public string StatistischeSectorCode { get; set; } = string.Empty;
     
+    public List<UserBuurt> Bewoners { get; set; } = [];
+    
     public Buurt() {}
     
     public bool Equals(Buurt? other)

@@ -8,6 +8,7 @@ public class BuurtDto
     public DeelGemeenteDto? DeelGemeente { get; set; }
     public string Naam { get; set; } = string.Empty;
     public string StatischeSectorCode { get; set; } = string.Empty;
+    public List<PrivacyUserDto> Bewoners { get; set; } = [];
     
     public BuurtDto() {}
 
@@ -27,5 +28,7 @@ public class BuurtDto
         {
             DeelGemeente = new DeelGemeenteDto(buurt.DeelGemeente, taal, negeerBuurten: true);
         }
+        
+        Bewoners = buurt.Bewoners.Select(ub => new PrivacyUserDto(ub.User!)).ToList();
     }
 }
