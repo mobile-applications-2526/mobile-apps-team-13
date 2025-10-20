@@ -25,6 +25,7 @@ public static class DependencyInjections
         services.AddScoped<BuurtService>();
         services.AddScoped<GemeenteService>();
         services.AddScoped<AdresService>();
+        services.AddScoped<UserService>();
 
         // Unit of Work
         services.AddScoped<UnitOfWork>();
