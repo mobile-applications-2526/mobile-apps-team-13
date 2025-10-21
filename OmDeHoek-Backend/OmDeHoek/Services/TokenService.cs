@@ -6,16 +6,10 @@ using OmDeHoek.Model.Entities;
 
 namespace OmDeHoek.Services;
 
-public class TokenService
-    {
+public class TokenService(ILogger<TokenService> logger)
+{
         private const int ExpirationMinutes = 30;
         private const int RememberMeExpirationDays = 14;
-        private readonly ILogger<TokenService> _logger;
-
-        public TokenService(ILogger<TokenService> logger)
-        {
-            _logger = logger;
-        }
 
         public virtual string CreateToken(User player, bool rememberMe = false)
         {
@@ -27,7 +21,7 @@ public class TokenService
             );
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            _logger.LogInformation("JWT Token created");
+            logger.LogInformation("JWT Token created");
             return tokenHandler.WriteToken(token);
         }
 

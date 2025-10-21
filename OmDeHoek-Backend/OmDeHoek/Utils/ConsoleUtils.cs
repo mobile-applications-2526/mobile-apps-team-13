@@ -41,7 +41,7 @@ public static class ConsoleUtils
 
         public static void LogException(Exception ex)
         {
-            if(ex is ServiceExceptions || ex is DbUpdateException)
+            if(ex is ServiceException or DbUpdateException)
             {
                 LogError(ex.ToString());
                 return;

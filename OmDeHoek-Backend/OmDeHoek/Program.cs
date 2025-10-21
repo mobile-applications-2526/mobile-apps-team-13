@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using OmDeHoek.Hubs;
 using OmDeHoek.Middleware;
 using OmDeHoek.Model;
 using OmDeHoek.Model.Data;
@@ -137,6 +138,8 @@ namespace OmDeHoek
                     });
                 });
             }
+
+            builder.Services.AddSignalR();
             
             var app = builder.Build();
 
@@ -167,6 +170,7 @@ namespace OmDeHoek
             app.UseTokenManagerMiddleware();
             
             app.MapControllers();
+            app.MapHub<MessageHub>("/hubs/message");
             
             app.Run();
         }

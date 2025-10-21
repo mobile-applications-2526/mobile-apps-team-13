@@ -3,11 +3,12 @@ using OmDeHoek.Utils;
 
 namespace OmDeHoek.Model.Exceptions;
 
-public abstract class ServiceExceptions : Exception, IServiceException
+public class ServiceException : Exception, IServiceException
 {
-    public string Field { get; set; }
-    public int StatusCode { get; set; }
-    public ServiceExceptions(string message, string field, int statusCode) : base(message)
+    private string Field { get; set; }
+    private int StatusCode { get; set; }
+
+    protected ServiceException(string message, string field, int statusCode) : base(message)
     {
         Field = field;
         StatusCode = statusCode;
@@ -32,58 +33,16 @@ public abstract class ServiceExceptions : Exception, IServiceException
     }
 }
 
-public class UnauthorizedException : ServiceExceptions
-{
-    public UnauthorizedException(string message, string field) : base(message, field, 401)
-    {
-    }
-}
+public class UnauthorizedException(string message, string field) : ServiceException(message, field, 401);
 
-public class ForbiddenActionException : ServiceExceptions
-{
-    public ForbiddenActionException(string message, string field) : base(message, field, 403)
-    {
-    }
-}
+public class ForbiddenActionException(string message, string field) : ServiceException(message, field, 403);
 
-public class MissingDataException : ServiceExceptions
-{
-    public MissingDataException(string message, string field): base(message, field, 400)
-    {
-    }
-}
+public class MissingDataException(string message, string field) : ServiceException(message, field, 400);
 
-public class InvalidInputException : ServiceExceptions
-{
-    public InvalidInputException(string message, string field) : base(message, field, 422)
-    {
-    }
-}
+public class InvalidInputException(string message, string field) : ServiceException(message, field, 422);
 
-public class ResourceNotFoundException : ServiceExceptions
-{
-    public ResourceNotFoundException(string message, string field) : base(message, field, 404)
-    {
-    }
-}
+public class ResourceNotFoundException(string message, string field) : ServiceException(message, field, 404);
 
-public class CantCreateException : ServiceExceptions
-{
-    public CantCreateException(string message, string field) : base(message, field, 500)
-    {
-    }
-}
+public class CantCreateException(string message, string field) : ServiceException(message, field, 500);
 
-public class ServiceException : ServiceExceptions
-{
-    public ServiceException(string message, string field, int statusCode) : base(message, field, statusCode)
-    {
-    }
-}
-
-public class DuplicateFieldException : ServiceExceptions
-{
-    public DuplicateFieldException(string message, string field) : base(message, field, 409)
-    {
-    }
-}
+public class DuplicateFieldException(string message, string field) : ServiceException(message, field, 409);
