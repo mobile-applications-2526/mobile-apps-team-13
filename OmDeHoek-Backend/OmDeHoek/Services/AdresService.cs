@@ -54,7 +54,7 @@ public class AdresService(
             {
                 throw new ResourceNotFoundException($"No postcode found with code '{postcode}'", "postcode");
             }
-            
+
             var gemeenteTaal = storedPostcode.Gemeente.GesprokenTalen.ToCharArray()[0];
             var dorpNaam = gemeenteTaal switch
             {
@@ -72,21 +72,21 @@ public class AdresService(
                 Postcode = postcode,
                 Dorp = dorpNaam!
             };
-            
+
             var storedAdres = await uow.AdresRepository.Insert(adres);
-            
+
             await uow.Save();
-            
+
             await uow.CommitTransaction();
             return new AdresDto(storedAdres);
-        } 
+        }
         catch (Exception)
         {
             await uow.RollbackTransaction();
             throw;
         }
     }
-    
+
     public async Task<List<AdresDto>> GetAdressenByUserIdAsync(string token)
     {
         var userId = tokenService.GetUserIdFromToken(token.Trim());

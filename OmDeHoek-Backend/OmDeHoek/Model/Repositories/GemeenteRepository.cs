@@ -21,7 +21,7 @@ public class GemeenteRepository(DataContext context) : GenericRepository<Gemeent
             .Include(g => g.Postcodes)
             .ToListAsync();
     }
-    
+
     public virtual async Task<Gemeente?> GetByNaamAsync(string naam)
     {
         return await DbSet
@@ -30,7 +30,7 @@ public class GemeenteRepository(DataContext context) : GenericRepository<Gemeent
             .Include(g => g.Postcodes)
             .FirstOrDefaultAsync(g => g.NaamNl.ToLower() == naam.ToLower() || g.NaamFr.ToLower() == naam.ToLower());
     }
-    
+
     public virtual async Task<IEnumerable<Gemeente>> SearchByPostCodeAsync(string postCode)
     {
         return await DbSet

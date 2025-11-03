@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OmDeHoek.Model.DTO;
 using OmDeHoek.Model.Enums;
 using OmDeHoek.Services;
@@ -25,7 +26,7 @@ public class BuurtController(BuurtService buurtService) : ControllerBase
             return ExceptionHandler.HandleException(e);
         }
     }
-    
+
     // GET api/buurt/deelgemeente/{nis6Code}/{taal}
     [HttpGet("deelgemeente/{nis6Code}/{taal?}")]
     public async Task<ActionResult<List<BuurtDto>>> GetBuurtenByDeelGemeenteNis6Code(string nis6Code, Talen? taal)
@@ -40,7 +41,7 @@ public class BuurtController(BuurtService buurtService) : ControllerBase
             return ExceptionHandler.HandleException(e);
         }
     }
-    
+
     [HttpGet("gemeente/{nisCode}/{taal?}")]
     public async Task<ActionResult<List<BuurtDto>>> GetBuurtenByGemeenteNisCode(string nisCode, Talen? taal)
     {
@@ -48,6 +49,42 @@ public class BuurtController(BuurtService buurtService) : ControllerBase
         {
             var buurten = await buurtService.GetByGemeenteNisCodeAsync(nisCode, taal ?? Talen.En);
             return Ok(buurten);
+        }
+        catch (Exception e)
+        {
+            return ExceptionHandler.HandleException(e);
+        }
+    }
+
+    [HttpPost("join/{buurtId}")]
+    [Authorize]
+    public async Task<ActionResult<MessageResponseDto>> JoinBuurt(string buurtId)
+    {
+        try
+        {
+            var token = Request.Headers.Authorization.ToString().Replace("Bearer ", "");
+            await buurtService.JoinBuurtAsync(buurtId, token);
+            return Ok(
+                new MessageResponseDto("Successfully joined the buurt")
+            );
+        }
+        catch (Exception e)
+        {
+            return ExceptionHandler.HandleException(e);
+        }
+    }
+
+    [HttpPost("leave/{buurtId}")]
+    [Authorize]
+    public async Task<ActionResult<MessageResponseDto>> LeaveBuurt(string buurtId)
+    {
+        try
+        {
+            var token = Request.Headers.Authorization.ToString().Replace("Bearer ", "");
+            await buurtService.LeaveBuurtAsync(buurtId, token);
+            return Ok(
+                new MessageResponseDto("Successfully left the buurt")
+            );
         }
         catch (Exception e)
         {

@@ -12,18 +12,18 @@ public class Gemeente : IDataBaseEntity<Gemeente>
     public string NaamFr { get; set; } = string.Empty;
     [MaxLength(255)]
     public string? NaamDe { get; set; } = null;
-    
+
     [MaxLength(3)]
     public string GesprokenTalen { get; set; } = "N"; // Default Nederlands
-    
+
     public List<DeelGemeente> DeelGemeentes { get; set; } = [];
     public List<Postcode> Postcodes { get; set; } = [];
 
-    public Gemeente() {}
-    
+    public Gemeente() { }
+
     public bool Equals(Gemeente? other)
     {
-        return !CheckNullOrWrongType(other) 
+        return !CheckNullOrWrongType(other)
                && NisCode == other.NisCode;
     }
 
@@ -38,9 +38,9 @@ public class Gemeente : IDataBaseEntity<Gemeente>
 
     public bool HardEquals(Gemeente? other)
     {
-        return Equals(other) 
-               && NaamFr == other.NaamFr 
-               && NaamNl == other.NaamNl 
+        return Equals(other)
+               && NaamFr == other.NaamFr
+               && NaamNl == other.NaamNl
                && GesprokenTalen == other.GesprokenTalen
                && NaamDe == other.NaamDe;
     }

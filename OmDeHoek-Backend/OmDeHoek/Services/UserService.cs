@@ -20,7 +20,7 @@ public class UserService(
         {
             throw new UnauthorizedException("Invalid token", "auth/invalid-token");
         }
-        
+
         var user = await uow.UserRepository.GetByIdAsync(id);
         if (user == null)
         {

@@ -10,8 +10,8 @@ public class AdresDto
     public string Postcode { get; init; } = string.Empty;
     public string BewonerId { get; init; } = string.Empty;
     public string Dorp { get; init; } = string.Empty;
-    
-    public AdresDto(){}
+
+    public AdresDto() { }
 
     public AdresDto(Adres adres)
     {

@@ -12,7 +12,7 @@ namespace OmDeHoek.Controllers;
 [Route("api/[controller]")]
 public class UserController(UserService userService) : ControllerBase
 {
-    
+
     [HttpGet("loggedin/{taal}")]
     [Authorize]
     public async Task<ActionResult<UserDto>> GetLoggedInUser([FromRoute] Talen taal = Talen.En)

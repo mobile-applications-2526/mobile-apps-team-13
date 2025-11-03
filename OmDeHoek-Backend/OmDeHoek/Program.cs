@@ -23,7 +23,7 @@ namespace OmDeHoek
             var builder = WebApplication.CreateBuilder(args);
 
             var env = builder.Environment;
-            
+
             Env.SetEnvironment(
                 dbConnection: builder.Configuration.GetConnectionString("devConnection"),
                 environment: env.EnvironmentName,
@@ -47,7 +47,7 @@ namespace OmDeHoek
                     opts.UseNpgsql(Env.DbConnection);
                 });
             }
-            
+
             builder.Services.AddCustomServices();
 
             builder.Services.AddControllers(options =>
@@ -59,7 +59,7 @@ namespace OmDeHoek
                 opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
-            
+
             builder.Services.AddIdentity<User, IdentityRole>(
                     options =>
                     {
@@ -76,7 +76,7 @@ namespace OmDeHoek
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
-            
+
             var validIssuer = builder.Configuration.GetValue<string>("JwtTokenSettings:ValidIssuer");
             var validAudience = builder.Configuration.GetValue<string>("JwtTokenSettings:ValidAudience");
             var symmetricSecurityKey = builder.Configuration.GetValue<string>("JwtTokenSettings:SymmetricSecurityKey");
@@ -111,7 +111,7 @@ namespace OmDeHoek
             {
                 builder.Services.AddSwaggerGen(option =>
                 {
-                    option.SwaggerDoc("v1", new() {Title = "OmDeHoek", Version = "v1"});
+                    option.SwaggerDoc("v1", new() { Title = "OmDeHoek", Version = "v1" });
                     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                     {
                         In = ParameterLocation.Header,
@@ -121,7 +121,7 @@ namespace OmDeHoek
                         BearerFormat = "JWT",
                         Scheme = "Bearer"
                     });
-                    
+
                     option.AddSecurityRequirement(new OpenApiSecurityRequirement
                     {
                         {
@@ -140,17 +140,17 @@ namespace OmDeHoek
             }
 
             builder.Services.AddSignalR();
-            
+
             var app = builder.Build();
 
             if (!Env.IsTesting)
             {
                 using var scope = app.Services.CreateScope();
                 using var context = scope.ServiceProvider.GetRequiredService<DataContext>();
-                    
+
                 var pendingMigrations = context.Database.GetPendingMigrations();
-                    
-                if(pendingMigrations.Any())
+
+                if (pendingMigrations.Any())
                 {
                     context.Database.Migrate();
                     DataContextFactory.SeedDatabase(context, builder.Configuration);
@@ -162,16 +162,16 @@ namespace OmDeHoek
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
             app.UseAuthorization();
             app.UseTokenManagerMiddleware();
-            
+
             app.MapControllers();
             app.MapHub<MessageHub>("/hubs/message");
-            
+
             app.Run();
         }
     }

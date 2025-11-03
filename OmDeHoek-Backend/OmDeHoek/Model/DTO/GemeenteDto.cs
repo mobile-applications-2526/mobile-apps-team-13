@@ -10,14 +10,14 @@ public class GemeenteDto
     public string Talen { get; set; } = string.Empty;
     public List<DeelGemeenteDto> DeelGemeenten { get; set; } = [];
     public List<string> Postcodes { get; set; } = [];
-    
+
     public GemeenteDto() { }
-    
+
     public GemeenteDto(Gemeente gemeente, Talen taal = Enums.Talen.En, bool negeerDeelGemeenten = false)
     {
         NisCode = gemeente.NisCode;
         Postcodes = gemeente.Postcodes.Select(p => p.Code).ToList();
-        
+
         var talenChars = gemeente.GesprokenTalen.Trim().ToCharArray();
         var talenVoluit = talenChars.Select(c => c switch
         {
@@ -33,7 +33,7 @@ public class GemeenteDto
             'D' => gemeente.NaamDe,
             _ => gemeente.NaamNl
         };
-        
+
         var naam = taal switch
         {
             Enums.Talen.Nl => gemeente.NaamNl,
@@ -41,9 +41,9 @@ public class GemeenteDto
             Enums.Talen.De => gemeente.NaamDe ?? gemeente.NaamNl,
             _ => defaultNaam ?? gemeente.NaamNl
         };
-        
+
         Naam = naam;
-        
+
         // loop protection: DeelgemeenteDto enkel vullen wanneer nodig en dit object geen deel is van een DeelGemeenteDto
         if (!negeerDeelGemeenten)
         {

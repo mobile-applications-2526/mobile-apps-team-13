@@ -9,9 +9,9 @@ public class User : IdentityUser, IDataBaseEntity<User>
     public DateOnly BirthDate { get; set; }
     public List<Adres> Adressen { get; set; } = [];
     public List<UserBuurt> Buurten { get; set; } = [];
-    
-    public User() : base(){}
-    
+
+    public User() : base() { }
+
     public User(
         string username,
         string email,
@@ -28,7 +28,7 @@ public class User : IdentityUser, IDataBaseEntity<User>
         PhoneNumber = phoneNumber;
         Role = role;
     }
-    
+
     public bool Equals(User? other)
     {
         return other is not null && (Id == other.Id || NormalizedEmail == other.NormalizedEmail);
@@ -44,7 +44,7 @@ public class User : IdentityUser, IDataBaseEntity<User>
         PhoneNumber = entity.PhoneNumber ?? PhoneNumber;
         PhoneNumberConfirmed = entity.PhoneNumberConfirmed || PhoneNumberConfirmed;
     }
-    
+
     public bool CheckNullOrWrongType(object? other)
     {
         return other is null || GetType() != other.GetType();

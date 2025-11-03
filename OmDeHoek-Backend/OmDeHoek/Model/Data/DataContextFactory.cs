@@ -11,20 +11,20 @@ public class DataContextFactory : IDesignTimeDbContextFactory<DataContext>
     {
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
         ConsoleUtils.LogInfo($"Environment: {environment}");
-        
+
         var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
         var appsettings = environment == "Development" ? "appsettings.Development.json" : "appsettings.json";
         var configuration = new ConfigurationBuilder().AddJsonFile(appsettings).AddEnvironmentVariables().Build();
-        
+
         var connectionString = configuration.GetConnectionString("devConnection");
-        
+
         optionsBuilder.UseNpgsql(connectionString);
 
         optionsBuilder.EnableDetailedErrors();
         optionsBuilder.EnableSensitiveDataLogging();
-        
+
         var context = new DataContext(optionsBuilder.Options);
-        
+
         if (IsDatabaseUpdateCommand())
         {
             var pendingMigrations = context.Database.GetPendingMigrations();
@@ -36,7 +36,7 @@ public class DataContextFactory : IDesignTimeDbContextFactory<DataContext>
                 Console.WriteLine("database migrated");
             }
 
-            SeedDatabase(context, configuration); 
+            SeedDatabase(context, configuration);
         }
 
         return context;
@@ -48,7 +48,7 @@ public class DataContextFactory : IDesignTimeDbContextFactory<DataContext>
 
         return commandLine.Contains("ef") && commandLine.Contains("database") && commandLine.Contains("update");
     }
-    
+
     public static void SeedDatabase(DataContext context, IConfiguration configuration)
     {
         try

@@ -13,9 +13,9 @@ public class UserDto
     public DateOnly BirthDate { get; set; }
     public List<AdresDto> Adressen { get; set; } = [];
     public List<BuurtDto> Buurten { get; set; } = [];
-    
+
     public UserDto() { }
-    
+
     public UserDto(User user, Talen taal = Talen.En)
     {
         Id = user.Id;
@@ -27,5 +27,5 @@ public class UserDto
         BirthDate = user.BirthDate;
         Buurten = user.Buurten.Select(ub => new BuurtDto(ub.Buurt, taal, negeerDeelgemeente: false)).ToList();
     }
-    
+
 }

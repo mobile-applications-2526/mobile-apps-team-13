@@ -20,7 +20,7 @@ public class AuthService(
         try
         {
             await uow.StartTransaction();
-            
+
             if (String.IsNullOrWhiteSpace(newUser.Username))
             {
                 throw new MissingDataException("username is missing or only spaces", "username");
@@ -72,22 +72,24 @@ public class AuthService(
                 var errors = result.Errors.Select(e => e.Description);
                 throw new CantCreateException("Could not create user: " + string.Join(", ", errors), "User");
             }
-            
+
             await uow.CommitTransaction();
 
             return new UserDto(user);
-        } catch (Exception)
+        }
+        catch (Exception)
         {
             await uow.RollbackTransaction();
             throw;
         }
     }
-    
+
     public async Task<TokenDto> LoginAsync(LoginUser login)
     {
-        try {
+        try
+        {
             await uow.StartTransaction();
-            
+
             if (!Utils.AuthUtils.IsValidEmail(login.Email))
             {
                 throw new InvalidInputException("email is not in email format", "email");
@@ -106,36 +108,38 @@ public class AuthService(
             }
 
             var token = tokenService.CreateToken(user);
-            
+
             await uow.CommitTransaction();
-            
+
             return new TokenDto
             {
                 Token = token,
                 Email = user.Email!,
                 Id = user.Id
             };
-        } catch (Exception)
+        }
+        catch (Exception)
         {
             await uow.RollbackTransaction();
             throw;
         }
     }
-    
+
     public async Task<bool> LogoutAsync(string? token)
     {
         try
         {
             tokenManager.AddToRevokedTokens(token);
-            
+
             return true;
-        } catch (Exception)
+        }
+        catch (Exception)
         {
             await uow.RollbackTransaction();
             throw;
         }
     }
-    
+
     public async Task<TokenDto> RefreshToken(string? token)
     {
         if (string.IsNullOrWhiteSpace(token))

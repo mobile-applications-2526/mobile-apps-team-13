@@ -13,7 +13,7 @@ public class GenericRepository<T>(DataContext context, DbSet<T> dbSet) where T :
     public GenericRepository(DataContext context) : this(context, context.Set<T>())
     {
     }
-    
+
     public virtual async Task<IEnumerable<T>> Get(
         Expression<Func<T, bool>>? filter = null,
         Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
@@ -26,7 +26,7 @@ public class GenericRepository<T>(DataContext context, DbSet<T> dbSet) where T :
             query = query.Where(filter);
         }
 
-        query = includeProperties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries).Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+        query = includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
 
         if (orderBy != null)
         {
@@ -41,7 +41,7 @@ public class GenericRepository<T>(DataContext context, DbSet<T> dbSet) where T :
     public virtual async Task<T> GetById(object id)
     {
         var result = await DbSet.FindAsync(id);
-        if(result == null)
+        if (result == null)
         {
             throw new KeyNotFoundException($"Entity of type {typeof(T).Name} with id {id} not found.");
         }

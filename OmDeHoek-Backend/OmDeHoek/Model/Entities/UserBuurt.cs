@@ -10,8 +10,8 @@ public class UserBuurt : IDataBaseEntity<UserBuurt>
     [MaxLength(9)]
     public string SectorCodeBuurt { get; set; } = string.Empty; // Foreign key
     public Buurt? Buurt { get; init; }
-    
-    public UserBuurt() {}
+
+    public UserBuurt() { }
 
     public UserBuurt(
         User user,
@@ -26,21 +26,21 @@ public class UserBuurt : IDataBaseEntity<UserBuurt>
 
     public bool Equals(UserBuurt? other)
     {
-        return !CheckNullOrWrongType(other) 
+        return !CheckNullOrWrongType(other)
                && UserId == other!.UserId
                && SectorCodeBuurt == other.SectorCodeBuurt;
     }
 
     public void Update(UserBuurt? entity)
     {
-        if(!Equals(entity)) throw new ArgumentException("Entities are not the same");
+        if (!Equals(entity)) throw new ArgumentException("Entities are not the same");
         UserId = entity?.UserId ?? UserId;
         SectorCodeBuurt = entity?.SectorCodeBuurt ?? SectorCodeBuurt;
     }
 
     public bool HardEquals(UserBuurt? other)
     {
-        return Equals(other) 
+        return Equals(other)
                && UserId == other!.UserId
                && SectorCodeBuurt == other.SectorCodeBuurt;
     }

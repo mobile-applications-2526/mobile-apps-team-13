@@ -9,7 +9,7 @@ namespace OmDeHoek.Controllers;
 // Api path: api/gemeente
 [ApiController]
 [Route("api/[controller]")]
-public class GemeenteController(GemeenteService gemeenteService): ControllerBase
+public class GemeenteController(GemeenteService gemeenteService) : ControllerBase
 {
     // GET: api/gemeente/{taal}
     [HttpGet("{taal?}")]
@@ -25,7 +25,7 @@ public class GemeenteController(GemeenteService gemeenteService): ControllerBase
             return ExceptionHandler.HandleException(e);
         }
     }
-    
+
     // GET: api/gemeente/nis/{nisCode}/{taal}
     [HttpGet("nis/{nisCode}/{taal?}")]
     public async Task<ActionResult<GemeenteDto>> GetByNisCode(string nisCode, Talen? taal)
@@ -40,7 +40,7 @@ public class GemeenteController(GemeenteService gemeenteService): ControllerBase
             return ExceptionHandler.HandleException(e);
         }
     }
-    
+
     // GET: api/gemeente/naam/{naam}/{taal}
     [HttpGet("naam/{naam}/{taal?}")]
     public async Task<ActionResult<GemeenteDto>> GetByNaam(string naam, Talen? taal)
@@ -55,7 +55,7 @@ public class GemeenteController(GemeenteService gemeenteService): ControllerBase
             return ExceptionHandler.HandleException(e);
         }
     }
-    
+
     // GET: api/gemeente/postcode/{postCode}/{taal}
     [HttpGet("postcode/{postCode}/{taal?}")]
     public async Task<ActionResult<List<GemeenteDto>>> SearchByPostCode(string postCode, Talen? taal)

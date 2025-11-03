@@ -11,7 +11,7 @@ public class AdresRepository(DataContext ctx) : GenericRepository<Adres>(ctx, ct
         return await DbSet
             .FirstOrDefaultAsync(a => a.Id == id);
     }
-    
+
     public virtual async Task<IEnumerable<Adres>> GetByUserId(string userId)
     {
         return await DbSet

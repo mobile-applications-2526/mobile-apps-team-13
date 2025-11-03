@@ -27,7 +27,7 @@ public class AuthController(AuthService authService) : ControllerBase
             return ExceptionHandler.HandleException(ex);
         }
     }
-    
+
     // route: api/auth/login
     [HttpPost("login")]
     [AllowAnonymous]
@@ -43,7 +43,7 @@ public class AuthController(AuthService authService) : ControllerBase
             return ExceptionHandler.HandleException(e);
         }
     }
-    
+
     // route: api/auth/logout
     [HttpPost("logout")]
     [Authorize]
@@ -60,7 +60,7 @@ public class AuthController(AuthService authService) : ControllerBase
             return ExceptionHandler.HandleException(e);
         }
     }
-    
+
     // route: api/auth/refresh
     [HttpPost("refresh")]
     [Authorize]

@@ -19,7 +19,7 @@ public class ServiceException : Exception, IServiceException
     {
         return $"{this.GetType().Name}: {Message}, \nField: {Field}, \nStatusCode: {StatusCode}";
     }
-        
+
     public ActionResult ToActionResult()
     {
         var problemDetails = new ProblemDetails

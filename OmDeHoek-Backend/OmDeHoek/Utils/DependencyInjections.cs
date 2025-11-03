@@ -11,6 +11,7 @@ public static class DependencyInjections
         services.AddScoped<ILogger, Logger<IStartup>>();
 
         services.AddSingleton<TokenManager>();
+        services.AddSingleton<ConnectionMappingService>();
 
         // Repositories
         services.AddScoped<UserRepository>();
@@ -18,7 +19,7 @@ public static class DependencyInjections
         services.AddScoped<GemeenteRepository>();
         services.AddScoped<PostcodeRepository>();
         services.AddScoped<AdresRepository>();
-        
+
         // Services
         services.AddScoped<TokenService>();
         services.AddScoped<AuthService>();
@@ -29,7 +30,7 @@ public static class DependencyInjections
 
         // Unit of Work
         services.AddScoped<UnitOfWork>();
-        
+
         return services;
     }
 }

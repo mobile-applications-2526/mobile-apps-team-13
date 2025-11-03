@@ -16,7 +16,7 @@ public class BuurtRepository(DataContext context) : GenericRepository<Buurt>(con
             .ThenInclude(ub => ub.User)
             .FirstOrDefaultAsync(b => b.StatistischeSectorCode == code);
     }
-    
+
     public virtual async Task<IEnumerable<Buurt>> GetByDeelGemeenteNis6CodeAsync(string nis6Code)
     {
         return await DbSet
@@ -26,7 +26,7 @@ public class BuurtRepository(DataContext context) : GenericRepository<Buurt>(con
             .Where(b => b.Nis6DeelGemeente == nis6Code)
             .ToListAsync();
     }
-    
+
     public virtual async Task<IEnumerable<Buurt>> GetByGemeenteNisCodeAsync(string nisCode)
     {
         return await DbSet
