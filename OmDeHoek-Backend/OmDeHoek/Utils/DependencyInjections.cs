@@ -19,6 +19,9 @@ public static class DependencyInjections
         services.AddScoped<GemeenteRepository>();
         services.AddScoped<PostcodeRepository>();
         services.AddScoped<AdresRepository>();
+        services.AddScoped<UserBuurtRepository>();
+        services.AddScoped<MessageRepository>();
+        services.AddScoped<DeelgemeenteRepository>();
 
         // Services
         services.AddScoped<TokenService>();
