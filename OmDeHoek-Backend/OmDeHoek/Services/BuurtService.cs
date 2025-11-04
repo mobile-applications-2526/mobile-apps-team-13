@@ -36,9 +36,9 @@ public class BuurtService(
             throw new InvalidInputException("NIS6 code cannot be null or empty.", "NIS6Code");
         }
 
-        var buurten = await uow.BuurtRepository.GetByDeelGemeenteNis6CodeAsync(nis6Code);
+        var buurten = (await uow.BuurtRepository.GetByDeelGemeenteNis6CodeAsync(nis6Code)).ToArray();
 
-        if (buurten == null || !buurten.Any())
+        if (buurten == null || buurten.Length == 0)
         {
             throw new ResourceNotFoundException($"No buurten found for NIS6 code '{nis6Code}'.", "NIS6Code");
         }
@@ -52,9 +52,9 @@ public class BuurtService(
             throw new InvalidInputException("NIS code cannot be null or empty.", "NISCode");
         }
 
-        var buurten = await uow.BuurtRepository.GetByGemeenteNisCodeAsync(nisCode);
+        var buurten = (await uow.BuurtRepository.GetByGemeenteNisCodeAsync(nisCode)).ToArray();
 
-        if (buurten == null || !buurten.Any())
+        if (buurten == null || buurten.Length == 0)
         {
             throw new ResourceNotFoundException($"No buurten found for NIS code '{nisCode}'.", "NISCode");
         }

@@ -15,7 +15,7 @@ De database connection string is te vinden in de `appsettings.Development.json` 
 
 De database migraties zijn te vinden in de `Migrations` folder. Deze migraties worden gebruikt om de database structuur bij te werken naar de laatste versie. Om de migraties toe te passen, gebruik de volgende command in de terminal:
 ```bash
-dotnet ef database update --project 'OmDeHoek/OmDeHoek.csproj'
+dotnet ef database update --project 'OmDeHoek/OmDeHoek.csproj' --launch-profile 'http'
 ```
 
 Als dit command een error geeft dat de `dotnet-ef` tool niet gevonden kan worden, installeer deze dan met de volgende command:

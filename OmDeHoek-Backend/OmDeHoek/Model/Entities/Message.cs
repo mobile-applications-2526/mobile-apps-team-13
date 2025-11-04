@@ -12,10 +12,10 @@ public class Message() : IDataBaseEntity<Message>
     [MaxLength(9)]
     public string BuurtSectorCode { get; set; } = string.Empty; // Foreign key
     public Buurt? Buurt { get; set; }
-
+    public string Title { get; set; } = string.Empty;
     public string Content { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public MessageSeverity? Severity { get; set; }
+    public MessageSeverity Severity { get; set; }
     public bool Equals(Message? other)
     {
         return !CheckNullOrWrongType(other)
@@ -33,7 +33,8 @@ public class Message() : IDataBaseEntity<Message>
         return Equals(other)
                && Content == other?.Content
                && UserId == other?.UserId
-               && BuurtSectorCode == other?.BuurtSectorCode;
+               && BuurtSectorCode == other?.BuurtSectorCode
+               && Title == other?.Title;
     }
 
     public bool CheckNullOrWrongType(object? other)

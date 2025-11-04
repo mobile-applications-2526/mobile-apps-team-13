@@ -110,6 +110,7 @@ public class DataContext : IdentityUserContext<User>
         {
             entity.HasKey(m => m.Id);
 
+            entity.Property(m => m.Title).IsRequired();
             entity.Property(m => m.Content).IsRequired();
             entity.Property(m => m.CreatedAt).IsRequired();
 

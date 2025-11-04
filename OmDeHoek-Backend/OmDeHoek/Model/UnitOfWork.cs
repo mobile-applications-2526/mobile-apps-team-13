@@ -14,6 +14,8 @@ public sealed class UnitOfWork : IDisposable
     private readonly PostcodeRepository _postcodeRepository;
     private readonly AdresRepository _adresRepository;
     private readonly UserBuurtRepository _userBuurtRepository;
+    private readonly MessageRepository _messageRepository;
+    private readonly DeelgemeenteRepository _deelgemeenteRepository;
 
     public UnitOfWork(
         DataContext context,
@@ -22,7 +24,9 @@ public sealed class UnitOfWork : IDisposable
         GemeenteRepository gemeenteRepository = null,
         PostcodeRepository postcodeRepository = null,
         AdresRepository adresRepository = null,
-        UserBuurtRepository userBuurtRepository = null
+        UserBuurtRepository userBuurtRepository = null,
+        MessageRepository messageRepository = null,
+        DeelgemeenteRepository deelgemeenteRepository = null
         )
     {
         _context = context;
@@ -32,6 +36,8 @@ public sealed class UnitOfWork : IDisposable
         _postcodeRepository = postcodeRepository;
         _adresRepository = adresRepository;
         _userBuurtRepository = userBuurtRepository;
+        _messageRepository = messageRepository;
+        _deelgemeenteRepository = deelgemeenteRepository;
     }
 
     public async Task Save()
@@ -100,5 +106,15 @@ public sealed class UnitOfWork : IDisposable
     public UserBuurtRepository UserBuurtRepository
     {
         get { return _userBuurtRepository ?? new UserBuurtRepository(_context); }
+    }
+
+    public MessageRepository MessageRepository
+    {
+        get { return _messageRepository ?? new MessageRepository(_context); }
+    }
+    
+    public DeelgemeenteRepository DeelgemeenteRepository
+    {
+        get { return _deelgemeenteRepository ?? new DeelgemeenteRepository(_context); }
     }
 }
