@@ -26,7 +26,7 @@ namespace OmDeHoek
             Env.SetEnvironment(
                 dbConnection: builder.Configuration.GetConnectionString("devConnection") ?? "",
                 environment: env.EnvironmentName,
-                isDevelopment: env.IsDevelopment(),
+                isDevelopment: env.IsDevelopment() || env.IsStaging() || env.EnvironmentName == "Staging",
                 isProduction: env.IsProduction(),
                 notificationHubConnectionString: builder.Configuration.GetConnectionString("notificationHubUrl") ?? "",
                 notificationHubName: builder.Configuration.GetConnectionString("notificationHubName") ?? ""
@@ -108,7 +108,7 @@ namespace OmDeHoek
 
             builder.Services.AddProblemDetails();
 
-            if (env.IsDevelopment())
+            if (Env.IsDevelopment)
             {
                 builder.Services.AddSwaggerGen(option =>
                 {
@@ -158,7 +158,7 @@ namespace OmDeHoek
                 }
             }
 
-            if (env.IsDevelopment())
+            if (Env.IsDevelopment)
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();

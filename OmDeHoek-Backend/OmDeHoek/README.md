@@ -68,6 +68,12 @@ Dit zal een release build maken van de back-end in de `bin/Release/net9.0/publis
 
 Hiervoor moet de `appsettings.json` file aangepast worden met de juiste database connection string voor productie. Dit kan bijvoorbeeld een connection string zijn voor een cloud database zoals AWS RDS, Azure Database for PostgreSQL of Google Cloud SQL.
 
+### published backend URL
+
+De backend is gepubliceerd op azure met URLs voor testing en voor production.
+- Testing: `omdehoek-staging-bwcgcwdyg2bqhpcq.westeurope-01.azurewebsites.net` (heeft [swagger]("https://omdehoek-staging-bwcgcwdyg2bqhpcq.westeurope-01.azurewebsites.net/swagger) op endpoint `/swagger`)
+- Production: `omdehoek-fmctdnhcekangkce.westeurope-01.azurewebsites.net`
+
 ## Extra informatie
 
 - [Entity Framework Core documentatie](https://learn.microsoft.com/en-us/ef/core/)
