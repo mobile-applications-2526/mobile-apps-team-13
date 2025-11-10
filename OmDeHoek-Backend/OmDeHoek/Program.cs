@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using OmDeHoek.Hubs;
 using OmDeHoek.Middleware;
 using OmDeHoek.Model;
 using OmDeHoek.Model.Data;
@@ -25,10 +24,12 @@ namespace OmDeHoek
             var env = builder.Environment;
 
             Env.SetEnvironment(
-                dbConnection: builder.Configuration.GetConnectionString("devConnection"),
+                dbConnection: builder.Configuration.GetConnectionString("devConnection") ?? "",
                 environment: env.EnvironmentName,
                 isDevelopment: env.IsDevelopment(),
-                isProduction: env.IsProduction()
+                isProduction: env.IsProduction(),
+                notificationHubConnectionString: builder.Configuration.GetSection("Azure").GetSection("NotificationHub").GetValue<string>("Url") ?? "",
+                notificationHubName: builder.Configuration.GetSection("Azure").GetSection("NotificationHub").GetValue<string>("Name") ?? ""
                 );
 
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
@@ -170,7 +171,6 @@ namespace OmDeHoek
             app.UseTokenManagerMiddleware();
 
             app.MapControllers();
-            app.MapHub<MessageHub>("/hubs/message");
 
             app.Run();
         }

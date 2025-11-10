@@ -11,7 +11,6 @@ public static class DependencyInjections
         services.AddScoped<ILogger, Logger<IStartup>>();
 
         services.AddSingleton<TokenManager>();
-        services.AddSingleton<ConnectionMappingService>();
 
         // Repositories
         services.AddScoped<UserRepository>();

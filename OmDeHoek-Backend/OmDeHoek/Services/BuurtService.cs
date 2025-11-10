@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using OmDeHoek.Hubs;
-using OmDeHoek.Model;
+﻿using OmDeHoek.Model;
 using OmDeHoek.Model.DTO;
 using OmDeHoek.Model.Entities;
 using OmDeHoek.Model.Enums;
@@ -10,9 +8,7 @@ namespace OmDeHoek.Services;
 
 public class BuurtService(
     UnitOfWork uow,
-    IHubContext<MessageHub> hub,
-    TokenService tokenService,
-    ConnectionMappingService mappingService
+    TokenService tokenService
     )
 {
     public async Task<BuurtDto> GetByStatistischeSectorCodeAsync(string code, Talen taal = Talen.En)
@@ -94,12 +90,6 @@ public class BuurtService(
 
             await uow.UserBuurtRepository.Insert(userBuurt);
             await uow.Save();
-
-            var connectionId = mappingService.GetConnectionId(userId);
-            if (connectionId != null)
-            {
-                await hub.Groups.AddToGroupAsync(connectionId, $"Buurt-{buurt.StatistischeSectorCode}");
-            }
             
             await uow.CommitTransaction();
         }
@@ -137,11 +127,6 @@ public class BuurtService(
             await uow.UserBuurtRepository.Delete(userBuurt);
             await uow.Save();
 
-            var connectionId = mappingService.GetConnectionId(userId);
-            if (connectionId != null)
-            {
-                await hub.Groups.RemoveFromGroupAsync(connectionId, $"Buurt-{buurt.StatistischeSectorCode}");
-            }
             await uow.CommitTransaction();
         }
         catch (Exception ex)

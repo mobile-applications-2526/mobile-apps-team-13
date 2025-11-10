@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using OmDeHoek.Hubs;
-using OmDeHoek.Model;
+﻿using OmDeHoek.Model;
 using OmDeHoek.Model.Commands.Message;
 using OmDeHoek.Model.DTO.Message;
 using OmDeHoek.Model.Entities;
@@ -11,9 +9,7 @@ namespace OmDeHoek.Services;
 
 public class MessageService(
     UnitOfWork uow,
-    IHubContext<MessageHub> hub,
-    TokenService tokenService,
-    ConnectionMappingService mappingService
+    TokenService tokenService
 )
 {
     public async Task<MessageDto> PostMessage(string token, PostMessage message)
@@ -76,14 +72,8 @@ public class MessageService(
                 _ => throw new InvalidInputException("Invalid message severity", "Severity")
             };
 
-            var sendTasks = ontvangendeBuurten.Select(buurtCode => hub.Clients.Group($"Buurt-{buurtCode}")
-                    .SendAsync(eventName, new MessageDto(newMessage)))
-                .ToList();
-
             var savedMessage = await uow.MessageRepository.Insert(newMessage);
             await uow.CommitTransaction();
-
-            await Task.WhenAll(sendTasks);
 
             return new MessageDto(savedMessage);
         }
