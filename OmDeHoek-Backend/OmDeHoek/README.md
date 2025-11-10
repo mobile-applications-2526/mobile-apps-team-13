@@ -15,7 +15,7 @@ De database connection string is te vinden in de `appsettings.Development.json` 
 
 De database migraties zijn te vinden in de `Migrations` folder. Deze migraties worden gebruikt om de database structuur bij te werken naar de laatste versie. Om de migraties toe te passen, gebruik de volgende command in de terminal:
 ```bash
-dotnet ef database update --project 'OmDeHoek/OmDeHoek.csproj' --launch-profile 'http'
+dotnet ef database update --project 'OmDeHoek/OmDeHoek.csproj'
 ```
 
 Als dit command een error geeft dat de `dotnet-ef` tool niet gevonden kan worden, installeer deze dan met de volgende command:
@@ -41,7 +41,7 @@ Dit moet enkel wanneer er wijzigingen zijn in de database structuur, zoals het t
 
 De back-end kan gerund worden met de volgende command:
 ```bash
-dotnet run --project 'OmDeHoek/OmDeHoek.csproj'
+dotnet run --project 'OmDeHoek/OmDeHoek.csproj'  --launch-profile 'http'
 ```
 
 De back-end zal dan starten op `https://localhost:5001` en `http://localhost:5000`. De Swagger UI is te vinden op `https://localhost:5001/swagger` of `http://localhost:5000/swagger`.
