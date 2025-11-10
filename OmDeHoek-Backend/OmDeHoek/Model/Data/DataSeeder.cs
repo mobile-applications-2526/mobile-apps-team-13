@@ -46,6 +46,8 @@ public static class DataSeeder
 
         var seedData = new SeedData();
 
+        seedData.Gemeentes = ExcelFileReader.ReadExcelGemeenten(SeedGemeenten);
+        seedData.DeelGemeentes = ExcelFileReader.ReadExcelDeelGemeenten(SeedDeelgemeenten);
         seedData.Buurten = ExcelFileReader.ReadExcelBuurten(SeedBuurten, seedData.Gemeentes);
         seedData.Postcodes = ExcelFileReader.ReadExcelPostcodes(SeedPostcodeMapping);
 
