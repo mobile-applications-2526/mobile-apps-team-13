@@ -27,7 +27,7 @@ public static class Env
         NotificationHubName = notificationHubName;
         if(string.IsNullOrEmpty(notificationHubConnectionString) || string.IsNullOrEmpty(notificationHubName))
         {
-            ConsoleUtils.LogWarning("Notification Hub configuration is missing.");
+            ConsoleUtils.LogWarning("Notification Hub configuration ontbreekt. Negeer deze waarschuwing als je de app enkel runt om swagger te bekijken of voor development zonder notificaties.");
         }
         IsProduction = isProduction;
         IsDevelopment = isDevelopment;

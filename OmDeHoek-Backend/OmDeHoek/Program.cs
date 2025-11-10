@@ -28,8 +28,8 @@ namespace OmDeHoek
                 environment: env.EnvironmentName,
                 isDevelopment: env.IsDevelopment(),
                 isProduction: env.IsProduction(),
-                notificationHubConnectionString: builder.Configuration.GetSection("Azure").GetSection("NotificationHub").GetValue<string>("Url") ?? "",
-                notificationHubName: builder.Configuration.GetSection("Azure").GetSection("NotificationHub").GetValue<string>("Name") ?? ""
+                notificationHubConnectionString: builder.Configuration.GetConnectionString("notificationHubUrl") ?? "",
+                notificationHubName: builder.Configuration.GetConnectionString("notificationHubName") ?? ""
                 );
 
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
