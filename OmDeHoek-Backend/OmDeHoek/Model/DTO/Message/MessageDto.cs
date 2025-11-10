@@ -8,8 +8,8 @@ public class MessageDto
     public string Content { get; set; } = "";
     public DateTime CreatedAt { get; set; }
     public MessageSeverity Severity { get; set; }
-    
-    public MessageDto(){}
+
+    public MessageDto() { }
 
     public MessageDto(Entities.Message message)
     {

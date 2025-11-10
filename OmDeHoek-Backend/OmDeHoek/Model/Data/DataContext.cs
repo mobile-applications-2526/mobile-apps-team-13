@@ -105,7 +105,7 @@ public class DataContext : IdentityUserContext<User>
                 .HasForeignKey(ub => ub.SectorCodeBuurt)
                 .OnDelete(DeleteBehavior.Cascade);
         });
-        
+
         builder.Entity<Message>(entity =>
         {
             entity.HasKey(m => m.Id);

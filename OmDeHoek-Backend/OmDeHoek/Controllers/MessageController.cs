@@ -13,8 +13,16 @@ namespace OmDeHoek.Controllers;
 [Authorize]
 public class MessageController(MessageService service) : ControllerBase
 {
-    // POST api/message/send
+    /// <summary>
+    /// Sends a message.
+    /// </summary>
+    /// <param name="message">The message to send.</param>
+    /// <returns>An <see cref="ActionResult{MessageDto}"/> containing the sent message.</returns>
+    /// <remarks>
+    /// Requires authentication. The Authorization header bearer token is forwarded to the service.
+    /// </remarks>
     [HttpPost("send")]
+    [Authorize]
     public async Task<ActionResult<MessageDto>> SendMessage([FromBody] PostMessage message)
     {
         try

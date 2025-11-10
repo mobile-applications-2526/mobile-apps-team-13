@@ -20,7 +20,7 @@ public class Buurt : IDataBaseEntity<Buurt>
     public string StatistischeSectorCode { get; set; } = string.Empty;
 
     public List<UserBuurt> Bewoners { get; init; } = [];
-    
+
     public List<Message> Messages { get; init; } = [];
 
     public Buurt() { }

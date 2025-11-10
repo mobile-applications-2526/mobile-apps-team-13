@@ -90,7 +90,7 @@ public class BuurtService(
 
             await uow.UserBuurtRepository.Insert(userBuurt);
             await uow.Save();
-            
+
             await uow.CommitTransaction();
         }
         catch (Exception ex)
@@ -99,7 +99,7 @@ public class BuurtService(
             throw;
         }
     }
-    
+
     public async Task LeaveBuurtAsync(string buurtId, string token)
     {
         await uow.StartTransaction();

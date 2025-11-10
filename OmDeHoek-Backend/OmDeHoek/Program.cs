@@ -137,6 +137,10 @@ namespace OmDeHoek
                             new string[]{}
                         }
                     });
+
+                    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+                    option.IncludeXmlComments(xmlPath);
                 });
             }
 

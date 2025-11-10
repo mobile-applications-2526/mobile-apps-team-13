@@ -112,7 +112,7 @@ public sealed class UnitOfWork : IDisposable
     {
         get { return _messageRepository ?? new MessageRepository(_context); }
     }
-    
+
     public DeelgemeenteRepository DeelgemeenteRepository
     {
         get { return _deelgemeenteRepository ?? new DeelgemeenteRepository(_context); }

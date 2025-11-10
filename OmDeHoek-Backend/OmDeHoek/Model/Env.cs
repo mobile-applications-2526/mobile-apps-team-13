@@ -13,11 +13,11 @@ public static class Env
     public static string NotificationHubName { get; private set; } = "";
 
     public static void SetEnvironment(
-        string dbConnection, 
-        string environment, 
+        string dbConnection,
+        string environment,
         string notificationHubConnectionString = "",
         string notificationHubName = "",
-        bool isProduction = false, 
+        bool isProduction = false,
         bool isDevelopment = false
         )
     {
@@ -25,7 +25,7 @@ public static class Env
         Environment = environment;
         NotificationHubConnectionString = notificationHubConnectionString;
         NotificationHubName = notificationHubName;
-        if(string.IsNullOrEmpty(notificationHubConnectionString) || string.IsNullOrEmpty(notificationHubName))
+        if (string.IsNullOrEmpty(notificationHubConnectionString) || string.IsNullOrEmpty(notificationHubName))
         {
             ConsoleUtils.LogWarning("Notification Hub configuration ontbreekt. Negeer deze waarschuwing als je de app enkel runt om swagger te bekijken of voor development zonder notificaties.");
         }

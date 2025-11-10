@@ -4,7 +4,7 @@ using OmDeHoek.Model.Entities;
 
 namespace OmDeHoek.Model.Repositories;
 
-public class DeelgemeenteRepository(DataContext ctx): GenericRepository<DeelGemeente> (ctx, ctx.DeelGemeentes)
+public class DeelgemeenteRepository(DataContext ctx) : GenericRepository<DeelGemeente>(ctx, ctx.DeelGemeentes)
 {
     public async Task<DeelGemeente?> GetByNis6Async(string nis6)
     {

@@ -12,7 +12,14 @@ namespace OmDeHoek.Controllers;
 [Route("api/[controller]")]
 public class UserController(UserService userService) : ControllerBase
 {
-
+    /// <summary>
+    /// Retrieves information about the currently logged-in user.
+    /// </summary>
+    /// <param name="taal">The language for the returned data. Defaults to <see cref="Talen.En"/>.</param>
+    /// <returns>>An <see cref="ActionResult{UserDto}"/> containing the user information.</returns>
+    /// <remarks>
+    /// Requires authentication. The Authorization header bearer token is forwarded to the service.
+    /// </remarks>
     [HttpGet("loggedin/{taal}")]
     [Authorize]
     public async Task<ActionResult<UserDto>> GetLoggedInUser([FromRoute] Talen taal = Talen.En)

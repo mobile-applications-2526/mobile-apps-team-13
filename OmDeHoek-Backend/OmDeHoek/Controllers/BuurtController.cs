@@ -12,7 +12,15 @@ namespace OmDeHoek.Controllers;
 [Route("api/[controller]")]
 public class BuurtController(BuurtService buurtService) : ControllerBase
 {
-    // GET api/buurt/sectorcode/{sectorcode}/{taal}
+    /// <summary>
+    /// Retrieve a single buurt by its statistical sector code.
+    /// </summary>
+    /// <param name="sectorcode">The statistical sector code of the buurt.</param>
+    /// <param name="taal">Optional language for the returned data. Defaults to <see cref="Talen.En"/> when not provided.</param>
+    /// <returns>
+    /// An <see cref="ActionResult{BuurtDto}"/> containing the requested buurt on success,
+    /// or an appropriate error response produced by <see cref="ExceptionHandler.HandleException"/>.
+    /// </returns>
     [HttpGet("sectorcode/{sectorcode}/{taal?}")]
     public async Task<ActionResult<BuurtDto>> GetBuurtBySectorcode(string sectorcode, Talen? taal)
     {
@@ -27,7 +35,16 @@ public class BuurtController(BuurtService buurtService) : ControllerBase
         }
     }
 
-    // GET api/buurt/deelgemeente/{nis6Code}/{taal}
+
+    /// <summary>
+    /// Retrieve all buurten for a given deelgemeente (by NIS6 code).
+    /// </summary>
+    /// <param name="nis6Code">The NIS6 code of the deelgemeente.</param>
+    /// <param name="taal">Optional language for the returned data. Defaults to <see cref="Talen.En"/> when not provided.</param>
+    /// <returns>
+    /// An <see cref="ActionResult{List{BuurtDto}}"/> containing the list of buurten on success,
+    /// or an appropriate error response produced by <see cref="ExceptionHandler.HandleException"/>.
+    /// </returns>
     [HttpGet("deelgemeente/{nis6Code}/{taal?}")]
     public async Task<ActionResult<List<BuurtDto>>> GetBuurtenByDeelGemeenteNis6Code(string nis6Code, Talen? taal)
     {
@@ -42,6 +59,15 @@ public class BuurtController(BuurtService buurtService) : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Retrieve all buurten for a given gemeente (by NIS code).
+    /// </summary>
+    /// <param name="nisCode">The NIS code of the gemeente.</param>
+    /// <param name="taal">Optional language for the returned data. Defaults to <see cref="Talen.En"/> when not provided.</param>
+    /// <returns>
+    /// An <see cref="ActionResult{List{BuurtDto}}"/> containing the list of buurten on success,
+    /// or an appropriate error response produced by <see cref="ExceptionHandler.HandleException"/>.
+    /// </returns>
     [HttpGet("gemeente/{nisCode}/{taal?}")]
     public async Task<ActionResult<List<BuurtDto>>> GetBuurtenByGemeenteNisCode(string nisCode, Talen? taal)
     {
@@ -56,6 +82,16 @@ public class BuurtController(BuurtService buurtService) : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Adds the authenticated user to the specified buurt.
+    /// </summary>
+    /// <param name="buurtId">The identifier of the buurt to join.</param>
+    /// <returns>
+    /// An <see cref="ActionResult{MessageResponseDto}"/> indicating success or an appropriate error response.
+    /// </returns>
+    /// <remarks>
+    /// Requires authentication. The Authorization header bearer token is forwarded to the service.
+    /// </remarks>
     [HttpPost("join/{buurtId}")]
     [Authorize]
     public async Task<ActionResult<MessageResponseDto>> JoinBuurt(string buurtId)
@@ -74,6 +110,16 @@ public class BuurtController(BuurtService buurtService) : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Removes the authenticated user from the specified buurt.
+    /// </summary>
+    /// <param name="buurtId">The identifier of the buurt to leave.</param>
+    /// <returns>
+    /// An <see cref="ActionResult{MessageResponseDto}"/> indicating success or an appropriate error response.
+    /// </returns>
+    /// <remarks>
+    /// Requires authentication. The Authorization header bearer token is forwarded to the service.
+    /// </remarks>
     [HttpPost("leave/{buurtId}")]
     [Authorize]
     public async Task<ActionResult<MessageResponseDto>> LeaveBuurt(string buurtId)

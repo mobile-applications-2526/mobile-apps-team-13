@@ -49,7 +49,7 @@ public class MessageService(
                 BuurtSectorCode = buurt.StatistischeSectorCode,
                 UserId = userId
             };
-            
+
             var ontvangendeBuurten = new HashSet<string> { buurt.StatistischeSectorCode };
             if (!message.BuurtOnly)
             {
@@ -58,7 +58,7 @@ public class MessageService(
                 {
                     throw new ResourceNotFoundException($"Deelgemeente met Nis6 {buurt.Nis6DeelGemeente} bestaat niet", "deelgemeenteId");
                 }
-                foreach(Buurt b in deelgemeente.Buurten)
+                foreach (Buurt b in deelgemeente.Buurten)
                 {
                     ontvangendeBuurten.Add(b.StatistischeSectorCode);
                 }
