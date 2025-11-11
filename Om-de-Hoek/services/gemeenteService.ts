@@ -6,9 +6,9 @@ const fetchGemeenten = async (taal: string = "Nl"): Promise<Gemeente[]> => {
     return data as Gemeente[];
 }
 
-const fetchGemeenteByPostcode = async (postcode: string, taal: string = "Nl"): Promise<Gemeente | null> => {
+const fetchGemeenteByPostcode = async (postcode: string, taal: string = "Nl"): Promise<Gemeente[]> => {
     const data = await fetchData(`gemeente/postcode/${postcode}/${taal}`);
-    return data as Gemeente | null;
+    return data as Gemeente[];
 }
 
 export {

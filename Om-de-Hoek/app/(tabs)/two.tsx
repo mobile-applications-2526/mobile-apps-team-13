@@ -14,7 +14,8 @@ export default function TabTwoScreen() {
     const handleFetchGemeente = async () => {
         const result = await fetchGemeenteByPostcode(postcode, "Nl");
         if (result) {
-            setGemeente(result.naam);
+            setGemeente(result[0].naam);
+            console.log(result);
         } else {
             setGemeente("Gemeente niet gevonden");
         }
