@@ -51,6 +51,32 @@ namespace OmDeHoek
 
             builder.Services.AddCustomServices();
 
+            var corsName = "OmDeHoekCorsPolicy";
+            builder.Services.AddCors(options =>
+            {
+                if (Env.IsDevelopment)
+                {
+                    options.AddPolicy(name: corsName,
+                        policy =>
+                        {
+                            policy.AllowAnyOrigin()
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                        });
+                }
+                else
+                {
+                    options.AddPolicy(
+                        name: corsName,
+                        policy =>
+                        {
+                            policy.WithOrigins("https://omdehoek.be")
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                        });
+                }
+            });
+
             builder.Services.AddControllers(options =>
             {
                 options.Filters.Add(new ProducesAttribute("application/json"));
@@ -144,8 +170,6 @@ namespace OmDeHoek
                 });
             }
 
-            builder.Services.AddSignalR();
-
             var app = builder.Build();
 
             if (!Env.IsTesting)
@@ -169,6 +193,8 @@ namespace OmDeHoek
             }
 
             app.UseHttpsRedirection();
+            
+            app.UseCors(corsName);
 
             app.UseAuthorization();
             app.UseAuthorization();
