@@ -10,7 +10,7 @@ public class TokenService(ILogger<TokenService> logger)
 {
     private const int ExpirationHours = 8;
 
-    public virtual string CreateToken(User player, bool rememberMe = false)
+    public virtual string CreateToken(User player)
     {
         var expiration = DateTime.UtcNow.AddHours(ExpirationHours);
         var token = CreateJwtToken(

@@ -160,7 +160,7 @@ public class AuthService(
             throw new UnauthorizedException("user not found", "User");
         }
 
-        var newToken = tokenService.CreateToken(userInDb, true);
+        var newToken = tokenService.CreateToken(userInDb);
         tokenManager.AddToRevokedTokens(token);
 
         await uow.Save();
