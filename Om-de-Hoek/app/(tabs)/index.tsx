@@ -1,6 +1,8 @@
 import { Button, Text, View } from "react-native";
 import { useState } from "react";
 import { fetchGemeenteByPostcode } from "@/services/gemeenteService";
+import {PressableButton} from "@/components/PressableButton";
+import {Color} from "@/types/StyleOptions";
 
 export default function TabTwoScreen() {
   const [gemeente, setGemeente] = useState<string>("");
@@ -19,13 +21,12 @@ export default function TabTwoScreen() {
   return (
     <View className="flex-1 items-center justify-center bg-white">
       <Text className="text-2xl font-comfortaa-regular font-bold mb-4">
-        Magic button!!!!
+        Magic button!!!
       </Text>
 
-      <Button
-        onPress={async () => await handleFetchGemeente()}
-        title="Krijg de dorpsnaam"
-        color="#2548BC"
+      <PressableButton
+        onPress={handleFetchGemeente}
+        title="Klik hier om de gemeente op te halen"
       />
 
       {gemeente ? (
