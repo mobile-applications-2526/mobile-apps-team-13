@@ -30,6 +30,7 @@ public static class DependencyInjections
         services.AddScoped<AdresService>();
         services.AddScoped<UserService>();
         services.AddScoped<MessageService>();
+        services.AddScoped<PostcodeService>();
 
         // Unit of Work
         services.AddScoped<UnitOfWork>();

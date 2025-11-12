@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using OmDeHoek.Model.Enums;
 
 namespace OmDeHoek.Model.Entities;
 
@@ -48,5 +49,25 @@ public class Gemeente : IDataBaseEntity<Gemeente>
     public bool CheckNullOrWrongType(object? other)
     {
         return other is null || GetType() != other.GetType();
+    }
+    
+    public string GetNameInCorrectLanguage(Talen taal)
+    {
+        var defaultNaam = GesprokenTalen.ToCharArray()[0] switch
+        {
+            'F' => NaamFr,
+            'D' => NaamDe,
+            _ => NaamNl
+        };
+
+        var naam = taal switch
+        {
+            Enums.Talen.Nl => NaamNl,
+            Enums.Talen.Fr => NaamFr,
+            Enums.Talen.De => NaamDe ?? NaamNl,
+            _ => defaultNaam ?? NaamNl
+        };
+        
+        return naam;
     }
 }
