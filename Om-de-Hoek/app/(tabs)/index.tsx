@@ -1,31 +1,38 @@
-import { StyleSheet } from 'react-native';
+import { Button, Text, View } from "react-native";
+import { useState } from "react";
+import { fetchGemeenteByPostcode } from "@/services/gemeenteService";
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+export default function TabTwoScreen() {
+  const [gemeente, setGemeente] = useState<string>("");
+  const [postcode, setPostcode] = useState<string>("3000");
 
-export default function TabOneScreen() {
+  const handleFetchGemeente = async () => {
+    const result = await fetchGemeenteByPostcode(postcode, "Nl");
+    if (result) {
+      setGemeente(result[0].naam);
+      console.log(result);
+    } else {
+      setGemeente("Gemeente niet gevonden");
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+    <View className="flex-1 items-center justify-center bg-white">
+      <Text className="text-2xl font-comfortaa-regular font-bold mb-4">
+        Magic button!!!!
+      </Text>
+
+      <Button
+        onPress={async () => await handleFetchGemeente()}
+        title="Krijg de dorpsnaam"
+        color="#2548BC"
+      />
+
+      {gemeente ? (
+        <Text className="mt-4 text-black text-black font-comfortaa-regular">
+          De dorpsnaam is: {gemeente}
+        </Text>
+      ) : null}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontFamily: 'ComfortaaRegular'
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
