@@ -1,25 +1,22 @@
 const API_URL = process.env.EXPO_PUBLIC_API_PATH;
 
 const fetchData = async (endpoint: string, options = {}) => {
-    try {
-        console.log(`Fetching data from: ${API_URL}/api/${endpoint}`);
-        const response = await fetch(`${API_URL}/api/${endpoint}`, options);
-        if (!response.ok) {
-            throw new Error(`Error: ${response.statusText}`);
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Fetch error:', error);
-        throw error;
+
+    const response = await fetch(`${API_URL}/api/${endpoint}`, options);
+    if (!response.ok) {
+        console.error('Fetch error:', response.statusText);
+        throw new Error(`Error: ${response.statusText}`);
     }
+    return await response.json();
+
 }
 
 const statusCheck = async () => {
     try {
         const response = await fetch(`${API_URL}/status`);
         if (!response.ok) {
-            throw new Error(`Status check failed: ${response.statusText}`);
+            console.error('Status check failed:', response.statusText);
+            return false;
         }
         return true;
     } catch (error) {
