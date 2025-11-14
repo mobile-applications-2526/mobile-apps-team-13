@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OmDeHoek.Model.Commands.auth;
 using OmDeHoek.Model.Commands.User;
 using OmDeHoek.Model.DTO;
+using OmDeHoek.Model.Entities;
 using OmDeHoek.Services;
 using OmDeHoek.Utils;
 
@@ -65,17 +67,13 @@ public class AuthController(AuthService authService) : ControllerBase
     /// An <see cref="ActionResult{MessageResponseDto}"/> indicating success or an error response
     /// handled by <see cref="ExceptionHandler"/>.
     /// </returns>
-    /// <remarks>
-    /// Requires authentication. The Authorization header bearer token is forwarded to the service.
-    /// </remarks>
     [HttpPost("logout")]
-    [Authorize]
-    public async Task<ActionResult<MessageResponseDto>> Logout()
+    [AllowAnonymous]
+    public async Task<ActionResult<MessageResponseDto>> Logout([FromBody] LogoutCommand command)
     {
         try
         {
-            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            await authService.LogoutAsync(token);
+            await authService.LogoutAsync(command);
             return Ok(new MessageResponseDto("Successfully logged out"));
         }
         catch (Exception e)
@@ -91,16 +89,12 @@ public class AuthController(AuthService authService) : ControllerBase
     /// An <see cref="ActionResult{TokenDto}"/> containing a new token on success
     /// or an appropriate error response handled by <see cref="ExceptionHandler"/>.
     /// </returns>
-    /// <remarks>
-    /// Requires authentication. The Authorization header bearer token is forwarded to the service.
-    /// </remarks>
     [HttpPost("refresh")]
-    [Authorize]
-    public async Task<ActionResult<TokenDto>> Refresh()
+    [AllowAnonymous]
+    public async Task<ActionResult<TokenDto>> Refresh([FromBody] RefreshTokenCommand token)
     {
         try
         {
-            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             var result = await authService.RefreshToken(token);
             return Ok(result);
         }

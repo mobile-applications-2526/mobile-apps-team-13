@@ -70,4 +70,14 @@ public class Gemeente : IDataBaseEntity<Gemeente>
         
         return naam;
     }
+
+    public bool Equals(Gemeente? x, Gemeente? y)
+    {
+        return x is not null && x.Equals(y);
+    }
+
+    public int GetHashCode(Gemeente obj)
+    {
+        return HashCode.Combine(NisCode);
+    }
 }

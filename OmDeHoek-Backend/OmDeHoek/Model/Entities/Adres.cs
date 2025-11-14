@@ -1,6 +1,6 @@
 ﻿namespace OmDeHoek.Model.Entities;
 
-public class Adres : IDataBaseEntity<Adres>
+public class Adres() : IDataBaseEntity<Adres>
 {
     public Guid Id { get; init; } = Guid.NewGuid();
     public string Straat { get; set; }
@@ -38,5 +38,15 @@ public class Adres : IDataBaseEntity<Adres>
     {
         return Equals(other) && Straat == other!.Straat && Huisnummer == other.Huisnummer &&
                Postcode == other.Postcode && Dorp == other.Dorp && BewonerId == other.BewonerId;
+    }
+
+    public bool Equals(Adres? x, Adres? y)
+    {
+        return x is not null && x.Equals(y);
+    }
+
+    public int GetHashCode(Adres obj)
+    {
+        return HashCode.Combine(Id);
     }
 }

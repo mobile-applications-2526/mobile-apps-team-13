@@ -44,4 +44,14 @@ public class DeelGemeente : IDataBaseEntity<DeelGemeente>
     {
         return other is null || GetType() != other.GetType();
     }
+
+    public bool Equals(DeelGemeente? x, DeelGemeente? y)
+    {
+        return x is not null && x.Equals(y);
+    }
+
+    public int GetHashCode(DeelGemeente obj)
+    {
+        return HashCode.Combine(obj.Nis6Code);
+    }
 }

@@ -53,7 +53,10 @@ public class DataContextFactory : IDesignTimeDbContextFactory<DataContext>
     {
         try
         {
-            DataSeeder.SeedDatabase(context);
+            DataSeeder.SeedDatabase(context)
+                .ConfigureAwait(false)
+                .GetAwaiter()
+                .GetResult();
         }
         catch (Exception ex)
         {

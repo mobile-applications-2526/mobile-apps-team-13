@@ -1,6 +1,6 @@
 ﻿namespace OmDeHoek.Model.Entities;
 
-public interface IDataBaseEntity<in T>
+public interface IDataBaseEntity<in T> : IEqualityComparer<T>
 {
     /// <summary>
     /// Kijkt na of de twee objecten gelijk zijn op basis van hun unieke eigenschappen. (bijv. Id)

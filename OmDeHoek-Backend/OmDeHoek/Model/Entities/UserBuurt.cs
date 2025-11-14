@@ -49,4 +49,14 @@ public class UserBuurt : IDataBaseEntity<UserBuurt>
     {
         return other is null || GetType() != other.GetType();
     }
+
+    public bool Equals(UserBuurt? x, UserBuurt? y)
+    {
+        return x is not null && x.Equals(y);
+    }
+
+    public int GetHashCode(UserBuurt obj)
+    {
+        return HashCode.Combine(UserId, SectorCodeBuurt);
+    }
 }

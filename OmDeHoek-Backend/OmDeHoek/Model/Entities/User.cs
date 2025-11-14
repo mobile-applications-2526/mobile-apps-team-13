@@ -54,4 +54,14 @@ public class User : IdentityUser, IDataBaseEntity<User>
     {
         return !CheckNullOrWrongType(other) && Id == other!.Id && NormalizedEmail == other.NormalizedEmail && UserName == other.UserName && Role == other.Role && PhoneNumber == other.PhoneNumber;
     }
+
+    public bool Equals(User? x, User? y)
+    {
+        return x is not null && x.Equals(y);
+    }
+
+    public int GetHashCode(User obj)
+    {
+        return HashCode.Combine(Id, NormalizedEmail);
+    }
 }

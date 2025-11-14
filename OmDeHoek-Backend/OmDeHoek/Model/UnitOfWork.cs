@@ -16,6 +16,7 @@ public sealed class UnitOfWork : IDisposable
     private readonly UserBuurtRepository _userBuurtRepository;
     private readonly MessageRepository _messageRepository;
     private readonly DeelgemeenteRepository _deelgemeenteRepository;
+    private readonly RefreshTokenRepository _refreshTokenRepository;
 
     public UnitOfWork(
         DataContext context,
@@ -26,7 +27,8 @@ public sealed class UnitOfWork : IDisposable
         AdresRepository adresRepository = null,
         UserBuurtRepository userBuurtRepository = null,
         MessageRepository messageRepository = null,
-        DeelgemeenteRepository deelgemeenteRepository = null
+        DeelgemeenteRepository deelgemeenteRepository = null,
+        RefreshTokenRepository refreshTokenRepository = null
         )
     {
         _context = context;
@@ -38,6 +40,7 @@ public sealed class UnitOfWork : IDisposable
         _userBuurtRepository = userBuurtRepository;
         _messageRepository = messageRepository;
         _deelgemeenteRepository = deelgemeenteRepository;
+        _refreshTokenRepository = refreshTokenRepository;
     }
 
     public async Task Save()
@@ -116,5 +119,10 @@ public sealed class UnitOfWork : IDisposable
     public DeelgemeenteRepository DeelgemeenteRepository
     {
         get { return _deelgemeenteRepository ?? new DeelgemeenteRepository(_context); }
+    }
+    
+    public RefreshTokenRepository RefreshTokenRepository
+    {
+        get { return _refreshTokenRepository ?? new RefreshTokenRepository(_context); }
     }
 }

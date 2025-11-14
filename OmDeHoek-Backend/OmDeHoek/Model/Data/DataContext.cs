@@ -14,6 +14,7 @@ public class DataContext : IdentityUserContext<User>
     public DbSet<Postcode> Postcodes { get; set; }
     public DbSet<UserBuurt> UserBuurten { get; set; }
     public DbSet<Message> Messages { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
@@ -123,6 +124,18 @@ public class DataContext : IdentityUserContext<User>
                 .WithMany(b => b.Messages)
                 .HasForeignKey(m => m.BuurtSectorCode)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        builder.Entity<RefreshToken>(entity =>
+        {
+            entity.HasKey(rt => rt.Id);
+            
+            entity.Property(rt => rt.TokenHash).IsRequired();
+            entity.Property(rt => rt.ExpiresAt).IsRequired();
+            entity.HasOne(rt => rt.User)
+                .WithMany()
+                .HasForeignKey(rt => rt.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }
