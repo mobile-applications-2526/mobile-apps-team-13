@@ -1,8 +1,9 @@
-import { Text, View } from "react-native";
+import { Text, View, Image } from "react-native";
 import { useState } from "react";
 import { fetchGemeenteByPostcode } from "@/services/gemeenteService";
 import {PressableButton} from "@/components/PressableButton";
 import {Color} from "@/types/StyleOptions";
+import {Link} from "expo-router"
 
 export default function TabTwoScreen() {
   const [gemeente, setGemeente] = useState<string>("");
@@ -19,8 +20,9 @@ export default function TabTwoScreen() {
 
   return (
     <View className="flex-1 items-center justify-center bg-white">
+    <Image source={require('@/assets/images/logo.png')}/>
       <Text className="text-2xl font-comfortaa-regular font-bold mb-4">
-        Magic button!!!
+        Magic !!!
       </Text>
 
       <PressableButton
@@ -35,6 +37,17 @@ export default function TabTwoScreen() {
           De dorpsnaam is: {gemeente}
         </Text>
       ) : null}
+
+    <View className="mt-4">
+             <Link href="/register" asChild>
+                 <PressableButton
+                     title="Naar Registratiepagina"
+                     background={Color.BLUE}
+                     textColor={Color.WHITE}
+                 />
+             </Link>
+           </View>
+
     </View>
   );
 }
