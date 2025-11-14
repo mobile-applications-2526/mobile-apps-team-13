@@ -1,8 +1,12 @@
 export type RegisterBody = {
     email: string;
-    username: string;
+    firstName: string;
+    lastName: string;
+    streetName: string;
+    houseNumber?: string;
+    municipality: string;
+    postalCode: string;
     password: string;
-    confirmPassword: string;
     birthDate: Date;
     phoneNumber?: string;
 }
