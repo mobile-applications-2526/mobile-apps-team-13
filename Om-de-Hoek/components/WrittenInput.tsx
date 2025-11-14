@@ -5,13 +5,15 @@ type Props = {
     value: string;
     onChangeText: (text: string) => void;
     inputType?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'password';
+    secureTextEntry?: boolean;
 }
 
 export const WrittenInput = ({
     placeholder,
     value,
     onChangeText,
-    inputType = 'default'
+    inputType = 'default',
+    secureTextEntry = false,
 }: Props) => {
     return(
         <TextInput
@@ -20,7 +22,7 @@ export const WrittenInput = ({
             value={value}
             onChangeText={onChangeText}
             keyboardType={inputType === 'password' ? 'default' : inputType}
-            secureTextEntry={inputType === 'password'}
+            secureTextEntry={secureTextEntry}
             autoCapitalize="none"
             autoCorrect={false}
         />
