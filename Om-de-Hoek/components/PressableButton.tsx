@@ -27,7 +27,7 @@ export const PressableButton = ({ onPress, title, background = Color.BLUE, textC
             disabled={disabled}
         >
             <Text
-                className={`font-comfortaa-regular text-center`}
+                className={`font-comfortaa-bold text-center`}
                 style={{ color: textColor }}
             >{title}</Text>
         </Pressable>
