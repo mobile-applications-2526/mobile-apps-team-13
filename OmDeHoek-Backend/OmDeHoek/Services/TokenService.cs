@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using OmDeHoek.Model.Entities;
@@ -84,5 +85,20 @@ public class TokenService(ILogger<TokenService> logger)
         }
 
         return userIdClaim.Value;
+    }
+    
+    public (string token, string tokenHash) CreateRefreshToken()
+    {
+        var randomNumber = new byte[64];
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(randomNumber);
+        }
+        var refreshToken = Convert.ToBase64String(randomNumber);
+        
+        var hashedBytes = SHA256.HashData(Encoding.UTF8.GetBytes(refreshToken));
+        var hashedRefreshToken = Convert.ToBase64String(hashedBytes);
+        
+        return (refreshToken, hashedRefreshToken);
     }
 }

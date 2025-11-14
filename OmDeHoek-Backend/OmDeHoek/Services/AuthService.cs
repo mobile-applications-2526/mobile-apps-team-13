@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Security.Cryptography;
+using System.Text;
+using Microsoft.AspNetCore.Identity;
 using OmDeHoek.Model;
+using OmDeHoek.Model.Commands.auth;
 using OmDeHoek.Model.Commands.User;
 using OmDeHoek.Model.DTO;
 using OmDeHoek.Model.Entities;
@@ -108,6 +111,22 @@ public class AuthService(
             }
 
             var token = tokenService.CreateToken(user);
+            
+            var (refreshTokenPlain, encryptedRefreshToken) = tokenService.CreateRefreshToken();
+            
+            var refreshToken = new RefreshToken
+            {
+                TokenHash = encryptedRefreshToken,
+                ExpiresAt = DateTime.UtcNow.AddMonths(1),
+                UserId = user.Id,
+                CreatedAt = DateTime.UtcNow,
+                Id = Guid.NewGuid(),
+                IsRevoked = false
+            };
+            
+            await uow.RefreshTokenRepository.Insert(refreshToken);
+            
+            await uow.Save();
 
             await uow.CommitTransaction();
 
@@ -115,7 +134,8 @@ public class AuthService(
             {
                 Token = token,
                 Email = user.Email!,
-                Id = user.Id
+                Id = user.Id,
+                RefreshToken = refreshTokenPlain
             };
         }
         catch (Exception)
@@ -125,11 +145,30 @@ public class AuthService(
         }
     }
 
-    public async Task<bool> LogoutAsync(string? token)
+    public async Task<bool> LogoutAsync(LogoutCommand token)
     {
         try
         {
-            tokenManager.AddToRevokedTokens(token);
+            await uow.StartTransaction();
+            
+            var refreshToken = token.RefreshToken;
+            if (string.IsNullOrWhiteSpace(refreshToken))
+            {
+                return true;
+            }
+            
+            var hashedToken = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(refreshToken)));
+            var refreshTokenInDb = await uow.RefreshTokenRepository.GetByTokenAsync(hashedToken);
+            
+            if (refreshTokenInDb == null || refreshTokenInDb.IsRevoked)
+            {
+                return true;
+            }
+            
+            refreshTokenInDb.IsRevoked = true;
+            uow.RefreshTokenRepository.Update(refreshTokenInDb);
+            await uow.Save();
+            await uow.CommitTransaction();
 
             return true;
         }
@@ -140,35 +179,64 @@ public class AuthService(
         }
     }
 
-    public async Task<TokenDto> RefreshToken(string? token)
+    public async Task<TokenDto> RefreshToken(RefreshTokenCommand command)
     {
-        if (string.IsNullOrWhiteSpace(token))
+        await uow.StartTransaction();
+        try
         {
-            throw new MissingDataException("token is missing or only spaces", "token");
+            var token = command.RefreshToken;
+
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                throw new MissingDataException("token is missing or only spaces", "token");
+            }
+        
+            var bytes = Encoding.UTF8.GetBytes(token);
+            var hash = SHA256.HashData(bytes);
+            var hashedToken = Convert.ToBase64String(hash);
+        
+            var refreshTokenInDb = await uow.RefreshTokenRepository.GetByTokenAsync(hashedToken);
+        
+            if (refreshTokenInDb == null || refreshTokenInDb.IsRevoked || refreshTokenInDb.ExpiresAt < DateTime.UtcNow || refreshTokenInDb.User == null)
+            {
+                throw new UnauthorizedException("invalid refresh token", "token");
+            }
+            
+            var userInDb = refreshTokenInDb.User;
+
+            var newToken = tokenService.CreateToken(userInDb);
+            
+            var (newRefreshTokenPlain, newEncryptedRefreshToken) = tokenService.CreateRefreshToken();
+            var newRefreshToken = new RefreshToken
+            {
+                TokenHash = newEncryptedRefreshToken,
+                ExpiresAt = DateTime.UtcNow.AddMonths(1),
+                UserId = userInDb.Id,
+                CreatedAt = DateTime.UtcNow,
+                Id = Guid.NewGuid(),
+                IsRevoked = false
+            };
+            
+            await uow.RefreshTokenRepository.Insert(newRefreshToken);
+
+            refreshTokenInDb.IsRevoked = true;
+            uow.RefreshTokenRepository.Update(refreshTokenInDb);
+
+            await uow.Save();
+            await uow.CommitTransaction();
+            
+            return new TokenDto
+            {
+                Token = newToken,
+                Email = userInDb.Email!,
+                Id = userInDb.Id,
+                RefreshToken = newRefreshTokenPlain
+            };
         }
-        if (tokenManager.IsTokenRevoked(token!))
+        catch (Exception e)
         {
-            throw new UnauthorizedException("token has been revoked", "token");
+            await uow.RollbackTransaction();
+            throw;
         }
-
-        var email = Utils.AuthUtils.GetTokenEmail(token);
-
-        var userInDb = await uow.UserRepository.GetByEmailAsync(email);
-
-        if (userInDb == null)
-        {
-            throw new UnauthorizedException("user not found", "User");
-        }
-
-        var newToken = tokenService.CreateToken(userInDb);
-        tokenManager.AddToRevokedTokens(token);
-
-        await uow.Save();
-        return new TokenDto
-        {
-            Token = newToken,
-            Email = userInDb.Email!,
-            Id = userInDb.Id
-        };
     }
 }

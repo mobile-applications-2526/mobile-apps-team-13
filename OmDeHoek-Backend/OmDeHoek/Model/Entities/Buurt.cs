@@ -53,4 +53,14 @@ public class Buurt : IDataBaseEntity<Buurt>
     {
         return other is null || GetType() != other.GetType();
     }
+
+    public bool Equals(Buurt? x, Buurt? y)
+    {
+        return x is not null && x.Equals(y);
+    }
+
+    public int GetHashCode(Buurt obj)
+    {
+        return HashCode.Combine(StatistischeSectorCode);
+    }
 }

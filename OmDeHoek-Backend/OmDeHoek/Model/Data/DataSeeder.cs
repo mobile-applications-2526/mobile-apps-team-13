@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using OmDeHoek.Model.Entities;
 using OmDeHoek.Utils;
 
@@ -68,7 +69,7 @@ public static class DataSeeder
         return seedData;
     }
 
-    private static bool AddOrUpdate<T>(DbSet<T> set, List<T> items) where T : class, IDataBaseEntity<T>
+    private static async Task<bool> AddOrUpdate<T>(DbSet<T> set, List<T> items) where T : class, IDataBaseEntity<T>, new()
     {
         if (set is null)
         {
@@ -76,14 +77,16 @@ public static class DataSeeder
             return false;
         }
 
+        var comparer = new T();
+        
+        var downloadedSet = await set.ToHashSetAsync(comparer: comparer);
+
         uint addedItems = 0;
         uint skippedItems = 0;
         uint updatedItems = 0;
         foreach (var item in items)
         {
-            var entry = set.FirstOrDefault(val => item.Equals(val));
-
-            if (entry == null)
+            if (!downloadedSet.TryGetValue(item, out var entry))
             {
                 set.Add(item);
                 addedItems++;
@@ -107,11 +110,11 @@ public static class DataSeeder
             }
         }
 
-        ConsoleUtils.LogInfo($"Database of type {typeof(T)}: Added {addedItems}, Updated {updatedItems} items");
+        ConsoleUtils.LogInfo($"Database of type {typeof(T)}: Added {addedItems}, Updated {updatedItems} items, Skipped {skippedItems} items.");
         return true;
     }
 
-    public static void SeedDatabase(DataContext ctx)
+    public static async Task SeedDatabase(DataContext ctx)
     {
         if (ctx == null)
         {
@@ -125,14 +128,14 @@ public static class DataSeeder
         var anyChanges = false;
 
         // Dit voor iedere entity die geseed wordt
-        anyChanges |= AddOrUpdate(ctx.Users, data.Users);
-        anyChanges |= AddOrUpdate(ctx.Adresses, data.Adresses);
-        anyChanges |= AddOrUpdate(ctx.Gemeentes, data.Gemeentes);
-        anyChanges |= AddOrUpdate(ctx.DeelGemeentes, data.DeelGemeentes);
-        anyChanges |= AddOrUpdate(ctx.Buurten, data.Buurten);
-        anyChanges |= AddOrUpdate(ctx.Postcodes, data.Postcodes);
-        anyChanges |= AddOrUpdate(ctx.UserBuurten, data.UserBuurten);
-        anyChanges |= AddOrUpdate(ctx.Messages, data.Messages);
+        anyChanges |= await AddOrUpdate(ctx.Users, data.Users);
+        anyChanges |= await AddOrUpdate(ctx.Adresses, data.Adresses);
+        anyChanges |= await AddOrUpdate(ctx.Gemeentes, data.Gemeentes);
+        anyChanges |= await AddOrUpdate(ctx.DeelGemeentes, data.DeelGemeentes);
+        anyChanges |= await AddOrUpdate(ctx.Buurten, data.Buurten);
+        anyChanges |= await AddOrUpdate(ctx.Postcodes, data.Postcodes);
+        anyChanges |= await AddOrUpdate(ctx.UserBuurten, data.UserBuurten);
+        anyChanges |= await AddOrUpdate(ctx.Messages, data.Messages);
 
         if (anyChanges)
         {

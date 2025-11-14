@@ -41,4 +41,14 @@ public class Message() : IDataBaseEntity<Message>
     {
         return other is null || GetType() != other.GetType();
     }
+
+    public bool Equals(Message? x, Message? y)
+    {
+        return x is not null && x.Equals(y);
+    }
+
+    public int GetHashCode(Message obj)
+    {
+        return HashCode.Combine(Id);
+    }
 }
