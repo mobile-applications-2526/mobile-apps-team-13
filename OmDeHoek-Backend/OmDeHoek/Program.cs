@@ -27,9 +27,7 @@ namespace OmDeHoek
                 dbConnection: builder.Configuration.GetConnectionString("devConnection") ?? "",
                 environment: env.EnvironmentName,
                 isDevelopment: env.IsDevelopment() || env.IsStaging() || env.EnvironmentName == "Staging",
-                isProduction: env.IsProduction(),
-                notificationHubConnectionString: builder.Configuration.GetConnectionString("notificationHubUrl") ?? "",
-                notificationHubName: builder.Configuration.GetConnectionString("notificationHubName") ?? ""
+                isProduction: env.IsProduction()
                 );
 
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
