@@ -2,10 +2,11 @@ import '../global.css';
 
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import {Slot, Stack, useRouter, useSegments} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import {AuthProvider, useAuth} from "@/components/context/AuthContext";
 
 
 export {
@@ -21,7 +22,7 @@ export const unstable_settings = {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+function InitialLayout() {
   const [loaded, error] = useFonts({
     ComfortaaBold: require("../assets/fonts/Comfortaa-Bold.ttf"),
     ComfortaaLight: require("../assets/fonts/Comfortaa-Light.ttf"),
@@ -30,6 +31,11 @@ export default function RootLayout() {
     ComfortaaSemiBold: require("../assets/fonts/Comfortaa-SemiBold.ttf"),
     ...FontAwesome.font,
   });
+
+  const { authStatus } = useAuth();
+
+  const router = useRouter();
+  const segments = useSegments();
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
@@ -42,19 +48,33 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
+  useEffect(() => {
+      if (authStatus === 'loading') return;
 
-  return <RootLayoutNav />;
+      const inAuthGroup = segments[0] === '(auth)';
+      const inAppGroup = segments[0] === '(tabs)';
+
+      if (authStatus === 'authenticated' && !inAppGroup) {
+         router.replace('/(tabs)');
+      }
+      else if (authStatus === 'unauthenticated' && !inAuthGroup) {
+          router.replace('/(auth)/register');
+      }
+      }, [authStatus, segments, loaded])
+
+    if (!loaded) {
+        return null;
+    }
+
+  return <Slot />;
 }
 
-function RootLayoutNav() {
+export default function RootLayout() {
 
 
   return (
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
+      <AuthProvider>
+          <InitialLayout />
+      </AuthProvider>
   );
 }

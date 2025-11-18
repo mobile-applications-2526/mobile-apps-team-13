@@ -10,9 +10,17 @@ import {Step4Address} from "@/components/register/Step4Address";
 import {Step5PhoneNumber} from "@/components/register/Step5PhoneNumber";
 import {Step6Password} from "@/components/register/Step6Password";
 import {ProgressIndicator} from "@/components/ProgressIndicator";
-import { authRegister } from "@/services/authService";
+import {authLogin, authRegister} from "@/services/authService";
+import {useAuth} from "@/components/context/AuthContext";
 
 const totalSteps = 6
+
+const parseDate = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); //jan = 0 en moet 1 zijn
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
 
 export default function RegisterPage() {
     const [data, setData] = useState<RegisterBody>({
@@ -32,20 +40,30 @@ export default function RegisterPage() {
 
     const pagerRef = useRef<PagerView>(null);
 
+    const { signIn } = useAuth();
+
     const goToNextStep = () => {
         pagerRef.current?.setPage(huidigeIndex + 1);
     }
 
-    const nextAndRegister = () => { //Registerbody heeft veel te veel velden, die niet nodig zijn voor registratie volgens swagger
+    const nextAndRegister = async () => { //Registerbody heeft veel te veel velden, die niet nodig zijn voor registratie volgens swagger
         const dataToRegister: RegisterRequestBody = {
             email: data.email,
             phoneNumber: data.phoneNumber || '',
             password: data.password,
-            username: `${data.firstName} ${data.lastName}`,
-            birthDate: data.birthDate.getFullYear().toString() + '-' + data.birthDate.getMonth().toString().padStart(2, '0') + '-' + data.birthDate.getDate().toString().padStart(2, '0')
+            username: `${data.firstName}${data.lastName}`,
+            birthDate: parseDate(data.birthDate)
         }
         console.log(dataToRegister);
-        authRegister(dataToRegister);
+        await authRegister(dataToRegister);
+
+        console.log("Registered, now logging in...");
+
+        const loginTokens = await authLogin(dataToRegister);
+
+        console.log("Logged in, signing in...");
+
+        await signIn(loginTokens.token, loginTokens.refreshToken);
     }
 
     

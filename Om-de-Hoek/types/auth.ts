@@ -27,4 +27,5 @@ export type AuthResponse = {
     token: string;
     email: string;
     id: string;
+    refreshToken: string;
 }

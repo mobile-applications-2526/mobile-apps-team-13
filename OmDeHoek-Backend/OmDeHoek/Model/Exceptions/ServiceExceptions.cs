@@ -27,7 +27,7 @@ public class ServiceException : Exception, IServiceException
             Title = this.GetType().Name,
             Detail = this.Message,
             Status = this.StatusCode,
-            Extensions = { { "field", this.Field } }
+            Extensions = { { "field", this.Field }, {"message", this.Message} }
         };
         return new ObjectResult(problemDetails) { StatusCode = this.StatusCode };
     }

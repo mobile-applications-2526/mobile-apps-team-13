@@ -44,6 +44,7 @@ export default function TabTwoScreen() {
                      title="Naar Registratiepagina"
                      background={Color.BLUE}
                      textColor={Color.WHITE}
+                     onPress={async () => {}}
                  />
              </Link>
            </View>

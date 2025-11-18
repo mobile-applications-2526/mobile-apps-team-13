@@ -7,6 +7,11 @@ const fetchData = async (endpoint: string, options = {}) => { //God data fetcher
     console.log(response);
     if (!response.ok) {
         console.error('Fetch error:', response.statusText);
+        if ([400, 409, 422].includes(response.status)) {
+            const errorData = await response.json();
+            console.error(errorData);
+            throw new Error(`Client Error: ${errorData}, Status Code: ${response.status}`);
+        }
         throw new Error(`Error: ${response.statusText}`);
     }
     return await response.json();
