@@ -1,8 +1,10 @@
 const API_URL = process.env.EXPO_PUBLIC_API_PATH;
 
-const fetchData = async (endpoint: string, options = {}) => {
-
+const fetchData = async (endpoint: string, options = {}) => { //God data fetcher
+    console.log(`Fetching data from: ${API_URL}/api/${endpoint}`);
+    
     const response = await fetch(`${API_URL}/api/${endpoint}`, options);
+    console.log(response);
     if (!response.ok) {
         console.error('Fetch error:', response.statusText);
         throw new Error(`Error: ${response.statusText}`);

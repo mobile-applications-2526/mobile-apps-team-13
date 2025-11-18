@@ -1,5 +1,5 @@
 import React, {useRef, useState, useCallback} from "react";
-import {RegisterBody} from "@/types/auth";
+import {RegisterBody, RegisterRequestBody} from "@/types/auth";
 import PagerView from "react-native-pager-view";
 import {Text, View, Image} from "react-native";
 import { Stack } from "expo-router";
@@ -10,6 +10,7 @@ import {Step4Address} from "@/components/register/Step4Address";
 import {Step5PhoneNumber} from "@/components/register/Step5PhoneNumber";
 import {Step6Password} from "@/components/register/Step6Password";
 import {ProgressIndicator} from "@/components/ProgressIndicator";
+import { authRegister } from "@/services/authService";
 
 const totalSteps = 6
 
@@ -35,6 +36,19 @@ export default function RegisterPage() {
         pagerRef.current?.setPage(huidigeIndex + 1);
     }
 
+    const nextAndRegister = () => { //Registerbody heeft veel te veel velden, die niet nodig zijn voor registratie volgens swagger
+        const dataToRegister: RegisterRequestBody = {
+            email: data.email,
+            phoneNumber: data.phoneNumber || '',
+            password: data.password,
+            username: `${data.firstName} ${data.lastName}`,
+            birthDate: data.birthDate.getFullYear().toString() + '-' + data.birthDate.getMonth().toString().padStart(2, '0') + '-' + data.birthDate.getDate().toString().padStart(2, '0')
+        }
+        console.log(dataToRegister);
+        authRegister(dataToRegister);
+    }
+
+    
     const handlePageSelected = (e: any) => {
         setHuidigeIndex(e.nativeEvent.position);
     }
@@ -95,7 +109,7 @@ export default function RegisterPage() {
 
                 <View key="6">
                     <Step6Password
-                        onNext={goToNextStep}
+                        onNext={nextAndRegister}
                         onChange={(password) => setData(prevData => ({...prevData, password}))}
                     />
                 </View>

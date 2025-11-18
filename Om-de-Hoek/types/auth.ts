@@ -10,6 +10,13 @@ export type RegisterBody = {
     birthDate: Date;
     phoneNumber?: string;
 }
+export type RegisterRequestBody = {
+  email: string,
+  phoneNumber: string,
+  password: string,
+  username: string,
+  birthDate: string
+}
 
 export type LoginBody = {
     email: string;

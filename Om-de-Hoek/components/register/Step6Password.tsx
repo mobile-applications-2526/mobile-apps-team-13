@@ -49,7 +49,7 @@ export const Step6Password = ({ onNext, onChange }: Props) => {
         if (strength < 4) return {text: 'Goed', color: 'text-yellow-500'};
         return {text: 'Sterk', color: 'text-green-500'};
     };
-
+    
     const strengthFeedback = getStrengthFeedback()
 
 
