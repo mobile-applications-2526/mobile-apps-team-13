@@ -43,6 +43,11 @@ public class AuthService(
             {
                 throw new DuplicateFieldException("emil already in use", "email");
             }
+            
+            if (await uow.UserRepository.GetByUserNameAsync(newUser.Username) != null)
+            {
+                throw new DuplicateFieldException("username already in use", "username");
+            }
 
             if (newUser.Username.Trim().Length < 3 || newUser.Username.Trim().Length > 31)
             {

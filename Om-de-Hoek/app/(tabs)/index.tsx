@@ -38,17 +38,6 @@ export default function TabTwoScreen() {
         </Text>
       ) : null}
 
-    <View className="mt-4">
-             <Link href="/register" asChild>
-                 <PressableButton
-                     title="Naar Registratiepagina"
-                     background={Color.BLUE}
-                     textColor={Color.WHITE}
-                     onPress={async () => {}}
-                 />
-             </Link>
-           </View>
-
     </View>
   );
 }
