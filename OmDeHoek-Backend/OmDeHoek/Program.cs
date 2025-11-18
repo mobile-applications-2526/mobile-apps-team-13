@@ -95,7 +95,6 @@ namespace OmDeHoek
                         options.Password.RequiredLength = 8;
                         options.Password.RequiredUniqueChars = 1;
                         options.User.RequireUniqueEmail = true;
-
                     }
                 )
                 .AddRoles<IdentityRole>()
