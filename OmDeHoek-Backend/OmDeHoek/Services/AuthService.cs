@@ -53,6 +53,11 @@ public class AuthService(
             {
                 throw new InvalidInputException("password must be between 3 and 31 characters", "password");
             }
+            
+            if(newUser.BirthDate > DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-13)))
+            {
+                throw new InvalidInputException("you must be at least 13 years old to register", "birthDate");
+            }
 
             User user = new()
             {
