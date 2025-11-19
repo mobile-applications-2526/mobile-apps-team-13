@@ -11,6 +11,18 @@ import {PasswordInput} from "@/components/auth/PasswordInput";
 import {PressableButton} from "@/components/PressableButton";
 import {Color} from "@/types/StyleOptions";
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const errorMessages = {
+    invalidEmail: "Ongeldig e-mail formaat.",
+    emptyPassword: "Wachtwoord mag niet leeg zijn.",
+    invalidCredentials: "Ongeldige inloggegevens. Probeer het opnieuw."
+}
+
+const references = {
+    registerPage: '/(auth)/register'
+}
+
 export default function LoginPage() {
     const [credentials, setCredentials] = useState<LoginBody>({
         email: '',
@@ -21,16 +33,19 @@ export default function LoginPage() {
     const { signIn } = useAuth();
 
     const goToRegister = async () => {
-        router.replace('/(auth)/register');
+        router.replace(references.registerPage);
     }
 
     const handleLogin = async () => {
         try {
+            if(!validate()) {
+                return;
+            }
             const loginResponse = await authService.authLogin(credentials);
             await signIn(loginResponse.token, loginResponse.refreshToken);
         } catch (error) {
             if(error instanceof CustomError) {
-                setErrorMessage(error.toString());
+                setErrorMessage(errorMessages.invalidCredentials);
                 return;
             }
             setErrorMessage('An unexpected error occurred. Please try again.');
@@ -43,6 +58,24 @@ export default function LoginPage() {
 
     const handlePasswordChange = (text: string) => {
         setCredentials((prev) => ({ ...prev, password: text }));
+    }
+
+    const validate = () => {
+        let isValid = true;
+        let message = "";
+
+        if (!emailRegex.test(credentials.email)) {
+            isValid = false;
+            message += errorMessages.invalidEmail;
+        }
+        if (credentials.password.trim() === "") {
+            isValid = false;
+            if (message) message += "\n";
+            message += errorMessages.emptyPassword;
+        }
+
+        setErrorMessage(isValid ? null : message);
+        return isValid;
     }
 
     return(
