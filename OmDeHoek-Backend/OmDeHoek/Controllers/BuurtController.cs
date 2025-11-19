@@ -21,8 +21,8 @@ public class BuurtController(BuurtService buurtService) : ControllerBase
     /// An <see cref="ActionResult{BuurtDto}"/> containing the requested buurt on success,
     /// or an appropriate error response produced by <see cref="ExceptionHandler.HandleException"/>.
     /// </returns>
-    [HttpGet("sectorcode/{sectorcode}/{taal?}")]
-    public async Task<ActionResult<BuurtDto>> GetBuurtBySectorcode(string sectorcode, Talen? taal)
+    [HttpGet("sectorcode/{sectorcode}")]
+    public async Task<ActionResult<BuurtDto>> GetBuurtBySectorcode(string sectorcode, [FromQuery] Talen? taal)
     {
         try
         {
@@ -45,8 +45,8 @@ public class BuurtController(BuurtService buurtService) : ControllerBase
     /// An <see cref="ActionResult{List{BuurtDto}}"/> containing the list of buurten on success,
     /// or an appropriate error response produced by <see cref="ExceptionHandler.HandleException"/>.
     /// </returns>
-    [HttpGet("deelgemeente/{nis6Code}/{taal?}")]
-    public async Task<ActionResult<List<BuurtDto>>> GetBuurtenByDeelGemeenteNis6Code(string nis6Code, Talen? taal)
+    [HttpGet("deelgemeente/{nis6Code}")]
+    public async Task<ActionResult<List<BuurtDto>>> GetBuurtenByDeelGemeenteNis6Code(string nis6Code, [FromQuery] Talen? taal)
     {
         try
         {
@@ -68,8 +68,8 @@ public class BuurtController(BuurtService buurtService) : ControllerBase
     /// An <see cref="ActionResult{List{BuurtDto}}"/> containing the list of buurten on success,
     /// or an appropriate error response produced by <see cref="ExceptionHandler.HandleException"/>.
     /// </returns>
-    [HttpGet("gemeente/{nisCode}/{taal?}")]
-    public async Task<ActionResult<List<BuurtDto>>> GetBuurtenByGemeenteNisCode(string nisCode, Talen? taal)
+    [HttpGet("gemeente/{nisCode}")]
+    public async Task<ActionResult<List<BuurtDto>>> GetBuurtenByGemeenteNisCode(string nisCode, [FromQuery] Talen? taal)
     {
         try
         {
