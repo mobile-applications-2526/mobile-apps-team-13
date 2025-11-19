@@ -20,9 +20,9 @@ public class UserController(UserService userService) : ControllerBase
     /// <remarks>
     /// Requires authentication. The Authorization header bearer token is forwarded to the service.
     /// </remarks>
-    [HttpGet("loggedin/{taal}")]
+    [HttpGet("loggedin")]
     [Authorize]
-    public async Task<ActionResult<UserDto>> GetLoggedInUser([FromRoute] Talen taal = Talen.En)
+    public async Task<ActionResult<UserDto>> GetLoggedInUser([FromQuery] Talen taal = Talen.En)
     {
         try
         {

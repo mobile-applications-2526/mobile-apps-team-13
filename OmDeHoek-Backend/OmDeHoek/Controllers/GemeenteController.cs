@@ -16,8 +16,8 @@ public class GemeenteController(GemeenteService gemeenteService) : ControllerBas
     /// </summary>
     /// <param name="taal">Optional language to use for the returned data. Defaults to <see cref="Talen.En"/> when null.</param>
     /// <returns>An <see cref="ActionResult"/> containing a list of <see cref="GemeenteDto"/>.</returns>
-    [HttpGet("{taal?}")]
-    public async Task<ActionResult<List<GemeenteDto>>> GetAll(Talen? taal)
+    [HttpGet]
+    public async Task<ActionResult<List<GemeenteDto>>> GetAll([FromQuery] Talen? taal)
     {
         try
         {
@@ -36,8 +36,8 @@ public class GemeenteController(GemeenteService gemeenteService) : ControllerBas
     /// <param name="nisCode">The NIS code of the gemeente to retrieve.</param>
     /// <param name="taal">Optional language to use for the returned data. Defaults to <see cref="Talen.En"/> when null.</param>
     /// <returns>An <see cref="ActionResult"/> containing the matching <see cref="GemeenteDto"/>.</returns>
-    [HttpGet("nis/{nisCode}/{taal?}")]
-    public async Task<ActionResult<GemeenteDto>> GetByNisCode(string nisCode, Talen? taal)
+    [HttpGet("nis/{nisCode}")]
+    public async Task<ActionResult<GemeenteDto>> GetByNisCode(string nisCode, [FromQuery] Talen? taal)
     {
         try
         {
@@ -56,8 +56,8 @@ public class GemeenteController(GemeenteService gemeenteService) : ControllerBas
     /// <param name="naam">The name of the gemeente to retrieve.</param>
     /// <param name="taal">Optional language to use for the returned data. Defaults to <see cref="Talen.En"/> when null.</param>
     /// <returns>An <see cref="ActionResult"/> containing the matching <see cref="GemeenteDto"/>.</returns>
-    [HttpGet("naam/{naam}/{taal?}")]
-    public async Task<ActionResult<GemeenteDto>> GetByNaam(string naam, Talen? taal)
+    [HttpGet("naam/{naam}")]
+    public async Task<ActionResult<GemeenteDto>> GetByNaam(string naam, [FromQuery] Talen? taal)
     {
         try
         {
@@ -76,8 +76,8 @@ public class GemeenteController(GemeenteService gemeenteService) : ControllerBas
     /// <param name="postCode">The postcode to search for.</param>
     /// <param name="taal">Optional language to use for the returned data. Defaults to <see cref="Talen.En"/> when null.</param>
     /// <returns>An <see cref="ActionResult"/> containing a list of matching <see cref="GemeenteDto"/>.</returns>
-    [HttpGet("postcode/{postCode}/{taal?}")]
-    public async Task<ActionResult<List<GemeenteDto>>> SearchByPostCode(string postCode, Talen? taal)
+    [HttpGet("postcode/{postCode}")]
+    public async Task<ActionResult<List<GemeenteDto>>> SearchByPostCode(string postCode, [FromQuery] Talen? taal)
     {
         try
         {
