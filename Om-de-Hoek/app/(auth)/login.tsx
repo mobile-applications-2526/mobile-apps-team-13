@@ -1,8 +1,8 @@
-import { Text, View} from "react-native";
+import {Text, View} from "react-native";
 import React, {useState} from "react";
 import {LoginBody} from "@/types/auth";
 import {useAuth} from "@/components/auth/context/AuthContext";
-import {router} from "expo-router";
+import {Href, router} from "expo-router";
 import authService from "@/services/authService";
 import {CustomError} from "@/types/Errors/CustomError";
 import AuthHeader from "@/components/auth/AuthHeader";
@@ -10,6 +10,7 @@ import {WrittenInput} from "@/components/WrittenInput";
 import {PasswordInput} from "@/components/auth/PasswordInput";
 import {PressableButton} from "@/components/PressableButton";
 import {Color} from "@/types/StyleOptions";
+import InputPageView from "@/components/InputPageView";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -20,7 +21,7 @@ const errorMessages = {
 }
 
 const references = {
-    registerPage: '/(auth)/register'
+    registerPage: "/(auth)/register"
 }
 
 export default function LoginPage() {
@@ -33,7 +34,8 @@ export default function LoginPage() {
     const { signIn } = useAuth();
 
     const goToRegister = async () => {
-        router.replace(references.registerPage);
+        const href = references.registerPage as Href;
+        router.navigate(href);
     }
 
     const handleLogin = async () => {
@@ -79,10 +81,10 @@ export default function LoginPage() {
     }
 
     return(
-        <View className="flex-1 p-4 bg-white">
+        <InputPageView>
             <AuthHeader title={"log in om je buurten te bekijken"} />
 
-            <View className={"flex-1 p-6 border-b-2 border-gray"}>
+            <View className={"flex-1 border-b-2 border-gray"}>
                 <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
                     Log in
                 </Text>
@@ -125,6 +127,6 @@ export default function LoginPage() {
                     textColor={Color.BLUE}
                 />
             </View>
-        </View>
+        </InputPageView>
     )
 }

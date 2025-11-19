@@ -1,8 +1,9 @@
 import {useState, useEffect} from "react";
-import {Text, View} from "react-native";
+import {Text} from "react-native";
 import {WrittenInput} from "@/components/WrittenInput";
 import {PressableButton} from "@/components/PressableButton";
 import {Color} from "@/types/StyleOptions";
+import InputPageView from "@/components/InputPageView";
 
 type Props = {
     onNext: () => void;
@@ -24,7 +25,7 @@ export const Step2Name = ({onNext, onChange}: Props) => {
 
 
     return (
-        <View className="flex-1 p-6">
+        <InputPageView>
             <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
                 Wat is uw naam?
             </Text>
@@ -52,6 +53,6 @@ export const Step2Name = ({onNext, onChange}: Props) => {
                 title="Verdergaan"
                 background={isValid ? Color.BLUE : Color.GRAY}
                 />
-        </View>
+        </InputPageView>
     )
 }

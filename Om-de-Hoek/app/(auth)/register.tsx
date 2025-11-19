@@ -69,14 +69,14 @@ export default function RegisterPage() {
     }
 
     return(
-        <View className="flex-1 p-4 bg-white">
+        <View className="flex-1 bg-white p-4 pt-8">
             <AuthHeader title={"maak een account aan"} />
 
             <PagerView
                 ref={pagerRef}
                 style={{ flex: 1 }}
-                scrollEnabled={false}
                 onPageSelected={handlePageSelected}
+                scrollEnabled={false}
             >
                 <View key="1">
                     <Step1Email
