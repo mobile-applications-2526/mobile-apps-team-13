@@ -7,6 +7,7 @@ type Props = {
     textColor?: Color;
     disabled?: boolean;
     borderColor? : Color;
+    underlineStyle?: "none" | "underline" | "line-through" | "underline line-through" | undefined
 }
 
 import {Pressable, Text, GestureResponderEvent} from "react-native";
@@ -17,7 +18,8 @@ export const PressableButton = ({
                                     background = Color.BLUE,
                                     textColor = Color.WHITE,
                                     disabled = false,
-                                    borderColor = undefined
+                                    borderColor = undefined,
+                                    underlineStyle = "none"
                                 }: Props) => {
 
     const onButtonPress = async (e: GestureResponderEvent) => {
@@ -40,7 +42,10 @@ export const PressableButton = ({
         >
             <Text
                 className={`font-comfortaa-bold text-center`}
-                style={{ color: textColor }}
+                style={{
+                    color: textColor,
+                    textDecorationLine: underlineStyle
+                }}
             >{title}</Text>
         </Pressable>
     );

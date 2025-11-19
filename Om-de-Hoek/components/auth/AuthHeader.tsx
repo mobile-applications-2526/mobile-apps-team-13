@@ -14,8 +14,8 @@ export default function AuthHeader({ title }: Props) {
                 <Text className={"text-[24px] text-black font-comfortaa-semibold"}>Om de Hoek</Text>
                 <Text className={"text-[11px] text-gray font-comfortaa-medium"}>"Jouw buurt, jouw mensen, jouw plek."</Text>
             </View>
-            <View className="items-center my-2">
-                <Image source={require('@/assets/images/logo.png')} width={128} height={128}/>
+            <View className="items-center py-8">
+                <Image source={require('@/assets/images/logo.png')} className={"w-[180] h-[180]"}/>
             </View>
         </>
     )

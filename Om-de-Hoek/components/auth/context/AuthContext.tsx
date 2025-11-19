@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const signOut = async () => {
         try {
-            await authService.logout(refreshToken ?? ""); // als dit faalt is token waarschijnlijk al vervallen, mag logout niet verbieden
+            await authService.logout(refreshToken ?? ""); // als dit faalt, is token waarschijnlijk al vervallen, mag logout niet verbieden
             await SecureStore.deleteItemAsync('authToken');
             await SecureStore.deleteItemAsync('refreshToken');
 

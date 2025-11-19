@@ -125,6 +125,7 @@ export default function LoginPage() {
                     background={Color.WHITE}
                     borderColor={Color.BLUE}
                     textColor={Color.BLUE}
+                    underlineStyle={"underline"}
                 />
             </View>
         </InputPageView>
