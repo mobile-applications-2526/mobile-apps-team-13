@@ -9,13 +9,13 @@ type Props = {
 export default function AuthHeader({ title }: Props) {
     return (
         <>
-            <Stack.Screen options={{title}}/><View className="items-center">
+            <Stack.Screen options={{title}}/>
+            <View className="items-center">
                 <Text className={"text-[24px] text-black font-comfortaa-semibold"}>Om de Hoek</Text>
                 <Text className={"text-[11px] text-gray font-comfortaa-medium"}>"Jouw buurt, jouw mensen, jouw plek."</Text>
             </View>
             <View className="items-center my-2">
-                <Image className="w-[256px] h-[256px]"
-                   source={require('@/assets/images/logo.png')}/>
+                <Image source={require('@/assets/images/logo.png')} width={128} height={128}/>
             </View>
         </>
     )

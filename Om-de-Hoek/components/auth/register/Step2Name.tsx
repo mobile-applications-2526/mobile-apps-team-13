@@ -1,9 +1,9 @@
 import {useState, useEffect} from "react";
-import {Text} from "react-native";
+import {Text, ScrollView} from "react-native";
 import {WrittenInput} from "@/components/WrittenInput";
 import {PressableButton} from "@/components/PressableButton";
 import {Color} from "@/types/StyleOptions";
-import InputPageView from "@/components/InputPageView";
+import AuthHeader from "@/components/auth/AuthHeader";
 
 type Props = {
     onNext: () => void;
@@ -25,7 +25,13 @@ export const Step2Name = ({onNext, onChange}: Props) => {
 
 
     return (
-        <InputPageView>
+        <ScrollView
+            className="flex-1 p-6"
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled">
+            <AuthHeader
+                title={"maak een account aan"}
+            />
             <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
                 Wat is uw naam?
             </Text>
@@ -53,6 +59,6 @@ export const Step2Name = ({onNext, onChange}: Props) => {
                 title="Verdergaan"
                 background={isValid ? Color.BLUE : Color.GRAY}
                 />
-        </InputPageView>
+        </ScrollView>
     )
 }

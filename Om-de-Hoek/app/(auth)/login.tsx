@@ -115,7 +115,7 @@ export default function LoginPage() {
                     title={"Inloggen"}
                 />
             </View>
-            <View className="py-4 items-center">
+            <View className="pt-4 items-center">
                 <Text className="text-gray mb-2 font-comfortaa-medium">
                     Nog geen account?
                 </Text>

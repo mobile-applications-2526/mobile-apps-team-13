@@ -1,8 +1,9 @@
 import {useState, useEffect} from "react";
-import {Text, View} from "react-native";
+import {ScrollView, Text} from "react-native";
 import {WrittenInput} from "@/components/WrittenInput";
 import {PressableButton} from "@/components/PressableButton";
 import {Color} from "@/types/StyleOptions";
+import AuthHeader from "@/components/auth/AuthHeader";
 
 type Props = {
     onNext: () => void;
@@ -29,7 +30,13 @@ export const Step1Email = ({ onNext, onChange }: Props) => {
 
 
     return (
-        <View className="flex-1 p-6">
+        <ScrollView
+            className="p-4"
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled">
+            <AuthHeader
+                title={"maak een account aan"}
+            />
             <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
                 Maak een account
             </Text>
@@ -50,6 +57,6 @@ export const Step1Email = ({ onNext, onChange }: Props) => {
                 title="Verdergaan"
                 background={isValid ? Color.BLUE : Color.GRAY}
                 />
-        </View>
+        </ScrollView>
     )
 }

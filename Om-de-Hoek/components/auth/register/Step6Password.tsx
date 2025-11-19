@@ -1,10 +1,11 @@
 import {useState, useEffect} from "react";
-import {Text, View, Pressable} from "react-native";
+import {Text, View, Pressable, ScrollView} from "react-native";
 import {WrittenInput} from "@/components/WrittenInput";
 import {PressableButton} from "@/components/PressableButton";
 import {Color} from "@/types/StyleOptions";
 import { Eye, EyeClosed } from "lucide-react-native";
 import { ValidationRow } from "@/components/ValidationRow";
+import AuthHeader from "@/components/auth/AuthHeader";
 
 
 type Props = {
@@ -54,7 +55,13 @@ export const Step6Password = ({ onNext, onChange }: Props) => {
 
 
     return (
-        <View className="flex-1 p-6">
+        <ScrollView
+            className="flex-1 p-6"
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled">
+            <AuthHeader
+                title={"maak een account aan"}
+            />
             <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
                 Kies een veilig wachtwoord
             </Text>
@@ -95,6 +102,6 @@ export const Step6Password = ({ onNext, onChange }: Props) => {
                 title="Verdergaan"
                 background={isValid ? Color.BLUE : Color.GRAY}
                 />
-        </View>
+        </ScrollView>
     )
 }

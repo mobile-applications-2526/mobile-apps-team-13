@@ -30,7 +30,7 @@ export const PressableButton = ({
     return(
         <Pressable
             onPress={onButtonPress}
-            className={`px-4 py-2 rounded-lg mb-4`}
+            className={`px-4 py-2 rounded-lg mb-10`}
             style={{
                 backgroundColor: background,
                 borderColor: borderColor,

@@ -1,8 +1,9 @@
 import {useState} from "react";
-import {Text, View, Platform, Pressable} from "react-native";
+import {Text, View, Platform, Pressable, ScrollView} from "react-native";
 import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';
 import {PressableButton} from "@/components/PressableButton";
 import {Color} from "@/types/StyleOptions";
+import AuthHeader from "@/components/auth/AuthHeader";
 
 type Props = {
     onNext: () => void;
@@ -36,7 +37,13 @@ export const Step3BirthDate = ({onNext, onChange}: Props) => {
     });
 
     return (
-        <View className="flex-1 p-6">
+        <ScrollView
+            className="flex-1 p-6"
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled">
+            <AuthHeader
+                title={"maak een account aan"}
+            />
             <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
                 Wat is uw geboortedatum?
             </Text>
@@ -70,6 +77,6 @@ export const Step3BirthDate = ({onNext, onChange}: Props) => {
                 title="Verdergaan"
                 background={isDateSelected ? Color.BLUE : Color.GRAY}
                 />
-        </View>
+        </ScrollView>
     )
 }

@@ -1,7 +1,7 @@
 import React, {useRef, useState} from "react";
 import {RegisterBody, RegisterRequestBody} from "@/types/auth";
 import PagerView from "react-native-pager-view";
-import {View} from "react-native";
+import {View, KeyboardAvoidingView, Platform} from "react-native";
 import {Step1Email} from "@/components/auth/register/Step1Email";
 import {Step2Name} from "@/components/auth/register/Step2Name";
 import {Step3BirthDate} from "@/components/auth/register/Step3BirthDate";
@@ -10,7 +10,9 @@ import {Step5PhoneNumber} from "@/components/auth/register/Step5PhoneNumber";
 import {Step6Password} from "@/components/auth/register/Step6Password";
 import {useAuth} from "@/components/auth/context/AuthContext";
 import authService from "@/services/authService";
-import AuthHeader from "@/components/auth/AuthHeader";
+import ProgressBar from "@/components/auth/register/ProgressBar";
+
+const totalSteps = 6;
 
 const parseDate = (date: Date): string => {
     const year = date.getFullYear();
@@ -69,8 +71,8 @@ export default function RegisterPage() {
     }
 
     return(
-        <View className="flex-1 bg-white p-4 pt-8">
-            <AuthHeader title={"maak een account aan"} />
+        <View
+            className="flex-1 bg-white p-4 pt-8">
 
             <PagerView
                 ref={pagerRef}
@@ -78,48 +80,83 @@ export default function RegisterPage() {
                 onPageSelected={handlePageSelected}
                 scrollEnabled={false}
             >
-                <View key="1">
+
+                <KeyboardAvoidingView
+                    key="1"
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    className="flex-1"
+                    keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 30}
+                >
                     <Step1Email
                         onNext={goToNextStep}
                         onChange={(email) => setData(prevData => ({...prevData, email}))}
                     />
-                </View>
+                </KeyboardAvoidingView>
 
-                <View key="2">
+                <KeyboardAvoidingView
+                    key="2"
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    className="flex-1"
+                    keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 30}
+                >
                     <Step2Name
                         onNext={goToNextStep}
                         onChange={({firstName, lastName}) => setData(prevData => ({...prevData, firstName, lastName}))}
                     />
-                </View>
+                </KeyboardAvoidingView>
 
-                <View key="3">
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    key="3"
+                    className="flex-1"
+                    keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 30}
+                >
                     <Step3BirthDate
                         onNext={goToNextStep}
                         onChange={(birthDate) => setData(prevData => ({...prevData, birthDate}))}
                     />
-                </View>
+                </KeyboardAvoidingView>
 
-                <View key="4">
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    key="4"
+                    className="flex-1"
+                    keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 30}
+                >
                     <Step4Address
                         onNext={goToNextStep}
                         onChange={({ streetName, houseNumber, municipality, postalCode }) => setData(prevData => ({...prevData, streetName, houseNumber, municipality, postalCode }))}
                     />
-                </View>
+                </KeyboardAvoidingView>
 
-                <View key="5">
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    key="5"
+                    className="flex-1"
+                    keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 30}
+                >
                     <Step5PhoneNumber
                         onNext={goToNextStep}
                         onChange={(phoneNumber) => setData(prevData => ({...prevData, phoneNumber}))}
                     />
-                </View>
+                </KeyboardAvoidingView>
 
-                <View key="6">
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    key="6"
+                    className="flex-1"
+                    keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 30}
+                >
                     <Step6Password
                         onNext={nextAndRegister}
                         onChange={(password) => setData(prevData => ({...prevData, password}))}
                     />
-                </View>
+                </KeyboardAvoidingView>
             </PagerView>
+            <ProgressBar
+                currentStep={huidigeIndex}
+                totalSteps={totalSteps}
+                />
         </View>
     )
 }
