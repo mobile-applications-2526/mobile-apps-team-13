@@ -8,7 +8,6 @@ public class AdresDto
     public string Straat { get; init; } = string.Empty;
     public string? Huisnummer { get; init; }
     public string Postcode { get; init; } = string.Empty;
-    public string BewonerId { get; init; } = string.Empty;
     public string Dorp { get; init; } = string.Empty;
 
     public AdresDto() { }
@@ -20,6 +19,5 @@ public class AdresDto
         Huisnummer = adres.Huisnummer;
         Postcode = adres.Postcode;
         Dorp = adres.Dorp;
-        BewonerId = adres.BewonerId;
     }
 }
