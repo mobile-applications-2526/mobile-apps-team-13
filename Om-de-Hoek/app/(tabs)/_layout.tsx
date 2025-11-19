@@ -23,7 +23,7 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerRight: () => (
             <Link href="/" asChild>
               <Pressable className="mr-4">
@@ -40,6 +40,27 @@ export default function TabLayout() {
           ),
         }}
       />
+        <Tabs.Screen
+            name="profile"
+            options={{
+                title: "profile",
+                tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+                headerRight: () => (
+                    <Link href="/profile" asChild>
+                        <Pressable className="mr-4">
+                            {({ pressed }) => (
+                                <FontAwesome
+                                    name="info-circle"
+                                    size={25}
+                                    color="#100D08"
+                                    className={pressed ? "opacity-50" : "opacity-100"}
+                                />
+                            )}
+                        </Pressable>
+                    </Link>
+                ),
+            }}
+        />
     </Tabs>
   );
 }

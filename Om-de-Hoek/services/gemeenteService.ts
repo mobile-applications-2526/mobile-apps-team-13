@@ -11,7 +11,7 @@ const fetchGemeenteByPostcode = async (postcode: string, taal: string = "Nl"): P
     return data as Gemeente[];
 }
 
-export {
+export default {
     fetchGemeenten,
     fetchGemeenteByPostcode
 };

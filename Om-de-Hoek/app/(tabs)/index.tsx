@@ -1,16 +1,15 @@
 import { Text, View, Image } from "react-native";
 import { useState } from "react";
-import { fetchGemeenteByPostcode } from "@/services/gemeenteService";
 import {PressableButton} from "@/components/PressableButton";
 import {Color} from "@/types/StyleOptions";
-import {Link} from "expo-router"
+import gemeenteService from "@/services/gemeenteService";
 
 export default function TabTwoScreen() {
   const [gemeente, setGemeente] = useState<string>("");
   const [postcode, _] = useState<string>("3000");
 
   const handleFetchGemeente = async () => {
-    const result = await fetchGemeenteByPostcode(postcode, "Nl");
+    const result = await gemeenteService.fetchGemeenteByPostcode(postcode, "Nl");
     if (result) {
       setGemeente(result[0].naam);
     } else {

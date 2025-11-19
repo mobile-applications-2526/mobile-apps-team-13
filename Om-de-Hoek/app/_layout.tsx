@@ -2,22 +2,20 @@ import '../global.css';
 
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFonts } from 'expo-font';
-import {Slot, Stack, useRouter, useSegments} from 'expo-router';
+import {Slot, useRouter, useSegments} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
-import {AuthProvider, useAuth} from "@/components/context/AuthContext";
+import {AuthProvider, useAuth} from "@/components/auth/context/AuthContext";
+
+const LOGIN_PATH = '/(auth)/login';
+const APP_PATH = '/(tabs)';
 
 
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from 'expo-router';
-
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
-};
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -55,10 +53,10 @@ function InitialLayout() {
       const inAppGroup = segments[0] === '(tabs)';
 
       if (authStatus === 'authenticated' && !inAppGroup) {
-         router.replace('/(tabs)');
+         router.replace(APP_PATH);
       }
       else if (authStatus === 'unauthenticated' && !inAuthGroup) {
-          router.replace('/(auth)/register');
+          router.replace(LOGIN_PATH);
       }
       }, [authStatus, segments, loaded])
 

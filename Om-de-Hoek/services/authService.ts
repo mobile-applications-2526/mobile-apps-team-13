@@ -23,8 +23,37 @@ const authLogin = async (data: LoginBody) => {
     return response as AuthResponse;
 }
 
+const refreshToken = async (token: string) => {
+    const response = await fetchData('auth/refresh', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ refreshToken: token }),
+    });
+    return response as AuthResponse;
+}
 
-export {
+const logout = async (refreshToken: string) => {
+    try {
+        await fetchData('auth/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({refreshToken}),
+        });
+        return;
+    } catch (error) {
+        console.error('Error during logout:', error);
+        return;
+    }
+}
+
+
+export default {
     authRegister,
-    authLogin
+    authLogin,
+    refreshToken,
+    logout
 };

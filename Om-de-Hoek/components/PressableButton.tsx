@@ -6,11 +6,19 @@ type Props = {
     background? : Color;
     textColor?: Color;
     disabled?: boolean;
+    borderColor? : Color;
 }
 
 import {Pressable, Text, GestureResponderEvent} from "react-native";
 
-export const PressableButton = ({ onPress, title, background = Color.BLUE, textColor = Color.WHITE, disabled = false}: Props) => {
+export const PressableButton = ({
+                                    onPress,
+                                    title,
+                                    background = Color.BLUE,
+                                    textColor = Color.WHITE,
+                                    disabled = false,
+                                    borderColor = undefined
+                                }: Props) => {
 
     const onButtonPress = async (e: GestureResponderEvent) => {
         const button = e.currentTarget;
@@ -23,7 +31,11 @@ export const PressableButton = ({ onPress, title, background = Color.BLUE, textC
         <Pressable
             onPress={onButtonPress}
             className={`px-4 py-2 rounded-lg mb-4`}
-            style={{ backgroundColor: background }}
+            style={{
+                backgroundColor: background,
+                borderColor: borderColor,
+                borderWidth: borderColor ? 2 : 0
+            }}
             disabled={disabled}
         >
             <Text

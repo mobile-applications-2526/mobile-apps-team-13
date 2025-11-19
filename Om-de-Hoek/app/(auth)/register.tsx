@@ -1,19 +1,16 @@
-import React, {useRef, useState, useCallback} from "react";
+import React, {useRef, useState} from "react";
 import {RegisterBody, RegisterRequestBody} from "@/types/auth";
 import PagerView from "react-native-pager-view";
-import {Text, View, Image} from "react-native";
-import { Stack } from "expo-router";
-import {Step1Email} from "@/components/register/Step1Email";
-import {Step2Name} from "@/components/register/Step2Name";
-import {Step3BirthDate} from "@/components/register/Step3BirthDate";
-import {Step4Address} from "@/components/register/Step4Address";
-import {Step5PhoneNumber} from "@/components/register/Step5PhoneNumber";
-import {Step6Password} from "@/components/register/Step6Password";
-import {ProgressIndicator} from "@/components/ProgressIndicator";
-import {authLogin, authRegister} from "@/services/authService";
-import {useAuth} from "@/components/context/AuthContext";
-
-const totalSteps = 6
+import {View} from "react-native";
+import {Step1Email} from "@/components/auth/register/Step1Email";
+import {Step2Name} from "@/components/auth/register/Step2Name";
+import {Step3BirthDate} from "@/components/auth/register/Step3BirthDate";
+import {Step4Address} from "@/components/auth/register/Step4Address";
+import {Step5PhoneNumber} from "@/components/auth/register/Step5PhoneNumber";
+import {Step6Password} from "@/components/auth/register/Step6Password";
+import {useAuth} from "@/components/auth/context/AuthContext";
+import authService from "@/services/authService";
+import AuthHeader from "@/components/auth/AuthHeader";
 
 const parseDate = (date: Date): string => {
     const year = date.getFullYear();
@@ -55,11 +52,11 @@ export default function RegisterPage() {
             birthDate: parseDate(data.birthDate)
         }
         console.log(dataToRegister);
-        await authRegister(dataToRegister);
+        await authService.authRegister(dataToRegister);
 
         console.log("Registered, now logging in...");
 
-        const loginTokens = await authLogin(dataToRegister);
+        const loginTokens = await authService.authLogin(dataToRegister);
 
         console.log("Logged in, signing in...");
 
@@ -73,16 +70,7 @@ export default function RegisterPage() {
 
     return(
         <View className="flex-1 p-4 bg-white">
-            <Stack.Screen options={{title: "Maak een account"}} />
-
-            <View className="items-center">
-                <Text className={"text-[24px] text-black font-comfortaa-semibold"}>Om de Hoek</Text>
-                <Text className={"text-[11px] text-gray font-comfortaa-medium"}>"Jouw buurt, jouw mensen, jouw plek."</Text>
-            </View>
-            <View className="items-center my-2">
-            <Image className="w-[256px] h-[256px]"
-            source={require('@/assets/images/logo.png')}/>
-            </View>
+            <AuthHeader title={"maak een account aan"} />
 
             <PagerView
                 ref={pagerRef}
