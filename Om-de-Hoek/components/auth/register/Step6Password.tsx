@@ -91,7 +91,7 @@ export const Step6Password = ({ onNext, onChange }: Props) => {
                 />
 
                 <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-                           className="absolute right-4 justify-center">
+                           className="absolute right-4 justify-center mb-4">
                     {isPasswordVisible ? <EyeClosed size={20} color="gray" /> : <Eye size={20} color="gray" />}
                 </Pressable>
             </View>

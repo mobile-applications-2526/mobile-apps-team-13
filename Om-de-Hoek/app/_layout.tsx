@@ -6,7 +6,7 @@ import { Slot, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { AuthProvider, useAuth } from "@/components/auth/context/AuthContext";
 
 const LOGIN_PATH = "/(auth)/login";
@@ -63,7 +63,11 @@ function InitialLayout() {
     return null;
   }
 
-  return <Slot />;
+  return (
+    <SafeAreaView edges={["top"]} className="flex-1 bg-black">
+      <Slot />
+    </SafeAreaView>
+  );
 }
 
 export default function RootLayout() {
