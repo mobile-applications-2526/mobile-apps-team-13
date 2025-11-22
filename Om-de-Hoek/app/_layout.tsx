@@ -1,3 +1,14 @@
+import "react-native-reanimated";
+import {
+  configureReanimatedLogger,
+  ReanimatedLogLevel,
+} from "react-native-reanimated";
+
+configureReanimatedLogger({
+  level: ReanimatedLogLevel.warn,
+  strict: false,
+});
+
 import "../global.css";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
