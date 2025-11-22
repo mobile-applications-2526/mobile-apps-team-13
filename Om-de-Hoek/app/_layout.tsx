@@ -1,21 +1,21 @@
-import '../global.css';
+import "../global.css";
 
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { useFonts } from 'expo-font';
-import {Slot, useRouter, useSegments} from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-import {AuthProvider, useAuth} from "@/components/auth/context/AuthContext";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useFonts } from "expo-font";
+import { Slot, useRouter, useSegments } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect } from "react";
+import "react-native-reanimated";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { AuthProvider, useAuth } from "@/components/auth/context/AuthContext";
 
-const LOGIN_PATH = '/(auth)/login';
-const APP_PATH = '/(tabs)';
-
+const LOGIN_PATH = "/(auth)/login";
+const APP_PATH = "/(tabs)";
 
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
-} from 'expo-router';
+} from "expo-router";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -47,32 +47,31 @@ function InitialLayout() {
   }, [loaded]);
 
   useEffect(() => {
-      if (authStatus === 'loading') return;
+    if (authStatus === "loading") return;
 
-      const inAuthGroup = segments[0] === '(auth)';
-      const inAppGroup = segments[0] === '(tabs)';
+    const inAuthGroup = segments[0] === "(auth)";
+    const inAppGroup = segments[0] === "(tabs)";
 
-      if (authStatus === 'authenticated' && !inAppGroup) {
-         router.replace(APP_PATH);
-      }
-      else if (authStatus === 'unauthenticated' && !inAuthGroup) {
-          router.replace(LOGIN_PATH);
-      }
-      }, [authStatus, segments, loaded])
-
-    if (!loaded) {
-        return null;
+    if (authStatus === "authenticated" && !inAppGroup) {
+      router.replace(APP_PATH);
+    } else if (authStatus === "unauthenticated" && !inAuthGroup) {
+      router.replace(LOGIN_PATH);
     }
+  }, [authStatus, segments, loaded]);
+
+  if (!loaded) {
+    return null;
+  }
 
   return <Slot />;
 }
 
 export default function RootLayout() {
-
-
   return (
+    <SafeAreaProvider>
       <AuthProvider>
-          <InitialLayout />
+        <InitialLayout />
       </AuthProvider>
+    </SafeAreaProvider>
   );
 }
