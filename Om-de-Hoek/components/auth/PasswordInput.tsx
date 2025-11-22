@@ -27,7 +27,7 @@ export const PasswordInput = ({
             />
 
             <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-                       className="absolute right-4 justify-center">
+                       className="absolute right-4 mb-4 justify-center">
                 {isPasswordVisible ? <EyeClosed size={20} color="gray" /> : <Eye size={20} color="gray" />}
             </Pressable>
         </View>
