@@ -1,4 +1,3 @@
-import { Pressable, Text } from "react-native";
 import { Color } from "@/types/StyleOptions";
 
 type Props = {
@@ -12,8 +11,11 @@ type Props = {
     | "none"
     | "underline"
     | "line-through"
-    | "underline line-through";
+    | "underline line-through"
+    | undefined;
 };
+
+import { Pressable, Text, GestureResponderEvent } from "react-native";
 
 export const PressableButton = ({
   onPress,
@@ -21,23 +23,29 @@ export const PressableButton = ({
   background = Color.BLUE,
   textColor = Color.WHITE,
   disabled = false,
-  borderColor,
+  borderColor = undefined,
   underlineStyle = "none",
 }: Props) => {
+  const onButtonPress = async (e: GestureResponderEvent) => {
+    const button = e.currentTarget;
+    button.setNativeProps({ style: { opacity: 0.6 } });
+    await onPress();
+    button.setNativeProps({ style: { opacity: 1 } });
+  };
+
   return (
     <Pressable
-      onPress={onPress}
-      disabled={disabled}
-      className="px-4 py-2 rounded-lg mb-10"
-      style={({ pressed }) => ({
+      onPress={onButtonPress}
+      className={`px-4 py-2 rounded-lg mb-10`}
+      style={{
         backgroundColor: background,
         borderColor: borderColor,
         borderWidth: borderColor ? 2 : 0,
-        opacity: pressed ? 0.6 : 1,
-      })}
+      }}
+      disabled={disabled}
     >
       <Text
-        className="font-comfortaa-bold text-center"
+        className={`font-comfortaa-bold text-center`}
         style={{
           color: textColor,
           textDecorationLine: underlineStyle,
