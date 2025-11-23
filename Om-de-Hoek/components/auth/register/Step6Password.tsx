@@ -78,7 +78,7 @@ export const Step6Password = ({ onNext, onChange }: Props) => {
                 <ValidationRow isValid={hasMinLength} text="Minstens 8 karakters" />
                 <ValidationRow isValid={hasNumber} text="Minstens één cijfer" />
                 <ValidationRow isValid={hasUppercase} text="Minstens één hoofdletter" />
-                <ValidationRow isValid={hasSpecialChar} text="Minstens één speciale karakter" />
+                <ValidationRow isValid={hasSpecialChar} text="Minstens één speciaal karakter" />
             </View>
 
             <View className="relative justify-center">

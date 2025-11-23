@@ -9,7 +9,7 @@ export const ValidationRow = ({
   text: string;
 }) => {
   return (
-    <View className="flex-row items-center px-3 mb-2.5 rounded-lg bg-gray-50">
+    <View className="flex-row items-center mb-2.5 rounded-lg bg-gray-50">
       {isValid ? (
         <CircleCheck size={18} color="green" strokeWidth={2.5} />
       ) : (
