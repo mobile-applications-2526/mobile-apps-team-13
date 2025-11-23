@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, Text} from "react-native";
 import PhoneInput from "react-native-phone-number-input";
 import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
@@ -69,7 +69,7 @@ export const Step5PhoneNumber = ({ onNext, onChange }: Props) => {
         autoFocus={false}
         containerStyle={{
           width: "100%",
-          borderColor: "#D1D5DB",
+          borderColor: "gray",
           borderWidth: 1,
           borderRadius: 8,
           marginBottom: 8,
