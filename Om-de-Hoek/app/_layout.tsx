@@ -24,11 +24,8 @@ const LOGIN_PATH = "/(auth)/login";
 const APP_PATH = "/(tabs)";
 
 export {
-  // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from "expo-router";
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 function InitialLayout() {
@@ -46,7 +43,6 @@ function InitialLayout() {
   const router = useRouter();
   const segments = useSegments();
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
   }, [error]);

@@ -17,9 +17,10 @@ import AuthHeader from "@/components/auth/AuthHeader";
 type Props = {
   onNext: () => void;
   onChange: (date: Date) => void;
+  onBack?: () => void;
 };
 
-export const Step3BirthDate = ({ onNext, onChange }: Props) => {
+export const Step3BirthDate = ({ onNext, onChange, onBack }: Props) => {
   const [birthDate, setBirthDate] = useState<Date>(new Date());
   const [showPicker, setShowPicker] = useState<boolean>(false);
   const [isDateSelected, setIsDateSelected] = useState<boolean>(false);
@@ -56,7 +57,7 @@ export const Step3BirthDate = ({ onNext, onChange }: Props) => {
       contentContainerStyle={{ flexGrow: 1 }}
       keyboardShouldPersistTaps="handled"
     >
-      <AuthHeader title={"maak een account aan"} />
+      <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
         Wat is uw geboortedatum?
       </Text>

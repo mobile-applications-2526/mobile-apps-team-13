@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import type { RegisterBody, RegisterRequestBody } from "@/types/auth";
-import PagerView from "react-native-pager-view";
 import { View, KeyboardAvoidingView, Platform } from "react-native";
+import { useRouter } from "expo-router";
 import { Step1Email } from "@/components/auth/register/Step1Email";
 import { Step2Name } from "@/components/auth/register/Step2Name";
 import { Step3BirthDate } from "@/components/auth/register/Step3BirthDate";
@@ -37,137 +37,136 @@ export default function RegisterPage() {
 
   const [huidigeIndex, setHuidigeIndex] = useState<number>(0);
 
-  const pagerRef = useRef<PagerView>(null);
-
   const { signIn } = useAuth();
+  const router = useRouter();
 
   const goToNextStep = () => {
-    pagerRef.current?.setPage(huidigeIndex + 1);
+    setHuidigeIndex((prev) => Math.min(prev + 1, totalSteps - 1));
   };
 
   const nextAndRegister = async () => {
-    //Registerbody heeft veel te veel velden, die niet nodig zijn voor registratie volgens swagger
     const dataToRegister: RegisterRequestBody = {
       email: data.email,
-      phoneNumber: data.phoneNumber || "",
+      phoneNumber: (data as any).phoneNumber || "",
       password: data.password,
       username: `${data.firstName}${data.lastName}`,
       birthDate: parseDate(data.birthDate),
     };
-    console.log(dataToRegister);
+
     await authService.authRegister(dataToRegister);
-
-    console.log("Registered, now logging in...");
-
     const loginTokens = await authService.authLogin(dataToRegister);
-
-    console.log("Logged in, signing in...");
-
     await signIn(loginTokens.token, loginTokens.refreshToken);
-  };
-
-  const handlePageSelected = (e: any) => {
-    setHuidigeIndex(e.nativeEvent.position);
   };
 
   return (
     <View className="flex-1 bg-white px-6 pt-12 pb-8">
-      <PagerView
-        ref={pagerRef}
-        style={{ flex: 1 }}
-        onPageSelected={handlePageSelected}
-        scrollEnabled={false}
-      >
-        <KeyboardAvoidingView
-          key="1"
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          className="flex-1 justify-center"
-          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
-        >
-          <Step1Email
-            onNext={goToNextStep}
-            onChange={(email) =>
-              setData((prevData) => ({ ...prevData, email }))
-            }
-          />
-        </KeyboardAvoidingView>
+      <View style={{ flex: 1 }}>
+        {huidigeIndex === 0 && (
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            className="flex-1 justify-center"
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
+          >
+            <Step1Email
+              onNext={goToNextStep}
+              value={data.email}
+              onChange={(email) => setData((prev) => ({ ...prev, email }))}
+              onBack={() => router.push("/(auth)/login")}
+            />
+          </KeyboardAvoidingView>
+        )}
 
-        <KeyboardAvoidingView
-          key="2"
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          className="flex-1 justify-center"
-          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
-        >
-          <Step2Name
-            onNext={goToNextStep}
-            onChange={({ firstName, lastName }) =>
-              setData((prevData) => ({ ...prevData, firstName, lastName }))
-            }
-          />
-        </KeyboardAvoidingView>
+        {huidigeIndex === 1 && (
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            className="flex-1 justify-center"
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
+          >
+            <Step2Name
+              onNext={goToNextStep}
+              onChange={({ firstName, lastName }) =>
+                setData((prev) => ({ ...prev, firstName, lastName }))
+              }
+              onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
+            />
+          </KeyboardAvoidingView>
+        )}
 
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          key="3"
-          className="flex-1 justify-center"
-          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
-        >
-          <Step3BirthDate
-            onNext={goToNextStep}
-            onChange={(birthDate) =>
-              setData((prevData) => ({ ...prevData, birthDate }))
-            }
-          />
-        </KeyboardAvoidingView>
+        {huidigeIndex === 2 && (
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            className="flex-1 justify-center"
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
+          >
+            <Step3BirthDate
+              onNext={goToNextStep}
+              onChange={(birthDate) =>
+                setData((prev) => ({ ...prev, birthDate }))
+              }
+              onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
+            />
+          </KeyboardAvoidingView>
+        )}
 
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          key="4"
-          className="flex-1 justify-center"
-          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
-        >
-          <Step4Address
-            onNext={goToNextStep}
-            onChange={({ streetName, houseNumber, municipality, postalCode }) =>
-              setData((prevData) => ({
-                ...prevData,
+        {huidigeIndex === 3 && (
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            className="flex-1 justify-center"
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
+          >
+            <Step4Address
+              onNext={goToNextStep}
+              onChange={({
                 streetName,
                 houseNumber,
                 municipality,
                 postalCode,
-              }))
-            }
-          />
-        </KeyboardAvoidingView>
+              }) =>
+                setData((prev) => ({
+                  ...prev,
+                  streetName,
+                  houseNumber,
+                  municipality,
+                  postalCode,
+                }))
+              }
+              onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
+            />
+          </KeyboardAvoidingView>
+        )}
 
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          key="5"
-          className="flex-1 justify-center"
-          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
-        >
-          <Step5PhoneNumber
-            onNext={goToNextStep}
-            onChange={(phoneNumber) =>
-              setData((prevData) => ({ ...prevData, phoneNumber }))
-            }
-          />
-        </KeyboardAvoidingView>
+        {huidigeIndex === 4 && (
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            className="flex-1 justify-center"
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
+          >
+            <Step5PhoneNumber
+              onNext={goToNextStep}
+              onChange={(phoneNumber) =>
+                setData((prev) => ({ ...prev, phoneNumber }))
+              }
+              onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
+            />
+          </KeyboardAvoidingView>
+        )}
 
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          key="6"
-          className="flex-1 justify-center"
-          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
-        >
-          <Step6Password
-            onNext={nextAndRegister}
-            onChange={(password) =>
-              setData((prevData) => ({ ...prevData, password }))
-            }
-          />
-        </KeyboardAvoidingView>
-      </PagerView>
+        {huidigeIndex === 5 && (
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            className="flex-1 justify-center"
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
+          >
+            <Step6Password
+              onNext={nextAndRegister}
+              onChange={(password) =>
+                setData((prev) => ({ ...prev, password }))
+              }
+              onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
+            />
+          </KeyboardAvoidingView>
+        )}
+      </View>
       <ProgressBar currentStep={huidigeIndex} totalSteps={totalSteps} />
     </View>
   );

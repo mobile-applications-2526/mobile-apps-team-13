@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ScrollView, Text} from "react-native";
+import { ScrollView, Text } from "react-native";
 import PhoneInput from "react-native-phone-number-input";
 import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
@@ -8,9 +8,10 @@ import AuthHeader from "@/components/auth/AuthHeader";
 type Props = {
   onNext: () => void;
   onChange: (formattedPhoneNumber: string) => void;
+  onBack?: () => void;
 };
 
-export const Step5PhoneNumber = ({ onNext, onChange }: Props) => {
+export const Step5PhoneNumber = ({ onNext, onChange, onBack }: Props) => {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [formattedValue, setFormattedValue] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean>(false);
@@ -36,7 +37,7 @@ export const Step5PhoneNumber = ({ onNext, onChange }: Props) => {
       contentContainerStyle={{ flexGrow: 1 }}
       keyboardShouldPersistTaps="handled"
     >
-      <AuthHeader title={"maak een account aan"} />
+      <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
         Wat is uw telefoonnummer?
       </Text>
