@@ -1,7 +1,14 @@
 import { View, Text, TouchableOpacity } from "react-native"
 import { UserRound, UsersRound } from "lucide-react-native"
 
-const NeighborhoodGlassCard = ({ name, participants }) => {
+import React from "react"
+
+type NeighborhoodGlassCardProps = {
+  name: string
+  participants: number
+}
+
+const NeighborhoodGlassCard: React.FC<NeighborhoodGlassCardProps> = ({ name, participants }) => {
   return (
     <View
       className="mx-2 my-2 rounded-3xl bg-white p-2.5"
