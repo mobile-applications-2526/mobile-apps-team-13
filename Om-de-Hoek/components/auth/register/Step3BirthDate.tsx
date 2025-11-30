@@ -127,7 +127,7 @@ export const Step3BirthDate = ({ onNext, onChange }: Props) => {
             display="spinner"
             onChange={onDateChange}
             maximumDate={new Date()}
-            textColor="#000000"
+            textColor="#100D08"
             style={{ width: 320, height: 180 }}
           />
         </View>
