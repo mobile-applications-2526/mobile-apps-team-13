@@ -17,7 +17,7 @@ export const WrittenInput = ({
 }: Props) => {
     return(
         <TextInput
-            className="border border-gray py-3 px-4 rounded-lg text-base mb-4 font-comfortaa-regular"
+            className="border border-gray py-3 px-4 rounded-lg mb-4 font-comfortaa-regular"
             placeholder={placeholder}
             placeholderTextColor="gray"
             value={value}
