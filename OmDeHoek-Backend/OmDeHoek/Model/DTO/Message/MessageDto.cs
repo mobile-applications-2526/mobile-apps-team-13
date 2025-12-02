@@ -8,6 +8,8 @@ public class MessageDto
     public string Content { get; set; } = "";
     public DateTime CreatedAt { get; set; }
     public MessageSeverity Severity { get; set; }
+    public List<MessageReactionDto> Reactions { get; set; }
+    public uint TotalLikes { get; init; }
 
     public MessageDto() { }
 
@@ -17,5 +19,8 @@ public class MessageDto
         Content = message.Content;
         CreatedAt = message.CreatedAt;
         Severity = message.Severity;
+        Reactions = message.Comments
+            .Select(r => new MessageReactionDto(r))
+            .ToList();
     }
 }
