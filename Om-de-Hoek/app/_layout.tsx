@@ -13,7 +13,7 @@ import "../global.css";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
-import { Slot, useRouter, useSegments } from "expo-router";
+import { Slot, useRouter, useSegments, useRootNavigationState } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
@@ -43,6 +43,8 @@ function InitialLayout() {
   const router = useRouter();
   const segments = useSegments();
 
+  const rootNavigationState = useRootNavigationState();
+
   useEffect(() => {
     if (error) throw error;
   }, [error]);
@@ -54,17 +56,17 @@ function InitialLayout() {
   }, [loaded]);
 
   useEffect(() => {
+    if (!loaded || !rootNavigationState?.key) return;
     if (authStatus === "loading") return;
 
     const inAuthGroup = segments[0] === "(auth)";
-    const inAppGroup = segments[0] === "(tabs)";
 
-    if (authStatus === "authenticated" && !inAppGroup) {
+    if (authStatus === "authenticated" && inAuthGroup) {
       router.replace(APP_PATH);
     } else if (authStatus === "unauthenticated" && !inAuthGroup) {
       router.replace(LOGIN_PATH);
     }
-  }, [authStatus, segments, loaded]);
+  }, [authStatus, segments, loaded, rootNavigationState?.key]);
 
   if (!loaded) {
     return null;
