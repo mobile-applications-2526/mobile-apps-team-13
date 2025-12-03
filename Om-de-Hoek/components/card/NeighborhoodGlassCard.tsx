@@ -3,12 +3,12 @@ import { UserRound, UsersRound } from "lucide-react-native"
 
 import React from "react"
 
-type NeighborhoodGlassCardProps = {
+type Props = {
   name: string
   participants: number
 }
 
-const NeighborhoodGlassCard: React.FC<NeighborhoodGlassCardProps> = ({ name, participants }) => {
+const NeighborhoodGlassCard: React.FC<Props> = ({ name, participants }) => {
   return (
     <View
       className="mx-2 my-2 rounded-3xl bg-white p-2.5"
