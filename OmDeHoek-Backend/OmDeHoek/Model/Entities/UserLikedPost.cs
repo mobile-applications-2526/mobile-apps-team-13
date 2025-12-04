@@ -2,12 +2,12 @@
 
 public class UserLikedPost : IDataBaseEntity<UserLikedPost>
 {
-    public string UserId { get; set; }
+    public string UserId { get; set; } = null!;
     public Guid PostId { get; set; }
-    public bool IsLiked { get; set; } = false;
+    public bool IsLiked { get; set; }
     public User User { get; set; } = null!;
     public Message Post { get; set; } = null!;
-    
+
     public bool Equals(UserLikedPost? x, UserLikedPost? y)
     {
         return x is not null && x.Equals(y);

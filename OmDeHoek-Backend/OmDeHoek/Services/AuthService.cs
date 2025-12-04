@@ -24,12 +24,12 @@ public class AuthService(
         {
             await uow.StartTransaction();
 
-            if (String.IsNullOrWhiteSpace(newUser.Username))
+            if (string.IsNullOrWhiteSpace(newUser.Username))
             {
                 throw new MissingDataException("username is missing or only spaces", "username");
             }
 
-            if (String.IsNullOrWhiteSpace(newUser.Password))
+            if (string.IsNullOrWhiteSpace(newUser.Password))
             {
                 throw new MissingDataException("invalid password", "password");
             }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using OmDeHoek.Model.Commands.User;
 using OmDeHoek.Model.Enums;
+using OmDeHoek.Model.Exceptions;
 
 namespace OmDeHoek.Model.Entities;
 

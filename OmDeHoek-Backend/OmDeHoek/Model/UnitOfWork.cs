@@ -17,6 +17,8 @@ public sealed class UnitOfWork : IDisposable
     private readonly MessageRepository _messageRepository;
     private readonly DeelgemeenteRepository _deelgemeenteRepository;
     private readonly RefreshTokenRepository _refreshTokenRepository;
+    private readonly UserLikedPostRepository _userLikedPostRepository;
+    private readonly MessageReactionRepository _messageReactionRepository;
 
     public UnitOfWork(
         DataContext context,
@@ -28,7 +30,9 @@ public sealed class UnitOfWork : IDisposable
         UserBuurtRepository userBuurtRepository = null,
         MessageRepository messageRepository = null,
         DeelgemeenteRepository deelgemeenteRepository = null,
-        RefreshTokenRepository refreshTokenRepository = null
+        RefreshTokenRepository refreshTokenRepository = null,
+        UserLikedPostRepository userLikedPostRepository = null,
+        MessageReactionRepository messageReactionRepository = null
         )
     {
         _context = context;
@@ -41,6 +45,8 @@ public sealed class UnitOfWork : IDisposable
         _messageRepository = messageRepository;
         _deelgemeenteRepository = deelgemeenteRepository;
         _refreshTokenRepository = refreshTokenRepository;
+        _userLikedPostRepository = userLikedPostRepository;
+        _messageReactionRepository = messageReactionRepository;
     }
 
     public async Task Save()
@@ -124,5 +130,15 @@ public sealed class UnitOfWork : IDisposable
     public RefreshTokenRepository RefreshTokenRepository
     {
         get { return _refreshTokenRepository ?? new RefreshTokenRepository(_context); }
+    }
+    
+    public UserLikedPostRepository UserLikedPostRepository
+    {
+        get { return _userLikedPostRepository ?? new UserLikedPostRepository(_context); }
+    }
+    
+    public MessageReactionRepository MessageReactionRepository
+    {
+        get { return _messageReactionRepository ?? new MessageReactionRepository(_context); }
     }
 }
