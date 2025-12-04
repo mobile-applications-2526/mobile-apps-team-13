@@ -31,6 +31,25 @@
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Remove="Model\Data\SeedData\Buurten.xlsx" />
+	  <Content Include="Model\Data\SeedData\Buurten.xlsx">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <None Remove="Model\Data\SeedData\Deelgemeenten.xlsx" />
+	  <Content Include="Model\Data\SeedData\Deelgemeenten.xlsx">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <None Remove="Model\Data\SeedData\Gemeenten.xlsx" />
+	  <Content Include="Model\Data\SeedData\Gemeenten.xlsx">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <None Remove="Model\Data\SeedData\PostcodeMapping.xlsx" />
+	  <Content Include="Model\Data\SeedData\PostcodeMapping.xlsx">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
 	<PropertyGroup>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 
