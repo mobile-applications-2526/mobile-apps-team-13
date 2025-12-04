@@ -29,7 +29,10 @@ public class DataContext : IdentityUserContext<User>
         builder.Entity<User>(entity =>
         {
             entity.HasKey(u => u.Id);
+            
             entity.Property(u => u.BirthDate).IsRequired();
+            entity.Property(u => u.Voornaam).IsRequired();
+            entity.Property(u => u.Achternaam).IsRequired();
 
             entity.HasIndex(u => u.NormalizedEmail).IsUnique();
         });

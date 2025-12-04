@@ -1,5 +1,7 @@
-﻿using System.Security.Cryptography;
+﻿using System.Globalization;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Identity;
 using OmDeHoek.Model;
 using OmDeHoek.Model.Commands.auth;
@@ -11,22 +13,29 @@ using OmDeHoek.Model.Exceptions;
 
 namespace OmDeHoek.Services;
 
-public class AuthService(
+public partial class AuthService(
     UnitOfWork uow,
     TokenManager tokenManager,
     TokenService tokenService,
     UserManager<User> userManager
     )
 {
+    private readonly int _minimumOnlineLeeftijd = 13;
+    
     public async Task<UserDto> RegisterAsync(RegisterUser newUser)
     {
         try
         {
             await uow.StartTransaction();
 
-            if (string.IsNullOrWhiteSpace(newUser.Username))
+            if (string.IsNullOrWhiteSpace(newUser.Voornaam))
             {
-                throw new MissingDataException("username is missing or only spaces", "username");
+                throw new MissingDataException("Voornaam is missing or only spaces", "voornaam");
+            }
+            
+            if (string.IsNullOrWhiteSpace(newUser.Achternaam))
+            {
+                throw new MissingDataException("Achternaam is missing or only spaces", "achternaam");
             }
 
             if (string.IsNullOrWhiteSpace(newUser.Password))
@@ -43,34 +52,26 @@ public class AuthService(
             {
                 throw new DuplicateFieldException("emil already in use", "email");
             }
-            
-            if (await uow.UserRepository.GetByUserNameAsync(newUser.Username) != null)
-            {
-                throw new DuplicateFieldException("username already in use", "username");
-            }
-
-            if (newUser.Username.Trim().Length < 3 || newUser.Username.Trim().Length > 31)
-            {
-                throw new InvalidInputException("username must be between 3 and 31 characters", "username");
-            }
 
             if (newUser.Password.Trim().Length < 3 || newUser.Password.Trim().Length > 31)
             {
                 throw new InvalidInputException("password must be between 3 and 31 characters", "password");
             }
             
-            if(newUser.BirthDate > DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-13)))
+            if(newUser.BirthDate > DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-_minimumOnlineLeeftijd)))
             {
-                throw new InvalidInputException("you must be at least 13 years old to register", "birthDate");
+                throw new InvalidInputException($"you must be at least {_minimumOnlineLeeftijd} years old to register", "birthDate");
             }
+            
+            var username = await GenerateUniqueUsername(newUser.Voornaam, newUser.Achternaam);
 
             User user = new()
             {
-                UserName = newUser.Username,
+                UserName = username,
                 Email = newUser.Email,
                 Role = Roles.User,
                 NormalizedEmail = newUser.Email.ToUpper(),
-                NormalizedUserName = newUser.Username.ToUpper(),
+                NormalizedUserName = username.ToUpper(),
                 PhoneNumber = newUser.PhoneNumber,
                 PhoneNumberConfirmed = newUser.PhoneNumber != null,
                 BirthDate = newUser.BirthDate
@@ -249,4 +250,50 @@ public class AuthService(
             throw;
         }
     }
+
+    #region Helper functions
+
+    private async Task<string> GenerateUniqueUsername(string voornaam, string achternaam)
+    {
+        var cleanVoornaam = CleanString(voornaam);
+        var cleanAchternaam = CleanString(achternaam);
+        
+        var baseUsername = $"{cleanVoornaam}{cleanAchternaam}";
+        
+        var uniqueUsername = baseUsername;
+        var counter = 1;
+
+        while (await userManager.FindByNameAsync(uniqueUsername) != null)
+        {
+            uniqueUsername = $"{baseUsername}{counter}";
+            counter++;
+        }
+
+        return uniqueUsername;
+    }
+
+    private string CleanString(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input)) return string.Empty;
+
+        var textInfo = new CultureInfo("nl-NL", false).TextInfo;
+        input = textInfo.ToTitleCase(input.ToLower());
+
+        var normalizedString = input.Normalize(NormalizationForm.FormD);
+        var stringBuilder = new StringBuilder();
+
+        foreach (var c in from c in normalizedString let unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c) where unicodeCategory != UnicodeCategory.NonSpacingMark select c)
+        {
+            stringBuilder.Append(c);
+        }
+
+        var cleanText = stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+
+        return MyRegex().Replace(cleanText, "");
+    }
+
+    [GeneratedRegex("[^a-zA-Z0-9]")]
+    private static partial Regex MyRegex();
+
+    #endregion
 }

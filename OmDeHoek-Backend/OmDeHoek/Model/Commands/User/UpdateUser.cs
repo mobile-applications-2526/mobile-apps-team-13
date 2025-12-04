@@ -1,4 +1,5 @@
 ﻿using OmDeHoek.Model.Exceptions;
+// ReSharper disable InvertIf
 
 namespace OmDeHoek.Model.Commands.User;
 
@@ -8,6 +9,8 @@ public class UpdateUser
     public string? Username { get; set; }
     public string? PhoneNumber { get; set; }
     public string? Email { get; set; }
+    public string? Voornaam { get; set; }
+    public string? Achternaam { get; set; }
 
     /// <summary>
     /// Throws wanneer een inputwaarde niet voldoet aan de validatieregels
@@ -28,13 +31,26 @@ public class UpdateUser
             //heeft nog geen validatieregels
         }
 
-        // ReSharper disable once InvertIf
         if (Email is not null)
         {
             Email = Email.Trim();
             if (!Utils.AuthUtils.IsValidEmail(Email))
                 throw new InvalidInputException("Email is van ongeldig formaat", "email");
             // valid email
+        }
+
+        if (Voornaam is not null)
+        {
+            Voornaam = Voornaam.Trim();
+            if(string.IsNullOrWhiteSpace(Voornaam)) 
+                throw new InvalidInputException("Voornaam mag niet leeg zijn",  "Voornaam");
+        }
+
+        if (Achternaam is not null)
+        {
+            Achternaam = Achternaam.Trim();
+            if (string.IsNullOrWhiteSpace(Achternaam))
+                throw new InvalidInputException("Acthernaam mag niet leeg zijn", "Achternaam");
         }
     }
 }
