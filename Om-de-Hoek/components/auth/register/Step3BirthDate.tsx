@@ -13,6 +13,8 @@ import DateTimePicker, {
 import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
 import AuthHeader from "@/components/auth/AuthHeader";
+import { useTranslation } from "react-i18next";
+import i18n from "@/i18n";
 
 type Props = {
   onNext: () => void;
@@ -24,6 +26,8 @@ export const Step3BirthDate = ({ onNext, onChange, onBack }: Props) => {
   const [birthDate, setBirthDate] = useState<Date>(new Date());
   const [showPicker, setShowPicker] = useState<boolean>(false);
   const [isDateSelected, setIsDateSelected] = useState<boolean>(false);
+
+  const { t, i18n } = useTranslation();
 
   const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     if (Platform.OS === "android") {
@@ -45,7 +49,7 @@ export const Step3BirthDate = ({ onNext, onChange, onBack }: Props) => {
     setShowPicker(false);
   };
 
-  const formattedDate = birthDate.toLocaleDateString("nl-NL", {
+  const formattedDate = birthDate.toLocaleDateString(i18n.language, {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -59,10 +63,10 @@ export const Step3BirthDate = ({ onNext, onChange, onBack }: Props) => {
     >
       <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
-        Wat is uw geboortedatum?
+        {t("register.birthdate.title")}
       </Text>
       <Text className="text-[14px] text-gray text-center font-comfortaa-medium mb-10">
-        Wanneer mag u ons trakteren op taart?
+        {t("register.birthdate.subtitle")}
       </Text>
 
       <Pressable onPress={showDatePicker} className="mb-4">
@@ -72,7 +76,7 @@ export const Step3BirthDate = ({ onNext, onChange, onBack }: Props) => {
             numberOfLines={1}
             ellipsizeMode="tail"
           >
-            {isDateSelected ? formattedDate : "Kies een datum"}
+            {isDateSelected ? formattedDate : t("register.birthdate.birthdate")}
           </Text>
         </View>
       </Pressable>
@@ -89,15 +93,15 @@ export const Step3BirthDate = ({ onNext, onChange, onBack }: Props) => {
               <View className="flex-row justify-between items-center px-4 py-4 border-b border-gray-200">
                 <Pressable onPress={closeDatePicker}>
                   <Text className="text-red font-comfortaa-semibold text-[16px]">
-                    Annuleren
+                    {t("register.birthdate.datepicker.cancel")}
                   </Text>
                 </Pressable>
                 <Text className="font-comfortaa-bold text-[16px] text-black">
-                  Selecteer datum
+                  {t("register.birthdate.datepicker.title")}
                 </Text>
                 <Pressable onPress={closeDatePicker}>
                   <Text className="text-blue font-comfortaa-semibold text-[16px]">
-                    Gereed
+                    {t("register.birthdate.datepicker.confirm")}
                   </Text>
                 </Pressable>
               </View>
@@ -130,6 +134,15 @@ export const Step3BirthDate = ({ onNext, onChange, onBack }: Props) => {
             maximumDate={new Date()}
             textColor="#100D08"
             style={{ width: 320, height: 180 }}
+
+            positiveButton={{
+              label: t("register.birthdate.datepicker.confirm"),
+              textColor: Color.BLUE 
+            }}
+            negativeButton={{
+              label: t("register.birthdate.datepicker.cancel"),
+              textColor: Color.RED 
+            }}
           />
         </View>
       )}
@@ -137,7 +150,7 @@ export const Step3BirthDate = ({ onNext, onChange, onBack }: Props) => {
       <PressableButton
         onPress={async () => onNext()}
         disabled={!isDateSelected}
-        title="Verdergaan"
+        title={t("register.continue")}
         background={isDateSelected ? Color.BLUE : Color.GRAY}
       />
     </ScrollView>
