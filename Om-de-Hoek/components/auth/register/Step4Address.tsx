@@ -4,6 +4,7 @@ import { WrittenInput } from "@/components/WrittenInput";
 import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
 import AuthHeader from "@/components/auth/AuthHeader";
+import { useTranslation } from "react-i18next";
 
 export interface AddressData {
   streetName: string;
@@ -24,6 +25,8 @@ export const Step4Address = ({ onNext, onChange, onBack }: Props) => {
   const [municipality, setMunicipality] = useState<string>("");
   const [postalCode, setPostalCode] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean>(false);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     const areFieldsFilled =
@@ -48,35 +51,35 @@ export const Step4Address = ({ onNext, onChange, onBack }: Props) => {
     >
       <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
-        Wat is uw adres?
+        {t("register.address.title")}
       </Text>
       <Text className="text-[14px] text-gray text-center font-comfortaa-medium mb-10">
-        Waar mogen we komen eten?
+        {t("register.address.subtitle")}
       </Text>
 
       <WrittenInput
-        placeholder="Straatnaam"
+        placeholder={t("register.address.street")}
         value={streetName}
         onChangeText={setStreetName}
         inputType="default"
       />
 
       <WrittenInput
-        placeholder="Huisnummer (optioneel)"
+        placeholder={t("register.address.housenumber")}
         value={houseNumber}
         onChangeText={setHouseNumber}
         inputType="default"
       />
 
       <WrittenInput
-        placeholder="Gemeente"
+        placeholder={t("register.address.municipality")}
         value={municipality}
         onChangeText={setMunicipality}
         inputType="default"
       />
 
       <WrittenInput
-        placeholder="Postcode"
+        placeholder={t("register.address.postalcode")}
         value={postalCode}
         onChangeText={setPostalCode}
         inputType="default"
@@ -85,7 +88,7 @@ export const Step4Address = ({ onNext, onChange, onBack }: Props) => {
       <PressableButton
         onPress={async () => onNext()}
         disabled={!isValid}
-        title="Verdergaan"
+        title={t("register.continue")}
         background={isValid ? Color.BLUE : Color.GRAY}
       />
     </ScrollView>
