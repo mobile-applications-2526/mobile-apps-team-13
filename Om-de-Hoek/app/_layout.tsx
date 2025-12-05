@@ -1,3 +1,4 @@
+import '@/i18n';
 import "react-native-reanimated";
 import {
   configureReanimatedLogger,
