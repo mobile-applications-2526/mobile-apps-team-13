@@ -5,7 +5,7 @@ namespace OmDeHoek.Model.Entities;
 
 public class Gemeente : IDataBaseEntity<Gemeente>
 {
-    [MaxLength(5)]
+    [MaxLength(5), Key]
     public string NisCode { get; set; } = string.Empty; // Primary key
     [MaxLength(255)]
     public string NaamNl { get; set; } = string.Empty;
@@ -16,7 +16,6 @@ public class Gemeente : IDataBaseEntity<Gemeente>
 
     [MaxLength(3)]
     public string GesprokenTalen { get; set; } = "N"; // Default Nederlands
-
     public List<DeelGemeente> DeelGemeentes { get; set; } = [];
     public List<Postcode> Postcodes { get; set; } = [];
 
@@ -25,7 +24,7 @@ public class Gemeente : IDataBaseEntity<Gemeente>
     public bool Equals(Gemeente? other)
     {
         return !CheckNullOrWrongType(other)
-               && NisCode == other.NisCode;
+               && NisCode == other!.NisCode;
     }
 
     public void Update(Gemeente? entity)
@@ -40,7 +39,7 @@ public class Gemeente : IDataBaseEntity<Gemeente>
     public bool HardEquals(Gemeente? other)
     {
         return Equals(other)
-               && NaamFr == other.NaamFr
+               && NaamFr == other!.NaamFr
                && NaamNl == other.NaamNl
                && GesprokenTalen == other.GesprokenTalen
                && NaamDe == other.NaamDe;

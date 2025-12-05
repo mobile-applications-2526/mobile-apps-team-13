@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OmDeHoek.Model.Data;
@@ -11,9 +12,11 @@ using OmDeHoek.Model.Data;
 namespace OmDeHoek.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20251204193713_NullableNameUser")]
+    partial class NullableNameUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -334,7 +337,6 @@ namespace OmDeHoek.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Achternaam")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateOnly>("BirthDate")
@@ -391,7 +393,6 @@ namespace OmDeHoek.Migrations
                         .HasColumnType("character varying(256)");
 
                     b.Property<string>("Voornaam")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");

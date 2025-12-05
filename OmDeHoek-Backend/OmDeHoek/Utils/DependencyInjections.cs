@@ -21,6 +21,9 @@ public static class DependencyInjections
         services.AddScoped<UserBuurtRepository>();
         services.AddScoped<MessageRepository>();
         services.AddScoped<DeelgemeenteRepository>();
+        services.AddScoped<UserLikedPostRepository>();
+        services.AddScoped<RefreshTokenRepository>();
+        services.AddScoped<MessageReactionRepository>();
 
         // Services
         services.AddScoped<TokenService>();

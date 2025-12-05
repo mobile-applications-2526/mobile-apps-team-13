@@ -16,6 +16,10 @@ public class Message() : IDataBaseEntity<Message>
     public string Content { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public MessageSeverity Severity { get; set; }
+    public List<MessageReaction> Comments { get; init; } = [];
+    public List<UserLikedPost> LikedBy { get; init; } = [];
+    
+    
     public bool Equals(Message? other)
     {
         return !CheckNullOrWrongType(other)

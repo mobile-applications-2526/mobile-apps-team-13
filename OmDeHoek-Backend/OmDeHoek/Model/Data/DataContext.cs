@@ -15,6 +15,8 @@ public class DataContext : IdentityUserContext<User>
     public DbSet<UserBuurt> UserBuurten { get; set; }
     public DbSet<Message> Messages { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<MessageReaction> MessageReactions { get; set; }
+    public DbSet<UserLikedPost> UserLikedPosts { get; set; }
 
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
@@ -27,7 +29,10 @@ public class DataContext : IdentityUserContext<User>
         builder.Entity<User>(entity =>
         {
             entity.HasKey(u => u.Id);
+            
             entity.Property(u => u.BirthDate).IsRequired();
+            entity.Property(u => u.Voornaam).IsRequired();
+            entity.Property(u => u.Achternaam).IsRequired();
 
             entity.HasIndex(u => u.NormalizedEmail).IsUnique();
         });
@@ -125,6 +130,23 @@ public class DataContext : IdentityUserContext<User>
                 .HasForeignKey(m => m.BuurtSectorCode)
                 .OnDelete(DeleteBehavior.Restrict);
         });
+        
+        builder.Entity<MessageReaction>(entity =>
+        {
+            entity.HasKey(mr => mr.Id);
+
+            entity.Property(mr => mr.CreatedAt).IsRequired();
+
+            entity.HasOne(mr => mr.User)
+                .WithMany()
+                .HasForeignKey(mr => mr.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(mr => mr.Message)
+                .WithMany(m => m.Comments)
+                .HasForeignKey(mr => mr.MessageId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
 
         builder.Entity<RefreshToken>(entity =>
         {
@@ -135,6 +157,21 @@ public class DataContext : IdentityUserContext<User>
             entity.HasOne(rt => rt.User)
                 .WithMany()
                 .HasForeignKey(rt => rt.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+        
+        builder.Entity<UserLikedPost>(entity =>
+        {
+            entity.HasKey(ulp => new { ulp.UserId, ulp.PostId });
+
+            entity.HasOne(ulp => ulp.User)
+                .WithMany()
+                .HasForeignKey(ulp => ulp.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(ulp => ulp.Post)
+                .WithMany(m => m.LikedBy)
+                .HasForeignKey(ulp => ulp.PostId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }

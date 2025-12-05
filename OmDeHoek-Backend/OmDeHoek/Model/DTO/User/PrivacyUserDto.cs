@@ -6,6 +6,8 @@ public class PrivacyUserDto
 {
     public string Id { get; set; } = string.Empty;
     public string Username { get; set; } = string.Empty;
+    public string Voornaam { get; set; } =  string.Empty;
+    public string Achternaam { get; set; } = string.Empty;
 
     public PrivacyUserDto() { }
 
@@ -19,5 +21,7 @@ public class PrivacyUserDto
     {
         Id = user.Id;
         Username = user.UserName;
+        Voornaam = user.Voornaam;
+        Achternaam = user.Achternaam;
     }
 }

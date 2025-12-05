@@ -1,4 +1,5 @@
 ﻿using System;
+using OmDeHoek.Model.Enums;
 
 namespace OmDeHoek.Tests.Model.Entities;
 
@@ -9,7 +10,14 @@ public class AdresTest
     private readonly string ValidPostcode = "3001";
     private readonly string ValidDorp = "Heverlee";
 
-    private static readonly User ValidBewoner = new User("User", "user@user.com", new DateOnly(2000, 7, 7) ,"+32412345678");
+    private static readonly User ValidBewoner = new(
+        username: "Bewoner",
+        voornaam: "ik",
+        achternaam: "ik",
+        email: "t@test.com",
+        birthDate: DateOnly.FromDateTime(DateTime.Now),
+        role: Roles.User
+        );
 
     [Fact]
     public void Constructor_ShouldCreateAdres()
