@@ -17,7 +17,8 @@
       "expo-router",
       "expo-font",
       "expo-web-browser",
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-localization"
     ],
     "ios": {
       "supportsTablet": true,
