@@ -8,6 +8,7 @@ import { UserRoundPen, Wrench, BellRing, UsersRound } from "lucide-react-native"
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import UserService from "@/services/UserService";
+import { useTranslation } from "react-i18next";
 
 export default function ProfilePage() {
 
@@ -18,6 +19,7 @@ export default function ProfilePage() {
     const { signOut } = useAuth();
     const router = useRouter();
     const { token } = useAuth();
+    const { t } = useTranslation();
 
     useEffect(() => {
         const fetchUserName = async () => {
@@ -25,10 +27,8 @@ export default function ProfilePage() {
                 const response = await UserService.loggedInuser(token);
                 if (response.ok) {
                     const data = await response.json();
-                    const fullName = data.userName || "";
-                    const nameParts = fullName.match(/[A-Z][a-z]*/g) || [fullName];
-                    setFirstName(nameParts[0] || "");
-                    setLastName(nameParts[1] || "");
+                    setFirstName(data.voornaam || "");
+                    setLastName(data.achternaam || "");
                 } else {
                     console.error("API Error:", response.status);
                 }
@@ -61,35 +61,35 @@ export default function ProfilePage() {
 
             <MenuItem
                 icon={<UserRoundPen color="#2548BC" size={20} fill="#2548BC"/>}
-                label="Mijn Gegevens"
+                label={t('settings.mydata')}
                 onPress={() => router.push("/data")}
             />
 
             <View className="mt-8 mb-2">
-                <Text className="text-black font-comfortaa-semibold text-[14px]">Instellingen</Text>
+                <Text className="text-black font-comfortaa-semibold text-[14px]">{t('settings.settings')}</Text>
             </View>
 
             <MenuItem
                 icon={<Wrench color="#2548BC" size={20} fill="#2548BC"/>}
-                label="Mijn Voorkeuren"
+                label={t('settings.mypreferences')}
                 onPress={() => router.push("/preferences")}
             />
 
             <MenuItem
                 icon={<BellRing color="#2548BC" size={20} fill="#2548BC"/>}
-                label="Mijn Meldingen"
+                label={t('settings.mynotifications')}
                 onPress={() => router.push("/notifications")}
             />
 
             <MenuItem
                 icon={<UsersRound color="#2548BC" size={20} fill="#2548BC"/>}
-                label="Mijn Buurten"
+                label={t('settings.myneighborhoods')}
                 onPress={() => router.push("/neighborhoods")}
             />
 
             <PressableButton
                 onPress={signOut}
-                title={"Uitloggen"}
+                title={t('settings.logout')}
                 background={Color.RED}
             />
         </View>
