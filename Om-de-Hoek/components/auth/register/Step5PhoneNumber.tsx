@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, use } from "react";
 import { ScrollView, Text } from "react-native";
 import PhoneInput from "react-native-phone-number-input";
 import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
 import AuthHeader from "@/components/auth/AuthHeader";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   onNext: () => void;
@@ -15,6 +16,8 @@ export const Step5PhoneNumber = ({ onNext, onChange, onBack }: Props) => {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [formattedValue, setFormattedValue] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean>(false);
+
+  const { t } = useTranslation();
 
   const phoneInputRef = useRef<PhoneInput>(null);
   const lastAllowedRef = useRef<string>("");
@@ -39,10 +42,10 @@ export const Step5PhoneNumber = ({ onNext, onChange, onBack }: Props) => {
     >
       <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
-        Wat is uw telefoonnummer?
+        {t("register.phone.title")}
       </Text>
       <Text className="text-[14px] text-gray text-center font-comfortaa-medium mb-10">
-        Waar kan men je in geval van nood bereiken?
+        {t("register.phone.subtitle")}
       </Text>
 
       <PhoneInput
@@ -50,6 +53,14 @@ export const Step5PhoneNumber = ({ onNext, onChange, onBack }: Props) => {
         value={phoneNumber}
         defaultCode="BE"
         layout="second"
+        placeholder={t("register.phone.phone")}
+
+        countryPickerProps={{
+          filterProps: {
+            placeholder: t("register.phone.country"), 
+          },
+        }}
+
         onChangeText={(text) => {
           const digits = text.replace(/\D/g, "");
           if (digits.length > 9) {
@@ -109,7 +120,7 @@ export const Step5PhoneNumber = ({ onNext, onChange, onBack }: Props) => {
       <PressableButton
         onPress={async () => onNext()}
         disabled={!isValid}
-        title="Verdergaan"
+        title={t("register.continue")}
         background={isValid ? Color.BLUE : Color.GRAY}
       />
     </ScrollView>
