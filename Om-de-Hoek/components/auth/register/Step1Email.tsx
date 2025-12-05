@@ -4,6 +4,7 @@ import { WrittenInput } from "@/components/WrittenInput";
 import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
 import AuthHeader from "@/components/auth/AuthHeader";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   onNext: () => void;
@@ -13,6 +14,8 @@ type Props = {
 };
 
 export const Step1Email = ({ onNext, onChange, value, onBack }: Props) => {
+  const { t } = useTranslation();
+
   const isValid = useMemo(() => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(("" + (value || "")).toLowerCase());
@@ -31,14 +34,14 @@ export const Step1Email = ({ onNext, onChange, value, onBack }: Props) => {
     >
       <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
-        Maak een account
+        {t('register.email.title')}
       </Text>
       <Text className="text-[14px] text-gray text-center font-comfortaa-medium mb-10">
-        En ontdek je buurt.
+        {t('register.email.subtitle')}
       </Text>
 
       <WrittenInput
-        placeholder="E-mail"
+        placeholder={t('register.email.email')}
         value={value}
         onChangeText={handleEmailChange}
         inputType="email-address"
@@ -47,7 +50,7 @@ export const Step1Email = ({ onNext, onChange, value, onBack }: Props) => {
       <PressableButton
         onPress={async () => onNext()}
         disabled={!isValid}
-        title="Verdergaan"
+        title={t('register.continue')}
         background={isValid ? Color.BLUE : Color.GRAY}
       />
     </ScrollView>
