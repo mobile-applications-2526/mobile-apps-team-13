@@ -6,6 +6,7 @@ import { Color } from "@/types/StyleOptions";
 import { Eye, EyeClosed } from "lucide-react-native";
 import { ValidationRow } from "@/components/ValidationRow";
 import AuthHeader from "@/components/auth/AuthHeader";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   onNext: () => void;
@@ -22,6 +23,8 @@ export const Step6Password = ({ onNext, onChange, onBack }: Props) => {
   const [hasSpecialChar, setHasSpecialChar] = useState<boolean>(false);
   const [isValid, setIsValid] = useState<boolean>(false);
   const [strength, setStrength] = useState<number>(0);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     const minLengthValid = password.length >= 8;
@@ -51,9 +54,9 @@ export const Step6Password = ({ onNext, onChange, onBack }: Props) => {
 
   const getStrengthFeedback = () => {
     if (!password) return { text: "", color: "text-gray" };
-    if (strength < 2) return { text: "Zwak", color: "text-red" };
-    if (strength < 4) return { text: "Goed", color: "text-yellow-500" };
-    return { text: "Sterk", color: "text-green-500" };
+    if (strength < 2) return { text: t("register.password.weak"), color: "text-red" };
+    if (strength < 4) return { text: t("register.password.good"), color: "text-yellow-500" };
+    return { text: t("register.password.strong"), color: "text-green-500" };
   };
 
   const strengthFeedback = getStrengthFeedback();
@@ -66,32 +69,32 @@ export const Step6Password = ({ onNext, onChange, onBack }: Props) => {
     >
       <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
-        Kies een veilig wachtwoord
+        {t("register.password.title")}
       </Text>
       <Text className="text-[14px] text-gray text-center font-comfortaa-medium mb-10">
-        Dat zelfs jij morgen nog probeert te onthouden.
+        {t("register.password.subtitle")}
       </Text>
 
       <View className="my-4">
         <View className="flex-row mb-2">
-          <Text className="font-comfortaa-semibold">Wachtwoord Sterkte: </Text>
+          <Text className="font-comfortaa-semibold">{t("register.password.passwordstrong")}</Text>
           <Text className={`font-comfortaa-bold ${strengthFeedback.color}`}>
             {strengthFeedback.text}
           </Text>
         </View>
 
-        <ValidationRow isValid={hasMinLength} text="Minstens 8 karakters" />
-        <ValidationRow isValid={hasNumber} text="Minstens één cijfer" />
-        <ValidationRow isValid={hasUppercase} text="Minstens één hoofdletter" />
+        <ValidationRow isValid={hasMinLength} text={t("register.password.characters")} />
+        <ValidationRow isValid={hasNumber} text={t("register.password.number")} />
+        <ValidationRow isValid={hasUppercase} text={t("register.password.uppercase")} />
         <ValidationRow
           isValid={hasSpecialChar}
-          text="Minstens één speciaal karakter"
+          text={t("register.password.special")}
         />
       </View>
 
       <View className="relative justify-center">
         <WrittenInput
-          placeholder="Wachtwoord"
+          placeholder={t("register.password.password")}
           value={password}
           onChangeText={setPassword}
           inputType="password"
@@ -113,7 +116,7 @@ export const Step6Password = ({ onNext, onChange, onBack }: Props) => {
       <PressableButton
         onPress={async () => onNext()}
         disabled={!isValid}
-        title="Verdergaan"
+        title={t("register.continue")}
         background={isValid ? Color.BLUE : Color.GRAY}
       />
     </ScrollView>
