@@ -11,14 +11,9 @@ import {PasswordInput} from "@/components/auth/PasswordInput";
 import {PressableButton} from "@/components/PressableButton";
 import {Color} from "@/types/StyleOptions";
 import InputPageView from "@/components/InputPageView";
+import { useTranslation } from "react-i18next";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const errorMessages = {
-    invalidEmail: "Ongeldig e-mail formaat.",
-    emptyPassword: "Wachtwoord mag niet leeg zijn.",
-    invalidCredentials: "Ongeldige inloggegevens. Probeer het opnieuw."
-}
 
 const references = {
     registerPage: "/(auth)/register"
@@ -31,7 +26,15 @@ export default function LoginPage() {
     })
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+    const { t } = useTranslation();
+
     const { signIn } = useAuth();
+
+    const errorMessages = {
+    invalidCredentials: t("login.error.invalidcredentials"),
+    invalidEmail: t("login.error.invalidemail"),
+    empty: t("login.error.empty"),
+}
 
     const goToRegister = async () => {
         const href = references.registerPage as Href;
@@ -39,18 +42,17 @@ export default function LoginPage() {
     }
 
     const handleLogin = async () => {
-        try {
             if(!validate()) {
                 return;
             }
+        
+        try {
             const loginResponse = await authService.authLogin(credentials);
             await signIn(loginResponse.token, loginResponse.refreshToken);
         } catch (error) {
             if(error instanceof CustomError) {
                 setErrorMessage(errorMessages.invalidCredentials);
-                return;
             }
-            setErrorMessage('An unexpected error occurred. Please try again.');
         }
     }
 
@@ -62,22 +64,19 @@ export default function LoginPage() {
         setCredentials((prev) => ({ ...prev, password: text }));
     }
 
-    const validate = () => {
-        let isValid = true;
-        let message = "";
-
+const validate = () => {
+        if (!credentials.email.trim() || !credentials.password.trim()) {
+            setErrorMessage(errorMessages.empty);
+            return false;
+        }
+        
         if (!emailRegex.test(credentials.email)) {
-            isValid = false;
-            message += errorMessages.invalidEmail;
-        }
-        if (credentials.password.trim() === "") {
-            isValid = false;
-            if (message) message += "\n";
-            message += errorMessages.emptyPassword;
+            setErrorMessage(errorMessages.invalidEmail);
+            return false;
         }
 
-        setErrorMessage(isValid ? null : message);
-        return isValid;
+        setErrorMessage(null);
+        return true;
     }
 
     return(
@@ -86,14 +85,14 @@ export default function LoginPage() {
 
             <View className={"flex-1 border-b-2 border-gray"}>
                 <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
-                    Log in
+                    {t("login.title")}
                 </Text>
                 <Text className="text-[14px] text-gray text-center font-comfortaa-medium mb-10">
-                    En praat met je buren.
+                    {t("login.subtitle")}
                 </Text>
 
                 <WrittenInput
-                    placeholder={"email@example.com"}
+                    placeholder={t("login.email")}
                     value={credentials.email}
                     onChangeText={handleEmailChange}
                     inputType={"email-address"}
@@ -112,16 +111,16 @@ export default function LoginPage() {
 
                 <PressableButton
                     onPress={handleLogin}
-                    title={"Inloggen"}
+                    title={t("login.login")}
                 />
             </View>
             <View className="pt-4 items-center">
                 <Text className="text-gray mb-2 font-comfortaa-medium">
-                    Nog geen account?
+                    {t("login.noaccount")}
                 </Text>
                 <PressableButton
                     onPress={goToRegister}
-                    title={"Registreer hier"}
+                    title={t("login.register")}
                     background={Color.WHITE}
                     borderColor={Color.BLUE}
                     textColor={Color.BLUE}
