@@ -5,7 +5,7 @@ import { getLocales } from 'expo-localization';
 import nl from './locales/nl.json';
 import en from './locales/en.json';
 
-const deviceLanguage = getLocales()[0]?.languageCode ?? 'nl';
+const deviceLanguage = getLocales()[0]?.languageCode ?? 'en';
 
 i18n
   .use(initReactI18next) 
