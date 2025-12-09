@@ -88,6 +88,8 @@ export default function RegisterPage() {
               onChange={({ firstName, lastName }) =>
                 setData((prev) => ({ ...prev, firstName, lastName }))
               }
+              firstName={data.firstName}
+              lastName={data.lastName}
               onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
             />
           </KeyboardAvoidingView>
@@ -104,6 +106,7 @@ export default function RegisterPage() {
               onChange={(birthDate) =>
                 setData((prev) => ({ ...prev, birthDate }))
               }
+              birthDate={data.birthDate}
               onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
             />
           </KeyboardAvoidingView>
@@ -131,6 +134,10 @@ export default function RegisterPage() {
                   postalCode,
                 }))
               }
+              streetName={data.streetName}
+              houseNumber={data.houseNumber}
+              municipality={data.municipality}
+              postalCode={data.postalCode}
               onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
             />
           </KeyboardAvoidingView>
@@ -147,6 +154,7 @@ export default function RegisterPage() {
               onChange={(phoneNumber) =>
                 setData((prev) => ({ ...prev, phoneNumber }))
               }
+              value={(data as any).phoneNumber}
               onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
             />
           </KeyboardAvoidingView>
@@ -163,6 +171,7 @@ export default function RegisterPage() {
               onChange={(password) =>
                 setData((prev) => ({ ...prev, password }))
               }
+              password={data.password}
               onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
             />
           </KeyboardAvoidingView>
@@ -173,7 +182,11 @@ export default function RegisterPage() {
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
           >
-            <Step7Neighborhood postalCode={data.postalCode} onNext={nextAndRegister} onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))} />
+            <Step7Neighborhood
+              postalCode={data.postalCode}
+              onNext={nextAndRegister}
+              onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
+            />
           </KeyboardAvoidingView>
         )}
       </View>

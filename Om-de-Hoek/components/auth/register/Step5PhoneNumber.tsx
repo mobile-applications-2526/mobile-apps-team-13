@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, use } from "react";
+import { useRef } from "react";
 import { ScrollView, Text } from "react-native";
 import PhoneInput from "react-native-phone-number-input";
 import { PressableButton } from "@/components/PressableButton";
@@ -10,29 +10,24 @@ type Props = {
   onNext: () => void;
   onChange: (formattedPhoneNumber: string) => void;
   onBack?: () => void;
+  value?: string;
 };
 
-export const Step5PhoneNumber = ({ onNext, onChange, onBack }: Props) => {
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
-  const [formattedValue, setFormattedValue] = useState<string>("");
-  const [isValid, setIsValid] = useState<boolean>(false);
-
+export const Step5PhoneNumber = ({
+  onNext,
+  onChange,
+  onBack,
+  value,
+}: Props) => {
   const { t } = useTranslation();
 
+  const phone = value ?? "";
+
   const phoneInputRef = useRef<PhoneInput>(null);
-  const lastAllowedRef = useRef<string>("");
 
-  useEffect(() => {
-    const digits = phoneNumber.replace(/\D/g, "");
-
-    if (digits.length === 9) {
-      setIsValid(true);
-      onChange(formattedValue || phoneNumber);
-    } else {
-      setIsValid(false);
-      onChange("");
-    }
-  }, [phoneNumber, formattedValue]);
+  const digitsFrom = (text: string) => text.replace(/\D/g, "");
+  const digits = digitsFrom(phone);
+  const isValid = digits.length === 9;
 
   return (
     <ScrollView
@@ -50,31 +45,24 @@ export const Step5PhoneNumber = ({ onNext, onChange, onBack }: Props) => {
 
       <PhoneInput
         ref={phoneInputRef}
-        value={phoneNumber}
+        value={phone}
         defaultCode="BE"
         layout="second"
         placeholder={t("register.phone.phone")}
-
         countryPickerProps={{
           filterProps: {
-            placeholder: t("register.phone.country"), 
+            placeholder: t("register.phone.country"),
           },
         }}
-
         onChangeText={(text) => {
-          const digits = text.replace(/\D/g, "");
-          if (digits.length > 9) {
-            return;
-          }
-          lastAllowedRef.current = text;
-          setPhoneNumber(text);
+          const d = digitsFrom(text);
+          if (d.length > 9) return;
+          onChange(text);
         }}
         onChangeFormattedText={(text) => {
-          const digits = text.replace(/\D/g, "");
-          if (digits.length > 9) {
-            return;
-          }
-          setFormattedValue(text);
+          const d = digitsFrom(text);
+          if (d.length > 9) return;
+          onChange(text);
         }}
         withDarkTheme={false}
         withShadow={false}
