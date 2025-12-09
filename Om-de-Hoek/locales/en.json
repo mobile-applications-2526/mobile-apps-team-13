@@ -70,7 +70,9 @@
             "subtitle": "the neighborhood",
             "participants": "members",
             "join": "Join",
-            "leave": "Leave"
+            "leave": "Leave",
+            "searchplaceholder": "Search for a neighborhood...",
+            "notfound": "No neighborhood found with "
         },
         "continue": "Continue"
     },
