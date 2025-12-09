@@ -44,7 +44,7 @@ export default function Step7Neighborhood({
   return (
     <ScrollView>
       <Header title="Buurten in" subtitle="de buurt" onBack={onBack} />
-      <View className="py-4">
+      <View className="px-1 mt-6 mb-10">
         {loading ? (
           <ActivityIndicator size="large" color="#100D08" />
         ) : (
