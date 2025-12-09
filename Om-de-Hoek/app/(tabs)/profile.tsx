@@ -29,8 +29,6 @@ export default function ProfilePage() {
                     const data = await response.json();
                     setFirstName(data.voornaam || "");
                     setLastName(data.achternaam || "");
-                } else {
-                    console.error("API Error:", response.status);
                 }
             } catch (error) {
                 console.error("Failed to fetch user data", error);
