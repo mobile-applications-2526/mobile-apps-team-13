@@ -1,4 +1,7 @@
-{
+{   
+    "logo": {
+        "title": "\"Jouw buurt, jouw mensen, jouw plek.\""
+    },
     "login": {
         "title": "Welkom terug!",
         "subtitle": "Log in en verwittig je buren.",
