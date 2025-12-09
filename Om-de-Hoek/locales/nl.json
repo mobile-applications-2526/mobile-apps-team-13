@@ -65,6 +65,13 @@
             "special": "Minimaal één speciaal karakter",
             "password": "Wachtwoord"
         },
+        "neighborhood": {
+            "title": "Buurten in",
+            "subtitle": "de buurt",
+            "participants": "Leden",
+            "join": "Deelnemen",
+            "leave": "Verlaten"
+        },
         "continue": "Verdergaan"
     },
     "settings": {

@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { Users } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 
 import type React from "react";
 
@@ -16,6 +17,9 @@ const NeighborhoodGlassCard: React.FC<Props> = ({
   participants,
   action,
 }) => {
+  
+  const { t } = useTranslation();
+
   return (
     <View
       className="mx-2 my-2 rounded-lg bg-white px-2 py-3
@@ -37,12 +41,14 @@ const NeighborhoodGlassCard: React.FC<Props> = ({
 
         {/* Linkerkant */}
         <View className="flex-col gap-2 flex-1">
-          <Text className="text-black font-comfortaa-bold text-base">{name}</Text>
+          <Text className="text-black font-comfortaa-bold text-base">
+            {name}
+          </Text>
 
           <View className="flex-row items-center gap-1">
             <Users color="#828282" size={12} />
             <Text className="text-gray font-comfortaa-medium text-xs">
-              {participants} leden
+              {participants} {t("register.neighborhood.participants")}
             </Text>
           </View>
         </View>
@@ -50,7 +56,7 @@ const NeighborhoodGlassCard: React.FC<Props> = ({
         {/* Rechterkant */}
         <TouchableOpacity className="bg-blue px-3 py-2.5 rounded-xl self-center">
           <Text className="text-white font-comfortaa-bold text-xs">
-            {action === "join" ? "Deelnemen" : "Verlaten"}
+            {action === "join" ? t("register.neighborhood.join") : t("register.neighborhood.leave")}
           </Text>
         </TouchableOpacity>
       </View>

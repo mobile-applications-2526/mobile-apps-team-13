@@ -9,6 +9,7 @@ import { useAuth } from "../context/AuthContext";
 import UserService from "@/services/UserService";
 import neighborhoodService from "@/services/neighborhoodService";
 import { Neighborhoods } from "@/types/neighborhood";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   postalCode: string;
@@ -21,6 +22,8 @@ export default function Step7Neighborhood({
   onNext,
   onBack,
 }: Props) {
+
+    const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(true);
   const [neighborhoods, setNeighborhoods] = useState<Array<string>>([]);
 
@@ -43,7 +46,7 @@ export default function Step7Neighborhood({
 
   return (
     <ScrollView>
-      <Header title="Buurten in" subtitle="de buurt" onBack={onBack} />
+      <Header title={t("register.neighborhood.title")} subtitle={t("register.neighborhood.subtitle")} onBack={onBack} />
       <View className="px-1 mt-6 mb-10">
         {loading ? (
           <ActivityIndicator size="large" color="#100D08" />
