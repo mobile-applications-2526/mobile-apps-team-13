@@ -22,8 +22,7 @@ const NeighborhoodGlassCard: React.FC<Props> = ({
 
   return (
     <View
-      className="mx-2 my-2 rounded-lg bg-white px-2 py-3
-             shadow-sm"
+      className="mx-2 my-2 rounded-lg bg-white px-2 py-3 shadow-sm"
       style={{
         shadowColor: "#000",
         shadowOpacity: 0.08,
