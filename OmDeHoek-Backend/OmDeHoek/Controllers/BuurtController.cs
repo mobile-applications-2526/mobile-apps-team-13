@@ -137,4 +137,25 @@ public class BuurtController(BuurtService buurtService) : ControllerBase
             return ExceptionHandler.HandleException(e);
         }
     }
+
+    /// <summary>
+    /// Krijg de lijst van buurten die vallen onder de gemeente met als postcode de gegeven postcode
+    /// </summary>
+    /// <param name="postcode">De postcode van de gemeente</param>
+    /// <param name="taal">De taal waarin de buurten moeten worden teruggestuurd (default: engels)</param>
+    /// <returns>een lijst van buurten binnen de gemeente met de gegeven postcode</returns>
+    [HttpGet("postcode/{postcode}")]
+    public async Task<ActionResult<List<BuurtDto>>> GetBuurtenInPostcode(string postcode,
+        [FromQuery] Talen taal = Talen.En)
+    {
+        try
+        {
+            var result = await buurtService.GetByPostcode(postcode, taal);
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return ExceptionHandler.HandleException(e);
+        }
+    }
 }

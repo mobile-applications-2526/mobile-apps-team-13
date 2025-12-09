@@ -7,6 +7,7 @@ using OmDeHoek.Model;
 using OmDeHoek.Model.Commands.auth;
 using OmDeHoek.Model.Commands.User;
 using OmDeHoek.Model.DTO;
+using OmDeHoek.Model.DTO.User;
 using OmDeHoek.Model.Entities;
 using OmDeHoek.Model.Enums;
 using OmDeHoek.Model.Exceptions;

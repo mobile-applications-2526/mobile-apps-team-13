@@ -1,6 +1,6 @@
 ﻿using OmDeHoek.Model.Entities;
 
-namespace OmDeHoek.Model.DTO;
+namespace OmDeHoek.Model.DTO.Message;
 
 public class MessageReactionDto
 {

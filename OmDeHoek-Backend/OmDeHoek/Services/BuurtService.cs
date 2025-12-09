@@ -135,4 +135,10 @@ public class BuurtService(
             throw;
         }
     }
+
+    public async Task<List<BuurtDto>> GetByPostcode(string postcode, Talen taal = Talen.En)
+    {
+        var buurten = await uow.BuurtRepository.GetByGemeentePostcodeAsync(postcode.Trim());
+        return buurten.Select(b => new BuurtDto(b, taal, negeerDeelgemeente: true)).ToList();
+    }
 }

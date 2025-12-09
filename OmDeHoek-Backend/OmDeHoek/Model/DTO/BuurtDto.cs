@@ -1,4 +1,5 @@
-﻿using OmDeHoek.Model.Entities;
+﻿using OmDeHoek.Model.DTO.User;
+using OmDeHoek.Model.Entities;
 using OmDeHoek.Model.Enums;
 
 namespace OmDeHoek.Model.DTO;

@@ -1,7 +1,6 @@
-﻿using OmDeHoek.Model.Entities;
-using OmDeHoek.Model.Enums;
+﻿using OmDeHoek.Model.Enums;
 
-namespace OmDeHoek.Model.DTO;
+namespace OmDeHoek.Model.DTO.User;
 
 public class UserDto
 {
@@ -18,7 +17,7 @@ public class UserDto
 
     public UserDto() { }
 
-    public UserDto(User user, Talen taal = Talen.En)
+    public UserDto(Entities.User user, Talen taal = Talen.En)
     {
         Id = user.Id;
         UserName = user.UserName;

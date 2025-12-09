@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OmDeHoek.Model.Commands.User;
 using OmDeHoek.Model.DTO;
+using OmDeHoek.Model.DTO.User;
 using OmDeHoek.Model.Enums;
 using OmDeHoek.Services;
 using OmDeHoek.Utils;
@@ -37,6 +38,12 @@ public class UserController(UserService userService) : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Update de gebruiker zijn velden.
+    /// </summary>
+    /// <param name="updateDetails">De velden die updated moeten worden met de nieuwe waarde (een veld null laten past het niet mee aan!)</param>
+    /// <param name="taal">De taal die gebruikt moet worden gebruikt voor de namen van buurten op te halen (default: En)</param>
+    /// <returns>De ge-update user</returns>
     [HttpPut("update")]
     public async Task<ActionResult<UserDto>> UpdateUser([FromBody] UpdateUser updateDetails,
         [FromQuery] Talen taal = Talen.En)

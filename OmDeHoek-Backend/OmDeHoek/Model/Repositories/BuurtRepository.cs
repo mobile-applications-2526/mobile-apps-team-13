@@ -36,4 +36,11 @@ public class BuurtRepository(DataContext context) : GenericRepository<Buurt>(con
             .Where(b => b.DeelGemeente.NisCodeGemeente == nisCode)
             .ToListAsync();
     }
+
+    public virtual async Task<IEnumerable<Buurt>> GetByGemeentePostcodeAsync(string postcode)
+    {
+        return await DbSet
+            .Where(b => b.DeelGemeente.Gemeente.Postcodes.Any(p => p.Code == postcode))
+            .ToListAsync();
+    }
 }

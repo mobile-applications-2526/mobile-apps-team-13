@@ -1,6 +1,4 @@
-﻿using OmDeHoek.Model.Entities;
-
-namespace OmDeHoek.Model.DTO;
+﻿namespace OmDeHoek.Model.DTO.User;
 
 public class PrivacyUserDto
 {
@@ -17,10 +15,10 @@ public class PrivacyUserDto
         Username = username;
     }
 
-    public PrivacyUserDto(User user)
+    public PrivacyUserDto(Entities.User user)
     {
         Id = user.Id;
-        Username = user.UserName;
+        Username = user.UserName ?? "onbekend";
         Voornaam = user.Voornaam;
         Achternaam = user.Achternaam;
     }
