@@ -46,8 +46,6 @@ export default function MyDataPage() {
                     setPhoneNumber(data.phoneNumber || "");
                     setAddress1(data.address1 || "");
                     setAddress2(data.address2 || "");
-                } else {
-                    console.error("API Error:", response.status);
                 }
             } catch (error) {
                 console.error("Failed to fetch user data", error);
