@@ -2,6 +2,7 @@ import { Stack } from "expo-router";
 import { Image, Text, View, Pressable } from "react-native";
 import React from "react";
 import { ChevronLeft } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   title: string;
@@ -9,6 +10,7 @@ type Props = {
 };
 
 export default function AuthHeader({ title, onBack }: Props) {
+  const { t } = useTranslation();
   return (
     <>
       <Stack.Screen options={{ title }} />
@@ -23,7 +25,7 @@ export default function AuthHeader({ title, onBack }: Props) {
             Om de Hoek
           </Text>
           <Text className={"text-[11px] text-gray font-comfortaa-medium"}>
-            "Jouw buurt, jouw mensen, jouw plek."
+            {t("logo.title")}
           </Text>
         </View>
         <View className="items-center py-8">
