@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { View, TextInput, TouchableOpacity } from "react-native";
 import { Search, X } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 
 type Props = {
     onSearch?: (query: string) => void;
 };
 
 export const SearchBar = ({ onSearch }: Props) => {
+    const { t } = useTranslation();
     const [query, setQuery] = useState("");
 
     const handleTextChange = (text: string) => {
@@ -24,7 +26,7 @@ export const SearchBar = ({ onSearch }: Props) => {
             <Search color="#828282" size={20} />
             <TextInput
                 className="flex-1 text-gray-800 font-comfortaa-medium text-base ml-3"
-                placeholder="Zoek een buurt..."
+                placeholder={t("register.neighborhood.searchplaceholder")}
                 placeholderTextColor="#828282"
                 value={query}
                 onChangeText={handleTextChange}
