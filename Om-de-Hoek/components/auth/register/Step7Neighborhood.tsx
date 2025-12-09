@@ -62,7 +62,7 @@ export default function Step7Neighborhood({
 
         {!loading && filteredNeighborhoods.length === 0 && searchQuery.length > 0 && (
           <View className="items-center mt-4">
-                <Text className="text-gray-500">Geen buurt gevonden met '{searchQuery}'</Text>
+                <Text className="text-gray-500"> {t("register.neighborhood.notfound")} '{searchQuery}'</Text>
             </View>
         )}
       </View>
