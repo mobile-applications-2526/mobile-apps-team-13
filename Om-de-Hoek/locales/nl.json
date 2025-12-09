@@ -70,7 +70,9 @@
             "subtitle": "de buurt",
             "participants": "Leden",
             "join": "Deelnemen",
-            "leave": "Verlaten"
+            "leave": "Verlaten",
+            "searchplaceholder": "Zoek een buurt...",
+            "notfound": "Geen buurt gevonden met "
         },
         "continue": "Verdergaan"
     },
