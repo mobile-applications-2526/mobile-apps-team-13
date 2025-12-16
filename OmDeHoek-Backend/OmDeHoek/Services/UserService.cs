@@ -15,12 +15,12 @@ public class UserService(
     UserManager<User> userManager
     )
 {
-    public async Task<UserDto> GetAccountInfo(string token, Talen taal = Talen.En)
+    public async Task<UserDto> GetAccountInfo(string token, Languages taal = Languages.En)
     {
         return new UserDto(await GetUserFromToken(token), taal);
     }
 
-    public async Task<UserDto> UpdateAccountInfo(string token, UpdateUser updatedValues, Talen taal = Talen.En)
+    public async Task<UserDto> UpdateAccountInfo(string token, UpdateUser updatedValues, Languages taal = Languages.En)
     {
         var user = await GetUserFromToken(token);
 

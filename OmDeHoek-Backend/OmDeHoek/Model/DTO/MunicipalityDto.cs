@@ -3,13 +3,13 @@ using OmDeHoek.Model.Enums;
 
 namespace OmDeHoek.Model.DTO;
 
-public class GemeenteDto
+public class MunicipalityDto
 {
-    public GemeenteDto()
+    public MunicipalityDto()
     {
     }
 
-    public GemeenteDto(Gemeente gemeente, Talen taal = Talen.En, bool negeerDeelGemeenten = false)
+    public MunicipalityDto(Gemeente gemeente, Languages taal = Enums.Languages.En, bool negeerDeelGemeenten = false)
     {
         NisCode = gemeente.NisCode;
         PostalCodes = gemeente.Postcodes.Select(p => p.Code).ToList();
@@ -32,9 +32,9 @@ public class GemeenteDto
 
         var naam = taal switch
         {
-            Talen.Nl => gemeente.NaamNl,
-            Talen.Fr => gemeente.NaamFr,
-            Talen.De => gemeente.NaamDe ?? gemeente.NaamNl,
+            Enums.Languages.Nl => gemeente.NaamNl,
+            Enums.Languages.Fr => gemeente.NaamFr,
+            Enums.Languages.De => gemeente.NaamDe ?? gemeente.NaamNl,
             _ => defaultNaam ?? gemeente.NaamNl
         };
 
@@ -43,7 +43,7 @@ public class GemeenteDto
         // loop protection: DeelgemeenteDto enkel vullen wanneer nodig en dit object geen deel is van een DeelGemeenteDto
         if (!negeerDeelGemeenten)
             Boroughs = gemeente.DeelGemeentes
-                .Select(dg => new DeelGemeenteDto(dg, taal, true))
+                .Select(dg => new BoroughDto(dg, taal, true))
                 .OrderBy(dg => dg.Name)
                 .ToList();
     }
@@ -51,6 +51,6 @@ public class GemeenteDto
     public string NisCode { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string Languages { get; set; } = string.Empty;
-    public List<DeelGemeenteDto> Boroughs { get; set; } = [];
+    public List<BoroughDto> Boroughs { get; set; } = [];
     public List<string> PostalCodes { get; set; } = [];
 }

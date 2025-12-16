@@ -8,7 +8,7 @@ public class UserDto
     {
     }
 
-    public UserDto(Entities.User user, Talen taal = Talen.En)
+    public UserDto(Entities.User user, Languages taal = Languages.En)
     {
         Id = user.Id;
         UserName = user.UserName;

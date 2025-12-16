@@ -50,7 +50,7 @@ public class Gemeente : IDataBaseEntity<Gemeente>
         return other is null || GetType() != other.GetType();
     }
 
-    public string GetNameInCorrectLanguage(Talen taal)
+    public string GetNameInCorrectLanguage(Languages taal)
     {
         var defaultNaam = GesprokenTalen.ToCharArray()[0] switch
         {
@@ -61,9 +61,9 @@ public class Gemeente : IDataBaseEntity<Gemeente>
 
         var naam = taal switch
         {
-            Enums.Talen.Nl => NaamNl,
-            Enums.Talen.Fr => NaamFr,
-            Enums.Talen.De => NaamDe ?? NaamNl,
+            Enums.Languages.Nl => NaamNl,
+            Enums.Languages.Fr => NaamFr,
+            Enums.Languages.De => NaamDe ?? NaamNl,
             _ => defaultNaam ?? NaamNl
         };
 

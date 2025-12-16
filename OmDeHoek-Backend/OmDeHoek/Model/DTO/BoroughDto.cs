@@ -3,19 +3,19 @@ using OmDeHoek.Model.Enums;
 
 namespace OmDeHoek.Model.DTO;
 
-public class DeelGemeenteDto
+public class BoroughDto
 {
-    public DeelGemeenteDto()
+    public BoroughDto()
     {
     }
 
-    public DeelGemeenteDto(DeelGemeente deelGemeente, Talen taal, bool negeerGemeente = false,
+    public BoroughDto(DeelGemeente deelGemeente, Languages taal, bool negeerGemeente = false,
         bool negeerBuurten = false)
     {
         Name = taal switch
         {
-            Talen.Nl => deelGemeente.NaamNl,
-            Talen.Fr => deelGemeente.NaamFr,
+            Languages.Nl => deelGemeente.NaamNl,
+            Languages.Fr => deelGemeente.NaamFr,
             _ => deelGemeente.NaamNl
         };
 
@@ -23,7 +23,7 @@ public class DeelGemeenteDto
 
         // Loop protection: Indien de gemeente dit DeelGemeenteDto aanmaakt, mag deze geen GemeenteDto meer aanmaken
         if (!negeerGemeente && deelGemeente.Gemeente != null)
-            Municipality = new GemeenteDto(deelGemeente.Gemeente, taal, true);
+            Municipality = new MunicipalityDto(deelGemeente.Gemeente, taal, true);
         // Loop protection: Indien de buurt dit DeelGemeenteDto aanmaakt, mag deze geen BuurtDto's meer aanmaken
         if (!negeerBuurten) Neighborhoods = deelGemeente.Buurten.Select(b => new NeighborhoodDto(b, taal, true)).ToList();
     }
@@ -31,7 +31,7 @@ public class DeelGemeenteDto
     public string Nis6Code { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
 
-    public GemeenteDto? Municipality { get; set; }
+    public MunicipalityDto? Municipality { get; set; }
 
     public List<NeighborhoodDto> Neighborhoods { get; set; } = [];
 }

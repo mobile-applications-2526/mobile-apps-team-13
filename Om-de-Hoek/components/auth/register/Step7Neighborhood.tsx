@@ -30,7 +30,7 @@ export default function Step7Neighborhood({
         const response =
           await neighborhoodService.fetchNeighborhoodsByPostalCode(postalCode);
         const data: Neighborhoods[] = await response.json();
-        setNeighborhoods(data.map((neighborhood) => neighborhood.naam));
+        setNeighborhoods(data.map((neighborhood) => neighborhood.name));
       } catch (error) {
         console.error("Error fetching neighborhoods:", error);
       } finally {

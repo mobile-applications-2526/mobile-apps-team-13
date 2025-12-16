@@ -1,6 +1,6 @@
 export type Gemeente = {
     nisCode: string;
-    naam: string;
-    postcodes: string[];
-    talen: string;
+    name: string;
+    postalCodes: string[];
+    languages: string;
 }
