@@ -15,9 +15,9 @@ public class UserDto
         Email = user.Email;
         PhoneNumber = user.PhoneNumber;
         Role = user.Role.ToString();
-        Addresses = user.Adressen.Select(a => new AdresDto(a)).ToList();
+        Addresses = user.Adressen.Select(a => new AddressDto(a)).ToList();
         BirthDate = user.BirthDate;
-        Neighborhoods = user.Buurten.Select(ub => new BuurtDto(ub.Buurt, taal, false)).ToList();
+        Neighborhoods = user.Buurten.Select(ub => new NeighborhoodDto(ub.Buurt, taal, false)).ToList();
         FirstName = user.Voornaam;
         LastName = user.Achternaam;
     }
@@ -28,8 +28,8 @@ public class UserDto
     public string? PhoneNumber { get; set; }
     public string Role { get; set; }
     public DateOnly BirthDate { get; set; }
-    public List<AdresDto> Addresses { get; set; } = [];
-    public List<BuurtDto> Neighborhoods { get; set; } = [];
+    public List<AddressDto> Addresses { get; set; } = [];
+    public List<NeighborhoodDto> Neighborhoods { get; set; } = [];
     public string FirstName { get; set; }
     public string LastName { get; set; }
 }

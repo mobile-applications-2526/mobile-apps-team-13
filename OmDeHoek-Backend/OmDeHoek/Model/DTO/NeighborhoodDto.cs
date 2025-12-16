@@ -4,13 +4,13 @@ using OmDeHoek.Model.Enums;
 
 namespace OmDeHoek.Model.DTO;
 
-public class BuurtDto
+public class NeighborhoodDto
 {
-    public BuurtDto()
+    public NeighborhoodDto()
     {
     }
 
-    public BuurtDto(Buurt buurt, Talen taal = Talen.En, bool negeerDeelgemeente = false)
+    public NeighborhoodDto(Buurt buurt, Talen taal = Talen.En, bool negeerDeelgemeente = false)
     {
         Name = taal switch
         {

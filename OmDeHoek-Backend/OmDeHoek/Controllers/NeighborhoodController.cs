@@ -22,7 +22,7 @@ public class NeighborhoodController(BuurtService buurtService) : ControllerBase
     ///     or an appropriate error response produced by <see cref="ExceptionHandler.HandleException" />.
     /// </returns>
     [HttpGet("sectorcode/{sectorcode}")]
-    public async Task<ActionResult<BuurtDto>> GetBuurtBySectorcode(string sectorcode, [FromQuery] Talen? language)
+    public async Task<ActionResult<NeighborhoodDto>> GetBuurtBySectorcode(string sectorcode, [FromQuery] Talen? language)
     {
         try
         {
@@ -50,7 +50,7 @@ public class NeighborhoodController(BuurtService buurtService) : ControllerBase
     ///     or an appropriate error response produced by <see cref="ExceptionHandler.HandleException" />.
     /// </returns>
     [HttpGet("deelgemeente/{nis6Code}")]
-    public async Task<ActionResult<List<BuurtDto>>> GetBuurtenByDeelGemeenteNis6Code(string nis6Code,
+    public async Task<ActionResult<List<NeighborhoodDto>>> GetBuurtenByDeelGemeenteNis6Code(string nis6Code,
         [FromQuery] Talen? language)
     {
         try
@@ -74,7 +74,7 @@ public class NeighborhoodController(BuurtService buurtService) : ControllerBase
     ///     or an appropriate error response produced by <see cref="ExceptionHandler.HandleException" />.
     /// </returns>
     [HttpGet("municipality/{nisCode}")]
-    public async Task<ActionResult<List<BuurtDto>>> GetBuurtenByGemeenteNisCode(string nisCode,
+    public async Task<ActionResult<List<NeighborhoodDto>>> GetBuurtenByGemeenteNisCode(string nisCode,
         [FromQuery] Talen? language)
     {
         try
@@ -151,7 +151,7 @@ public class NeighborhoodController(BuurtService buurtService) : ControllerBase
     /// <param name="language">The language in which neighborhoods should be returned (default: English)</param>
     /// <returns>A list of neighborhoods within the municipality with the given postal code</returns>
     [HttpGet("postalcode/{postalcode}")]
-    public async Task<ActionResult<List<BuurtDto>>> GetBuurtenInPostcode(string postalcode,
+    public async Task<ActionResult<List<NeighborhoodDto>>> GetBuurtenInPostcode(string postalcode,
         [FromQuery] Talen? language)
     {
         try

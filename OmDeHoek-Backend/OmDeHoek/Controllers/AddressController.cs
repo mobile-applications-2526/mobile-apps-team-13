@@ -19,7 +19,7 @@ public class AddressController(AdresService adresService) : ControllerBase
     /// </summary>
     /// <param name="address">Address data to insert.</param>
     /// <returns>
-    ///     ActionResult containing the created <see cref="AdresDto" /> on success,
+    ///     ActionResult containing the created <see cref="AddressDto" /> on success,
     ///     or an error ActionResult produced by <see cref="ExceptionHandler" /> on failure.
     /// </returns>
     /// <remarks>
@@ -27,7 +27,7 @@ public class AddressController(AdresService adresService) : ControllerBase
     /// </remarks>
     [HttpPost]
     [Authorize]
-    public async Task<ActionResult<AdresDto>> RegisterNewAdres([FromBody] InsertAdres address)
+    public async Task<ActionResult<AddressDto>> RegisterNewAdres([FromBody] InsertAddress address)
     {
         try
         {
@@ -47,7 +47,7 @@ public class AddressController(AdresService adresService) : ControllerBase
     ///     The request must include a Bearer token in the Authorization header.
     /// </summary>
     /// <returns>
-    ///     ActionResult containing a list of <see cref="AdresDto" /> for the logged-in user,
+    ///     ActionResult containing a list of <see cref="AddressDto" /> for the logged-in user,
     ///     or an error ActionResult produced by <see cref="ExceptionHandler" /> on failure.
     /// </returns>
     /// <remarks>
@@ -55,7 +55,7 @@ public class AddressController(AdresService adresService) : ControllerBase
     /// </remarks>
     [HttpGet("byLoggedInUser")]
     [Authorize]
-    public async Task<ActionResult<List<AdresDto>>> GetAdressenByUserId()
+    public async Task<ActionResult<List<AddressDto>>> GetAdressenByUserId()
     {
         try
         {

@@ -11,7 +11,7 @@ public class BuurtService(
     TokenService tokenService
     )
 {
-    public async Task<BuurtDto> GetByStatistischeSectorCodeAsync(string code, Talen taal = Talen.En)
+    public async Task<NeighborhoodDto> GetByStatistischeSectorCodeAsync(string code, Talen taal = Talen.En)
     {
         if (string.IsNullOrEmpty(code))
         {
@@ -22,10 +22,10 @@ public class BuurtService(
         {
             throw new ResourceNotFoundException($"Buurt with Statistische SectorCode '{code}' not found.", "StatischeSectorCode");
         }
-        return new BuurtDto(buurt, taal);
+        return new NeighborhoodDto(buurt, taal);
     }
 
-    public async Task<List<BuurtDto>> GetByDeelGemeenteNis6CodeAsync(string nis6Code, Talen taal = Talen.En)
+    public async Task<List<NeighborhoodDto>> GetByDeelGemeenteNis6CodeAsync(string nis6Code, Talen taal = Talen.En)
     {
         if (string.IsNullOrEmpty(nis6Code))
         {
@@ -38,10 +38,10 @@ public class BuurtService(
         {
             throw new ResourceNotFoundException($"No buurten found for NIS6 code '{nis6Code}'.", "NIS6Code");
         }
-        return buurten.Select(b => new BuurtDto(b, taal)).ToList();
+        return buurten.Select(b => new NeighborhoodDto(b, taal)).ToList();
     }
 
-    public async Task<List<BuurtDto>> GetByGemeenteNisCodeAsync(string nisCode, Talen taal = Talen.En)
+    public async Task<List<NeighborhoodDto>> GetByGemeenteNisCodeAsync(string nisCode, Talen taal = Talen.En)
     {
         if (string.IsNullOrEmpty(nisCode))
         {
@@ -54,7 +54,7 @@ public class BuurtService(
         {
             throw new ResourceNotFoundException($"No buurten found for NIS code '{nisCode}'.", "NISCode");
         }
-        return buurten.Select(b => new BuurtDto(b, taal)).ToList();
+        return buurten.Select(b => new NeighborhoodDto(b, taal)).ToList();
     }
 
     public async Task JoinBuurtAsync(string buurtId, string token)
@@ -136,9 +136,9 @@ public class BuurtService(
         }
     }
 
-    public async Task<List<BuurtDto>> GetByPostcode(string postcode, Talen taal = Talen.En)
+    public async Task<List<NeighborhoodDto>> GetByPostcode(string postcode, Talen taal = Talen.En)
     {
         var buurten = await uow.BuurtRepository.GetByGemeentePostcodeAsync(postcode.Trim());
-        return buurten.Select(b => new BuurtDto(b, taal, negeerDeelgemeente: true)).ToList();
+        return buurten.Select(b => new NeighborhoodDto(b, taal, negeerDeelgemeente: true)).ToList();
     }
 }

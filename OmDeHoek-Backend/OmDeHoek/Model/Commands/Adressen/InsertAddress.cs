@@ -1,6 +1,6 @@
 ﻿namespace OmDeHoek.Model.Commands.Adressen;
 
-public class InsertAdres
+public class InsertAddress
 {
     public string Street { get; set; } = string.Empty;
     public string? HouseNumber { get; set; }

@@ -13,7 +13,7 @@ public class PostalcodeController(PostcodeService service) : ControllerBase
     ///     Returns a list of all postal codes.
     /// </summary>
     [HttpGet]
-    public async Task<ActionResult<List<PostcodeDto>>> GetAllPostcodes()
+    public async Task<ActionResult<List<PostalcodeDto>>> GetAllPostcodes()
     {
         try
         {

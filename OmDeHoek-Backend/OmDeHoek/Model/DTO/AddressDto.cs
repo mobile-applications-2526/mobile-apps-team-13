@@ -2,13 +2,13 @@
 
 namespace OmDeHoek.Model.DTO;
 
-public class AdresDto
+public class AddressDto
 {
-    public AdresDto()
+    public AddressDto()
     {
     }
 
-    public AdresDto(Adres adres)
+    public AddressDto(Adres adres)
     {
         AdresId = adres.Id;
         Street = adres.Straat;

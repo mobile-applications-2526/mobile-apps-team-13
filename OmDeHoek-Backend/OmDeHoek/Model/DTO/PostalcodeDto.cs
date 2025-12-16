@@ -3,13 +3,13 @@ using OmDeHoek.Model.Enums;
 
 namespace OmDeHoek.Model.DTO;
 
-public class PostcodeDto
+public class PostalcodeDto
 {
-    public PostcodeDto()
+    public PostalcodeDto()
     {
     }
 
-    public PostcodeDto(Postcode postcode, Talen taal)
+    public PostalcodeDto(Postcode postcode, Talen taal)
     {
         Code = postcode.Code;
         Municipality = postcode.Gemeente != null ? postcode.Gemeente.GetNameInCorrectLanguage(taal) : string.Empty;
