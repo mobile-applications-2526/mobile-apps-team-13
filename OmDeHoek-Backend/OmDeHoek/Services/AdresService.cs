@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using OmDeHoek.Model;
 using OmDeHoek.Model.Commands.Adressen;
 using OmDeHoek.Model.DTO;
@@ -12,48 +11,35 @@ public class AdresService(
     UnitOfWork uow,
     TokenService tokenService,
     UserManager<User> userManager
-    )
+)
 {
-    public async Task<AdresDto> RegisterNewAdresAsync(InsertAdres newAdres, string token)
+    public async Task<AddressDto> RegisterNewAdresAsync(InsertAddress newAddress, string token)
     {
         try
         {
             await uow.StartTransaction();
 
             var idInToken = tokenService.GetUserIdFromToken(token.Trim());
-            if (idInToken == null)
-            {
-                throw new UnauthorizedException("Invalid token", "token");
-            }
+            if (idInToken == null) throw new UnauthorizedException("Invalid token", "token");
 
-            if (idInToken != newAdres.BewonerId)
-            {
+            if (idInToken != newAddress.ResidentId)
                 throw new ForbiddenActionException("You are not allowed to add an address for another user", "token");
-            }
 
-            var bewoner = await uow.UserRepository.GetById(newAdres.BewonerId);
+            var bewoner = await uow.UserRepository.GetById(newAddress.ResidentId);
 
             if (bewoner == null)
-            {
-                throw new ResourceNotFoundException($"No user found with id '{newAdres.BewonerId}'", "bewonerId");
-            }
+                throw new ResourceNotFoundException($"No user found with id '{newAddress.ResidentId}'", "residentId");
 
-            if (string.IsNullOrWhiteSpace(newAdres.Straat))
-            {
-                throw new MissingDataException("straat is missing or only spaces", "straat");
-            }
+            if (string.IsNullOrWhiteSpace(newAddress.Street))
+                throw new MissingDataException("straat is missing or only spaces", "street");
 
-            var postcode = newAdres.Postcode.Trim();
+            var postcode = newAddress.PostalCode.Trim();
             if (string.IsNullOrWhiteSpace(postcode) || postcode.Length != 4 || !postcode.All(char.IsDigit))
-            {
-                throw new InvalidInputException("postcode must be a 4-digit number", "postcode");
-            }
+                throw new InvalidInputException("postcode must be a 4-digit number", "postalCode");
 
             var storedPostcode = await uow.PostcodeRepository.GetByCodeAsync(postcode);
             if (storedPostcode == null)
-            {
-                throw new ResourceNotFoundException($"No postcode found with code '{postcode}'", "postcode");
-            }
+                throw new ResourceNotFoundException($"No postal code found with code '{postcode}'", "postalCode");
 
             var gemeenteTaal = storedPostcode.Gemeente.GesprokenTalen.ToCharArray()[0];
             var dorpNaam = gemeenteTaal switch
@@ -64,11 +50,11 @@ public class AdresService(
                 _ => storedPostcode.Gemeente.NaamNl
             };
 
-            var adres = new Adres()
+            var adres = new Adres
             {
                 Bewoner = bewoner,
-                Straat = newAdres.Straat.Trim(),
-                Huisnummer = string.IsNullOrWhiteSpace(newAdres.Huisnummer) ? null : newAdres.Huisnummer.Trim(),
+                Straat = newAddress.Street.Trim(),
+                Huisnummer = string.IsNullOrWhiteSpace(newAddress.HouseNumber) ? null : newAddress.HouseNumber.Trim(),
                 Postcode = postcode,
                 Dorp = dorpNaam!
             };
@@ -78,7 +64,7 @@ public class AdresService(
             await uow.Save();
 
             await uow.CommitTransaction();
-            return new AdresDto(storedAdres);
+            return new AddressDto(storedAdres);
         }
         catch (Exception)
         {
@@ -87,22 +73,16 @@ public class AdresService(
         }
     }
 
-    public async Task<List<AdresDto>> GetAdressenByUserIdAsync(string token)
+    public async Task<List<AddressDto>> GetAdressenByUserIdAsync(string token)
     {
         var userId = tokenService.GetUserIdFromToken(token.Trim());
-        if (userId == null)
-        {
-            throw new UnauthorizedException("Invalid token", "token");
-        }
+        if (userId == null) throw new UnauthorizedException("Invalid token", "token");
 
         var bewoner = await uow.UserRepository.GetById(userId);
 
-        if (bewoner == null)
-        {
-            throw new ResourceNotFoundException($"No user found with id '{userId}'", "userId");
-        }
+        if (bewoner == null) throw new ResourceNotFoundException($"No user found with id '{userId}'", "userId");
 
         var adressen = await uow.AdresRepository.GetByUserId(userId);
-        return adressen.Select(a => new AdresDto(a)).ToList();
+        return adressen.Select(a => new AddressDto(a)).ToList();
     }
 }

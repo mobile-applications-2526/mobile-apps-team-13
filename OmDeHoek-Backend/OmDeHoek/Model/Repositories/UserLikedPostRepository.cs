@@ -10,7 +10,7 @@ public class UserLikedPostRepository(DataContext ctx) : GenericRepository<UserLi
     {
         return await DbSet.CountAsync(ulp => ulp.PostId == postId && ulp.IsLiked);
     }
-    
+
     public async Task<UserLikedPost?> GetUserLikeStatusAsync(string userId, Guid postId)
     {
         return await DbSet.FirstOrDefaultAsync(ulp => ulp.UserId == userId && ulp.PostId == postId);

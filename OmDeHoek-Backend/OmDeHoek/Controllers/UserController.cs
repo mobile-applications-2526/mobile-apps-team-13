@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OmDeHoek.Model.Commands.User;
-using OmDeHoek.Model.DTO;
 using OmDeHoek.Model.DTO.User;
 using OmDeHoek.Model.Enums;
 using OmDeHoek.Services;
@@ -15,14 +14,14 @@ namespace OmDeHoek.Controllers;
 public class UserController(UserService userService) : ControllerBase
 {
     /// <summary>
-    /// Retrieves information about the currently logged-in user.
+    ///     Retrieves information about the currently logged-in user.
     /// </summary>
-    /// <param name="taal">The language for the returned data. Defaults to <see cref="Talen.En"/>.</param>
-    /// <returns>>An <see cref="ActionResult{UserDto}"/> containing the user information.</returns>
+    /// <param name="taal">The language for the returned data. Defaults to <see cref="Talen.En" />.</param>
+    /// <returns>>An <see cref="ActionResult{UserDto}" /> containing the user information.</returns>
     /// <remarks>
-    /// Requires authentication. The Authorization header bearer token is forwarded to the service.
+    ///     Requires authentication. The Authorization header bearer token is forwarded to the service.
     /// </remarks>
-    [HttpGet("loggedin")]
+    [HttpGet("loggedIn")]
     [Authorize]
     public async Task<ActionResult<UserDto>> GetLoggedInUser([FromQuery] Talen taal = Talen.En)
     {
@@ -39,11 +38,11 @@ public class UserController(UserService userService) : ControllerBase
     }
 
     /// <summary>
-    /// Update de gebruiker zijn velden.
+    ///     Updates the user's fields.
     /// </summary>
-    /// <param name="updateDetails">De velden die updated moeten worden met de nieuwe waarde (een veld null laten past het niet mee aan!)</param>
-    /// <param name="taal">De taal die gebruikt moet worden gebruikt voor de namen van buurten op te halen (default: En)</param>
-    /// <returns>De ge-update user</returns>
+    /// <param name="updateDetails">The fields to update with their new values (leaving a field null will not update it)</param>
+    /// <param name="taal">The language used to retrieve neighborhood names (default: En)</param>
+    /// <returns>The updated user</returns>
     [HttpPut("update")]
     public async Task<ActionResult<UserDto>> UpdateUser([FromBody] UpdateUser updateDetails,
         [FromQuery] Talen taal = Talen.En)

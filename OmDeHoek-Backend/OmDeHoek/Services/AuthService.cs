@@ -11,6 +11,7 @@ using OmDeHoek.Model.DTO.User;
 using OmDeHoek.Model.Entities;
 using OmDeHoek.Model.Enums;
 using OmDeHoek.Model.Exceptions;
+using OmDeHoek.Utils;
 
 namespace OmDeHoek.Services;
 
@@ -19,52 +20,39 @@ public partial class AuthService(
     TokenManager tokenManager,
     TokenService tokenService,
     UserManager<User> userManager
-    )
+)
 {
     private readonly int _minimumOnlineLeeftijd = 13;
-    
+
     public async Task<UserDto> RegisterAsync(RegisterUser newUser)
     {
         try
         {
             await uow.StartTransaction();
 
-            if (string.IsNullOrWhiteSpace(newUser.Voornaam))
-            {
-                throw new MissingDataException("Voornaam is missing or only spaces", "voornaam");
-            }
-            
-            if (string.IsNullOrWhiteSpace(newUser.Achternaam))
-            {
-                throw new MissingDataException("Achternaam is missing or only spaces", "achternaam");
-            }
+            if (string.IsNullOrWhiteSpace(newUser.FirstName))
+                throw new MissingDataException("First name is missing or only spaces", "FirstName");
+
+            if (string.IsNullOrWhiteSpace(newUser.LastName))
+                throw new MissingDataException("Last name is missing or only spaces", "LastName");
 
             if (string.IsNullOrWhiteSpace(newUser.Password))
-            {
                 throw new MissingDataException("invalid password", "password");
-            }
 
-            if (!Utils.AuthUtils.IsValidEmail(newUser.Email))
-            {
+            if (!AuthUtils.IsValidEmail(newUser.Email))
                 throw new InvalidInputException("email is not in email format", "email");
-            }
 
             if (await uow.UserRepository.GetByEmailAsync(newUser.Email) != null)
-            {
                 throw new DuplicateFieldException("emil already in use", "email");
-            }
 
             if (newUser.Password.Trim().Length < 3 || newUser.Password.Trim().Length > 31)
-            {
                 throw new InvalidInputException("password must be between 3 and 31 characters", "password");
-            }
-            
-            if(newUser.BirthDate > DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-_minimumOnlineLeeftijd)))
-            {
-                throw new InvalidInputException($"you must be at least {_minimumOnlineLeeftijd} years old to register", "birthDate");
-            }
-            
-            var username = await GenerateUniqueUsername(newUser.Voornaam, newUser.Achternaam);
+
+            if (newUser.BirthDate > DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-_minimumOnlineLeeftijd)))
+                throw new InvalidInputException($"you must be at least {_minimumOnlineLeeftijd} years old to register",
+                    "birthDate");
+
+            var username = await GenerateUniqueUsername(newUser.FirstName, newUser.LastName);
 
             User user = new()
             {
@@ -105,27 +93,19 @@ public partial class AuthService(
         {
             await uow.StartTransaction();
 
-            if (!Utils.AuthUtils.IsValidEmail(login.Email))
-            {
+            if (!AuthUtils.IsValidEmail(login.Email))
                 throw new InvalidInputException("email is not in email format", "email");
-            }
 
             var user = await uow.UserRepository.GetByEmailAsync(login.Email);
-            if (user == null)
-            {
-                throw new UnauthorizedException("invalid credentials", "login");
-            }
+            if (user == null) throw new UnauthorizedException("invalid credentials", "login");
 
             var result = await userManager.CheckPasswordAsync(user, login.Password);
-            if (!result)
-            {
-                throw new UnauthorizedException("invalid credentials", "login");
-            }
+            if (!result) throw new UnauthorizedException("invalid credentials", "login");
 
             var token = tokenService.CreateToken(user);
-            
+
             var (refreshTokenPlain, encryptedRefreshToken) = tokenService.CreateRefreshToken();
-            
+
             var refreshToken = new RefreshToken
             {
                 TokenHash = encryptedRefreshToken,
@@ -135,9 +115,9 @@ public partial class AuthService(
                 Id = Guid.NewGuid(),
                 IsRevoked = false
             };
-            
+
             await uow.RefreshTokenRepository.Insert(refreshToken);
-            
+
             await uow.Save();
 
             await uow.CommitTransaction();
@@ -162,21 +142,15 @@ public partial class AuthService(
         try
         {
             await uow.StartTransaction();
-            
+
             var refreshToken = token.RefreshToken;
-            if (string.IsNullOrWhiteSpace(refreshToken))
-            {
-                return true;
-            }
-            
+            if (string.IsNullOrWhiteSpace(refreshToken)) return true;
+
             var hashedToken = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(refreshToken)));
             var refreshTokenInDb = await uow.RefreshTokenRepository.GetByTokenAsync(hashedToken);
-            
-            if (refreshTokenInDb == null || refreshTokenInDb.IsRevoked)
-            {
-                return true;
-            }
-            
+
+            if (refreshTokenInDb == null || refreshTokenInDb.IsRevoked) return true;
+
             refreshTokenInDb.IsRevoked = true;
             uow.RefreshTokenRepository.Update(refreshTokenInDb);
             await uow.Save();
@@ -199,25 +173,22 @@ public partial class AuthService(
             var token = command.RefreshToken;
 
             if (string.IsNullOrWhiteSpace(token))
-            {
                 throw new MissingDataException("token is missing or only spaces", "token");
-            }
-        
+
             var bytes = Encoding.UTF8.GetBytes(token);
             var hash = SHA256.HashData(bytes);
             var hashedToken = Convert.ToBase64String(hash);
-        
+
             var refreshTokenInDb = await uow.RefreshTokenRepository.GetByTokenAsync(hashedToken);
-        
-            if (refreshTokenInDb == null || refreshTokenInDb.IsRevoked || refreshTokenInDb.ExpiresAt < DateTime.UtcNow || refreshTokenInDb.User == null)
-            {
-                throw new UnauthorizedException("invalid refresh token", "token");
-            }
-            
+
+            if (refreshTokenInDb == null || refreshTokenInDb.IsRevoked ||
+                refreshTokenInDb.ExpiresAt < DateTime.UtcNow ||
+                refreshTokenInDb.User == null) throw new UnauthorizedException("invalid refresh token", "token");
+
             var userInDb = refreshTokenInDb.User;
 
             var newToken = tokenService.CreateToken(userInDb);
-            
+
             var (newRefreshTokenPlain, newEncryptedRefreshToken) = tokenService.CreateRefreshToken();
             var newRefreshToken = new RefreshToken
             {
@@ -228,7 +199,7 @@ public partial class AuthService(
                 Id = Guid.NewGuid(),
                 IsRevoked = false
             };
-            
+
             await uow.RefreshTokenRepository.Insert(newRefreshToken);
 
             refreshTokenInDb.IsRevoked = true;
@@ -236,7 +207,7 @@ public partial class AuthService(
 
             await uow.Save();
             await uow.CommitTransaction();
-            
+
             return new TokenDto
             {
                 Token = newToken,
@@ -258,9 +229,9 @@ public partial class AuthService(
     {
         var cleanVoornaam = CleanString(voornaam);
         var cleanAchternaam = CleanString(achternaam);
-        
+
         var baseUsername = $"{cleanVoornaam}{cleanAchternaam}";
-        
+
         var uniqueUsername = baseUsername;
         var counter = 1;
 
@@ -283,10 +254,10 @@ public partial class AuthService(
         var normalizedString = input.Normalize(NormalizationForm.FormD);
         var stringBuilder = new StringBuilder();
 
-        foreach (var c in from c in normalizedString let unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c) where unicodeCategory != UnicodeCategory.NonSpacingMark select c)
-        {
-            stringBuilder.Append(c);
-        }
+        foreach (var c in from c in normalizedString
+                          let unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c)
+                          where unicodeCategory != UnicodeCategory.NonSpacingMark
+                          select c) stringBuilder.Append(c);
 
         var cleanText = stringBuilder.ToString().Normalize(NormalizationForm.FormC);
 

@@ -4,18 +4,9 @@ namespace OmDeHoek.Model.DTO.User;
 
 public class UserDto
 {
-    public string Id { get; set; }
-    public string UserName { get; set; }
-    public string Email { get; set; }
-    public string? PhoneNumber { get; set; }
-    public string Role { get; set; }
-    public DateOnly BirthDate { get; set; }
-    public List<AdresDto> Adressen { get; set; } = [];
-    public List<BuurtDto> Buurten { get; set; } = [];
-    public string Voornaam { get; set; }
-    public string Achternaam { get; set; }
-
-    public UserDto() { }
+    public UserDto()
+    {
+    }
 
     public UserDto(Entities.User user, Talen taal = Talen.En)
     {
@@ -24,11 +15,21 @@ public class UserDto
         Email = user.Email;
         PhoneNumber = user.PhoneNumber;
         Role = user.Role.ToString();
-        Adressen = user.Adressen.Select(a => new AdresDto(a)).ToList();
+        Addresses = user.Adressen.Select(a => new AddressDto(a)).ToList();
         BirthDate = user.BirthDate;
-        Buurten = user.Buurten.Select(ub => new BuurtDto(ub.Buurt, taal, negeerDeelgemeente: false)).ToList();
-        Voornaam = user.Voornaam;
-        Achternaam = user.Achternaam;
+        Neighborhoods = user.Buurten.Select(ub => new NeighborhoodDto(ub.Buurt, taal, false)).ToList();
+        FirstName = user.Voornaam;
+        LastName = user.Achternaam;
     }
 
+    public string Id { get; set; }
+    public string UserName { get; set; }
+    public string Email { get; set; }
+    public string? PhoneNumber { get; set; }
+    public string Role { get; set; }
+    public DateOnly BirthDate { get; set; }
+    public List<AddressDto> Addresses { get; set; } = [];
+    public List<NeighborhoodDto> Neighborhoods { get; set; } = [];
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
 }

@@ -22,7 +22,7 @@ public class UserRepository(DataContext context) : GenericRepository<User>(conte
             .ThenInclude(g => g.Postcodes)
             .FirstOrDefaultAsync(u => u.Id == id);
     }
-    
+
     public virtual async Task<User?> GetByUserNameAsync(string username)
     {
         return await DbSet.FirstOrDefaultAsync(u => u.NormalizedUserName == username.ToUpper());

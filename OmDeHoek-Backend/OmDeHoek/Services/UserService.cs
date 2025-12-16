@@ -66,7 +66,7 @@ public class UserService(
 
             await uow.Save();
             await uow.CommitTransaction();
-            
+
             return new UserDto(user, taal);
         }
         catch (Exception e)
@@ -75,9 +75,9 @@ public class UserService(
             throw;
         }
     }
-    
+
     #region helper functies
-    
+
     /// <summary>
     /// Haalt het user object uit de databank gelinkt aan de user waarvan het ID in het token verwerkt staat
     /// </summary>
@@ -91,9 +91,9 @@ public class UserService(
         {
             throw new UnauthorizedException("Invalid token", "auth/invalid-token");
         }
-        
+
         return await uow.UserRepository.GetByIdAsync(id) ?? throw new UnauthorizedException("Invalid token", "auth/invalid-token");
     }
-    
+
     #endregion
 }

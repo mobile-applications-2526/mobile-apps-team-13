@@ -6,13 +6,13 @@ namespace OmDeHoek.Services;
 
 public class PostcodeService(UnitOfWork uow)
 {
-    public async Task<List<PostcodeDto>> GetAllPostcodesAsync(Talen taal = Talen.En)
+    public async Task<List<PostalcodeDto>> GetAllPostcodesAsync(Talen taal = Talen.En)
     {
         var postcodes = await uow.PostcodeRepository.GetAllAsync();
         var list = postcodes
-            .Select(p => new PostcodeDto(p, taal))
+            .Select(p => new PostalcodeDto(p, taal))
             .ToList();
-        
+
         list.Sort((a, b) => string.Compare(a.Code, b.Code, StringComparison.Ordinal));
         return list;
     }

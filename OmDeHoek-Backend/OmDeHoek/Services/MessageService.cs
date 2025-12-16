@@ -21,25 +21,19 @@ public class MessageService(
 
             var user = await uow.UserRepository.GetByIdAsync(userId);
 
-            if (user is null)
-            {
-                throw new UnauthorizedException("User not found", "User");
-            }
+            if (user is null) throw new UnauthorizedException("User not found", "User");
 
-            var buurt = await uow.BuurtRepository.GetByStatistischeSectorCodeAsync(message.BuurtCode);
+            var buurt = await uow.BuurtRepository.GetByStatistischeSectorCodeAsync(message.NeighborhoodCode);
             if (buurt is null)
-            {
-                throw new ResourceNotFoundException($"Buurt met Id {message.BuurtCode} bestaat niet", "buurtId");
-            }
+                throw new ResourceNotFoundException($"Neighborhood with Id {message.NeighborhoodCode} does not exist.",
+                    "NeighborhoodCode");
 
             if (!Enum.TryParse(message.Severity, out MessageSeverity severity))
-            {
                 throw new InvalidInputException(
                     "Message severity has to be one of the following: \"Informational\",\"Warning\", \"Critical\"",
                     "Severity");
-            }
 
-            var newMessage = new Message()
+            var newMessage = new Message
             {
                 Buurt = buurt,
                 CreatedAt = DateTime.UtcNow,
@@ -51,17 +45,13 @@ public class MessageService(
             };
 
             var ontvangendeBuurten = new HashSet<string> { buurt.StatistischeSectorCode };
-            if (!message.BuurtOnly)
+            if (!message.NeighborhoodOnly)
             {
                 var deelgemeente = await uow.DeelgemeenteRepository.GetByNis6Async(buurt.Nis6DeelGemeente);
                 if (deelgemeente is null)
-                {
-                    throw new ResourceNotFoundException($"Deelgemeente met Nis6 {buurt.Nis6DeelGemeente} bestaat niet", "deelgemeenteId");
-                }
-                foreach (Buurt b in deelgemeente.Buurten)
-                {
-                    ontvangendeBuurten.Add(b.StatistischeSectorCode);
-                }
+                    throw new ResourceNotFoundException($"Borough with Nis6 {buurt.Nis6DeelGemeente} does not exist",
+                        "deelgemeenteId");
+                foreach (var b in deelgemeente.Buurten) ontvangendeBuurten.Add(b.StatistischeSectorCode);
             }
 
             var eventName = severity switch
