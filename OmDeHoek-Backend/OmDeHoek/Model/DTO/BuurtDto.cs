@@ -6,16 +6,13 @@ namespace OmDeHoek.Model.DTO;
 
 public class BuurtDto
 {
-    public DeelGemeenteDto? DeelGemeente { get; set; }
-    public string Naam { get; set; } = string.Empty;
-    public string StatischeSectorCode { get; set; } = string.Empty;
-    public List<PrivacyUserDto> Bewoners { get; set; } = [];
-
-    public BuurtDto() { }
+    public BuurtDto()
+    {
+    }
 
     public BuurtDto(Buurt buurt, Talen taal = Talen.En, bool negeerDeelgemeente = false)
     {
-        Naam = taal switch
+        Name = taal switch
         {
             Talen.Nl => buurt.NaamNl,
             Talen.Fr => buurt.NaamFr,
@@ -26,10 +23,13 @@ public class BuurtDto
 
         // Loop protection: DeelgemeenteDto enkel maken als de BuurtDto niet al deel uitmaakt van een DeelgemeenteDto
         if (!negeerDeelgemeente && buurt.DeelGemeente != null)
-        {
-            DeelGemeente = new DeelGemeenteDto(buurt.DeelGemeente, taal, negeerBuurten: true);
-        }
+            Borough = new DeelGemeenteDto(buurt.DeelGemeente, taal, negeerBuurten: true);
 
-        Bewoners = buurt.Bewoners.Select(ub => new PrivacyUserDto(ub.User!)).ToList();
+        Residents = buurt.Bewoners.Select(ub => new PrivacyUserDto(ub.User!)).ToList();
     }
+
+    public DeelGemeenteDto? Borough { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string StatischeSectorCode { get; set; } = string.Empty;
+    public List<PrivacyUserDto> Residents { get; set; } = [];
 }

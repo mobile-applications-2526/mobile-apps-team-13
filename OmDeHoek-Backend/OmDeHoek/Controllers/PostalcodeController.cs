@@ -7,10 +7,10 @@ namespace OmDeHoek.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PostcodeController(PostcodeService service): ControllerBase
+public class PostalcodeController(PostcodeService service) : ControllerBase
 {
     /// <summary>
-    /// Geeft een lijst van alle postcodes terug.
+    ///     Returns a list of all postal codes.
     /// </summary>
     [HttpGet]
     public async Task<ActionResult<List<PostcodeDto>>> GetAllPostcodes()

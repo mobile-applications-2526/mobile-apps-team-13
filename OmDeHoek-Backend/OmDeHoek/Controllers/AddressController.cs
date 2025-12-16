@@ -10,29 +10,29 @@ namespace OmDeHoek.Controllers;
 // api path: api/adres
 [ApiController]
 [Route("api/[controller]")]
-public class AdresController(AdresService adresService) : ControllerBase
+public class AddressController(AdresService adresService) : ControllerBase
 {
     // POST api/adres
     /// <summary>
-    /// Registers a new address for the authenticated user.
-    /// The request must include a Bearer token in the Authorization header.
+    ///     Registers a new address for the authenticated user.
+    ///     The request must include a Bearer token in the Authorization header.
     /// </summary>
-    /// <param name="adres">Address data to insert.</param>
+    /// <param name="address">Address data to insert.</param>
     /// <returns>
-    /// ActionResult containing the created <see cref="AdresDto"/> on success,
-    /// or an error ActionResult produced by <see cref="ExceptionHandler"/> on failure.
+    ///     ActionResult containing the created <see cref="AdresDto" /> on success,
+    ///     or an error ActionResult produced by <see cref="ExceptionHandler" /> on failure.
     /// </returns>
     /// <remarks>
-    /// Requires authentication. The Authorization header bearer token is forwarded to the service.
+    ///     Requires authentication. The Authorization header bearer token is forwarded to the service.
     /// </remarks>
     [HttpPost]
     [Authorize]
-    public async Task<ActionResult<AdresDto>> RegisterNewAdres([FromBody] InsertAdres adres)
+    public async Task<ActionResult<AdresDto>> RegisterNewAdres([FromBody] InsertAdres address)
     {
         try
         {
             var token = Request.Headers.Authorization.ToString().Replace("Bearer ", "");
-            var result = await adresService.RegisterNewAdresAsync(adres, token);
+            var result = await adresService.RegisterNewAdresAsync(address, token);
             return Ok(result);
         }
         catch (Exception e)
@@ -43,15 +43,15 @@ public class AdresController(AdresService adresService) : ControllerBase
 
     // GET api/adres/byLoggedInUser
     /// <summary>
-    /// Retrieves all addresses associated with the currently authenticated user.
-    /// The request must include a Bearer token in the Authorization header.
+    ///     Retrieves all addresses associated with the currently authenticated user.
+    ///     The request must include a Bearer token in the Authorization header.
     /// </summary>
     /// <returns>
-    /// ActionResult containing a list of <see cref="AdresDto"/> for the logged-in user,
-    /// or an error ActionResult produced by <see cref="ExceptionHandler"/> on failure.
+    ///     ActionResult containing a list of <see cref="AdresDto" /> for the logged-in user,
+    ///     or an error ActionResult produced by <see cref="ExceptionHandler" /> on failure.
     /// </returns>
     /// <remarks>
-    /// Requires authentication. The Authorization header bearer token is forwarded to the service.
+    ///     Requires authentication. The Authorization header bearer token is forwarded to the service.
     /// </remarks>
     [HttpGet("byLoggedInUser")]
     [Authorize]

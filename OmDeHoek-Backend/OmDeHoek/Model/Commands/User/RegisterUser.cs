@@ -6,6 +6,6 @@ public class RegisterUser
     public string? PhoneNumber { get; set; }
     public string Password { get; set; }
     public DateOnly BirthDate { get; set; }
-    public string Voornaam { get; set; }
-    public string Achternaam { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
 }

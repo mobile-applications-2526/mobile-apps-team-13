@@ -12,7 +12,7 @@ public class PostcodeService(UnitOfWork uow)
         var list = postcodes
             .Select(p => new PostcodeDto(p, taal))
             .ToList();
-        
+
         list.Sort((a, b) => string.Compare(a.Code, b.Code, StringComparison.Ordinal));
         return list;
     }

@@ -1,28 +1,31 @@
 ﻿using OmDeHoek.Model.Exceptions;
+using OmDeHoek.Utils;
+
 // ReSharper disable InvertIf
 
 namespace OmDeHoek.Model.Commands.User;
 
 public class UpdateUser
 {
-    #nullable enable
     public string? Username { get; set; }
     public string? PhoneNumber { get; set; }
     public string? Email { get; set; }
-    public string? Voornaam { get; set; }
-    public string? Achternaam { get; set; }
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
 
     /// <summary>
-    /// Throws wanneer een inputwaarde niet voldoet aan de validatieregels
+    ///     Throws wanneer een inputwaarde niet voldoet aan de validatieregels
     /// </summary>
     /// <exception cref="InvalidInputException"></exception>
     public void Validate()
     {
         if (Username is not null)
         {
-            if(string.IsNullOrWhiteSpace(Username)) throw new InvalidInputException("Username mag niet leeg zijn", "Username");
+            if (string.IsNullOrWhiteSpace(Username))
+                throw new InvalidInputException("Username mag niet leeg zijn", "Username");
             Username = Username.Trim();
-            if(Username.Length < 3 || Username.Length > 31) throw new InvalidInputException("Username moet tussen 3 en 31 karakters zijn", "Username");
+            if (Username.Length < 3 || Username.Length > 31)
+                throw new InvalidInputException("Username moet tussen 3 en 31 karakters zijn", "Username");
             // valid username
         }
 
@@ -34,23 +37,23 @@ public class UpdateUser
         if (Email is not null)
         {
             Email = Email.Trim();
-            if (!Utils.AuthUtils.IsValidEmail(Email))
+            if (!AuthUtils.IsValidEmail(Email))
                 throw new InvalidInputException("Email is van ongeldig formaat", "email");
             // valid email
         }
 
-        if (Voornaam is not null)
+        if (FirstName is not null)
         {
-            Voornaam = Voornaam.Trim();
-            if(string.IsNullOrWhiteSpace(Voornaam)) 
-                throw new InvalidInputException("Voornaam mag niet leeg zijn",  "Voornaam");
+            FirstName = FirstName.Trim();
+            if (string.IsNullOrWhiteSpace(FirstName))
+                throw new InvalidInputException("FirstName mag niet leeg zijn", "FirstName");
         }
 
-        if (Achternaam is not null)
+        if (LastName is not null)
         {
-            Achternaam = Achternaam.Trim();
-            if (string.IsNullOrWhiteSpace(Achternaam))
-                throw new InvalidInputException("Acthernaam mag niet leeg zijn", "Achternaam");
+            LastName = LastName.Trim();
+            if (string.IsNullOrWhiteSpace(LastName))
+                throw new InvalidInputException("Acthernaam mag niet leeg zijn", "LastName");
         }
     }
 }

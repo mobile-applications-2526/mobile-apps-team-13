@@ -190,7 +190,7 @@ namespace OmDeHoek
             }
 
             app.UseHttpsRedirection();
-            
+
             app.UseCors(corsName);
 
             app.UseAuthorization();

@@ -4,20 +4,22 @@ namespace OmDeHoek.Model.DTO;
 
 public class AdresDto
 {
-    public Guid AdresId { get; init; }
-    public string Straat { get; init; } = string.Empty;
-    public string? Huisnummer { get; init; }
-    public string Postcode { get; init; } = string.Empty;
-    public string Dorp { get; init; } = string.Empty;
-
-    public AdresDto() { }
+    public AdresDto()
+    {
+    }
 
     public AdresDto(Adres adres)
     {
         AdresId = adres.Id;
-        Straat = adres.Straat;
-        Huisnummer = adres.Huisnummer;
-        Postcode = adres.Postcode;
-        Dorp = adres.Dorp;
+        Street = adres.Straat;
+        HouseNumber = adres.Huisnummer;
+        PostalCode = adres.Postcode;
+        VillageName = adres.Dorp;
     }
+
+    public Guid AdresId { get; init; }
+    public string Street { get; init; } = string.Empty;
+    public string? HouseNumber { get; init; }
+    public string PostalCode { get; init; } = string.Empty;
+    public string VillageName { get; init; } = string.Empty;
 }

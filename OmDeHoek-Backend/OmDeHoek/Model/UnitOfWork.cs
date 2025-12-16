@@ -126,17 +126,17 @@ public sealed class UnitOfWork : IDisposable
     {
         get { return _deelgemeenteRepository ?? new DeelgemeenteRepository(_context); }
     }
-    
+
     public RefreshTokenRepository RefreshTokenRepository
     {
         get { return _refreshTokenRepository ?? new RefreshTokenRepository(_context); }
     }
-    
+
     public UserLikedPostRepository UserLikedPostRepository
     {
         get { return _userLikedPostRepository ?? new UserLikedPostRepository(_context); }
     }
-    
+
     public MessageReactionRepository MessageReactionRepository
     {
         get { return _messageReactionRepository ?? new MessageReactionRepository(_context); }

@@ -29,7 +29,7 @@ public class DataContext : IdentityUserContext<User>
         builder.Entity<User>(entity =>
         {
             entity.HasKey(u => u.Id);
-            
+
             entity.Property(u => u.BirthDate).IsRequired();
             entity.Property(u => u.Voornaam).IsRequired();
             entity.Property(u => u.Achternaam).IsRequired();
@@ -130,7 +130,7 @@ public class DataContext : IdentityUserContext<User>
                 .HasForeignKey(m => m.BuurtSectorCode)
                 .OnDelete(DeleteBehavior.Restrict);
         });
-        
+
         builder.Entity<MessageReaction>(entity =>
         {
             entity.HasKey(mr => mr.Id);
@@ -151,7 +151,7 @@ public class DataContext : IdentityUserContext<User>
         builder.Entity<RefreshToken>(entity =>
         {
             entity.HasKey(rt => rt.Id);
-            
+
             entity.Property(rt => rt.TokenHash).IsRequired();
             entity.Property(rt => rt.ExpiresAt).IsRequired();
             entity.HasOne(rt => rt.User)
@@ -159,7 +159,7 @@ public class DataContext : IdentityUserContext<User>
                 .HasForeignKey(rt => rt.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
-        
+
         builder.Entity<UserLikedPost>(entity =>
         {
             entity.HasKey(ulp => new { ulp.UserId, ulp.PostId });

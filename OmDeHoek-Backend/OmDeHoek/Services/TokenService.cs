@@ -86,7 +86,7 @@ public class TokenService(ILogger<TokenService> logger)
 
         return userIdClaim.Value;
     }
-    
+
     public (string token, string tokenHash) CreateRefreshToken()
     {
         var randomNumber = new byte[64];
@@ -95,10 +95,10 @@ public class TokenService(ILogger<TokenService> logger)
             rng.GetBytes(randomNumber);
         }
         var refreshToken = Convert.ToBase64String(randomNumber);
-        
+
         var hashedBytes = SHA256.HashData(Encoding.UTF8.GetBytes(refreshToken));
         var hashedRefreshToken = Convert.ToBase64String(hashedBytes);
-        
+
         return (refreshToken, hashedRefreshToken);
     }
 }

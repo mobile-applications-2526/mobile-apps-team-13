@@ -2,8 +2,8 @@
 
 public class InsertAdres
 {
-    public string Straat { get; set; } = string.Empty;
-    public string? Huisnummer { get; set; }
-    public string Postcode { get; set; } = string.Empty;
-    public string BewonerId { get; set; } = string.Empty;
+    public string Street { get; set; } = string.Empty;
+    public string? HouseNumber { get; set; }
+    public string PostalCode { get; set; } = string.Empty;
+    public string ResidentId { get; set; } = string.Empty;
 }

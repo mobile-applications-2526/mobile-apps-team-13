@@ -78,7 +78,7 @@ public static class DataSeeder
         }
 
         var comparer = new T();
-        
+
         var downloadedSet = await set.ToHashSetAsync(comparer: comparer);
 
         uint addedItems = 0;

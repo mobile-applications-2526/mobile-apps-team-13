@@ -7,21 +7,21 @@ public class RefreshToken() : IDataBaseEntity<RefreshToken>
 {
     [Key]
     public Guid Id { get; set; }
-    
+
     [Required]
     public string UserId { get; set; } = string.Empty;
     [Required]
     public string TokenHash { get; set; } = string.Empty;
-    
+
     [Required]
     public DateTime ExpiresAt { get; set; }
-    
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    
+
     public bool IsRevoked { get; set; } = false;
-    
+
     public virtual User User { get; set; }
-    
+
     public bool Equals(RefreshToken? other)
     {
         return !CheckNullOrWrongType(other)
@@ -37,7 +37,7 @@ public class RefreshToken() : IDataBaseEntity<RefreshToken>
 
     public bool HardEquals(RefreshToken? other)
     {
-        return Equals(other) 
+        return Equals(other)
             && UserId == other!.UserId
             && TokenHash == other.TokenHash
             && ExpiresAt == other.ExpiresAt
