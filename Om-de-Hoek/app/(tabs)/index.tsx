@@ -1,42 +1,43 @@
-import { Text, View, Image } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 import { useState } from "react";
 import {PressableButton} from "@/components/PressableButton";
 import {Color} from "@/types/StyleOptions";
 import gemeenteService from "@/services/gemeenteService";
+import Header from "@/components/Header";
+import { SafeAreaView } from "react-native-safe-area-context";
+import NotificationCard from "@/components/card/NotificationCard";
+import { TriangleAlert, Siren } from "lucide-react-native";
+import { useRouter } from "expo-router";
+
+const router = useRouter();
 
 export default function TabTwoScreen() {
-  const [gemeente, setGemeente] = useState<string>("");
-  const [postcode, _] = useState<string>("3000");
-
-  const handleFetchGemeente = async () => {
-    const result = await gemeenteService.fetchGemeenteByPostcode(postcode, "Nl");
-    if (result) {
-      setGemeente(result[0].naam);
-    } else {
-      setGemeente("Gemeente niet gevonden");
-    }
-  };
 
   return (
-    <View className="flex-1 items-center justify-center bg-white">
-    <Image source={require('@/assets/images/logo.png')}/>
-      <Text className="text-2xl font-comfortaa-regular font-bold mb-4">
-        Magic !!!
-      </Text>
-
-      <PressableButton
-        onPress={handleFetchGemeente}
-        title="Klik hier om de gemeente op te halen"
-        background={Color.BLUE}
-        textColor={Color.WHITE}
-      />
-
-      {gemeente ? (
-        <Text className="mt-4 text-black  font-comfortaa-regular">
-          De dorpsnaam is: {gemeente}
-        </Text>
-      ) : null}
-
-    </View>
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="items-center">
+        <Header title="Boseind 3910 Neerpelt," subtitle="Pelt"/>
+      </View>
+      <ScrollView className="mt-10 px-6">
+        <Text className="text-gray font-comfortaa-regular">Laatste meldingen</Text>
+        <NotificationCard 
+            icon={<TriangleAlert color="#100D08" size={24} strokeWidth={2} />} 
+            title="Waarschuwing" 
+            subtitle="Marter gespot: Handboogstraat 6u37" 
+            time="16u47" 
+        />
+        <NotificationCard 
+            icon={<Siren color="#100D08" size={24} strokeWidth={2} />} 
+            title="Noodgeval" 
+            subtitle="Mogelijke gaslek: Boomstraat 49" 
+            time="11u23" 
+        />
+      </ScrollView>
+      <Pressable onPress={() => router.push('/createNotification')}>
+        <View className="absolute bottom-10 right-6">
+           <Text>Knop</Text>
+        </View>
+      </Pressable>
+    </SafeAreaView>
   );
 }
