@@ -7,7 +7,7 @@ import {Color} from "@/types/StyleOptions";
 import { UserRoundPen, Wrench, BellRing, UsersRound } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import UserService from "@/services/UserService";
+import UserService from "@/services/userService";
 import { useTranslation } from "react-i18next";
 
 export default function ProfilePage() {
