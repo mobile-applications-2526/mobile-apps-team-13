@@ -65,6 +65,15 @@
             "special": "Minimal one special character",
             "password": "Password"
         },
+        "neighborhood": {
+            "title": "Neighborhoods in",
+            "subtitle": "the neighborhood",
+            "participants": "members",
+            "join": "Join",
+            "leave": "Leave",
+            "searchplaceholder": "Search for a neighborhood...",
+            "notfound": "No neighborhood found with "
+        },
         "continue": "Continue"
     },
     "settings": {

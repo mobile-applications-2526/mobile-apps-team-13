@@ -10,6 +10,17 @@ const loggedInuser = async (token: string | null) => {
     });
 };
 
+const addressByLoggedInUser = async (token: string | null) => {
+    return await fetch(`${API_URL}/api/adres/byloggedinuser`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    });
+};
+
 export default {
     loggedInuser,
+    addressByLoggedInUser,
 }

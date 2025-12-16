@@ -15,19 +15,35 @@ import { Color } from "@/types/StyleOptions";
 import AuthHeader from "@/components/auth/AuthHeader";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
+import { useEffect } from "react";
 
 type Props = {
   onNext: () => void;
   onChange: (date: Date) => void;
   onBack?: () => void;
+  birthDate?: Date;
 };
 
-export const Step3BirthDate = ({ onNext, onChange, onBack }: Props) => {
-  const [birthDate, setBirthDate] = useState<Date>(new Date());
+export const Step3BirthDate = ({
+  onNext,
+  onChange,
+  onBack,
+  birthDate: birthDateProp,
+}: Props) => {
+  const [birthDate, setBirthDate] = useState<Date>(birthDateProp ?? new Date());
   const [showPicker, setShowPicker] = useState<boolean>(false);
-  const [isDateSelected, setIsDateSelected] = useState<boolean>(false);
+  const [isDateSelected, setIsDateSelected] = useState<boolean>(
+    Boolean(birthDateProp)
+  );
 
   const { t, i18n } = useTranslation();
+
+  useEffect(() => {
+    if (birthDateProp) {
+      setBirthDate(birthDateProp);
+      setIsDateSelected(true);
+    }
+  }, [birthDateProp]);
 
   const onDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     if (Platform.OS === "android") {
@@ -134,14 +150,13 @@ export const Step3BirthDate = ({ onNext, onChange, onBack }: Props) => {
             maximumDate={new Date()}
             textColor="#100D08"
             style={{ width: 320, height: 180 }}
-
             positiveButton={{
               label: t("register.birthdate.datepicker.confirm"),
-              textColor: Color.BLUE 
+              textColor: Color.BLUE,
             }}
             negativeButton={{
               label: t("register.birthdate.datepicker.cancel"),
-              textColor: Color.RED 
+              textColor: Color.RED,
             }}
           />
         </View>

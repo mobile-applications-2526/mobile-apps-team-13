@@ -11,8 +11,9 @@ import { Step6Password } from "@/components/auth/register/Step6Password";
 import { useAuth } from "@/components/auth/context/AuthContext";
 import authService from "@/services/authService";
 import ProgressBar from "@/components/auth/register/ProgressBar";
+import Step7Neighborhood from "@/components/auth/register/Step7Neighborhood";
 
-const totalSteps = 6;
+const totalSteps = 7;
 
 const parseDate = (date: Date): string => {
   const year = date.getFullYear();
@@ -87,6 +88,8 @@ export default function RegisterPage() {
               onChange={({ firstName, lastName }) =>
                 setData((prev) => ({ ...prev, firstName, lastName }))
               }
+              firstName={data.firstName}
+              lastName={data.lastName}
               onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
             />
           </KeyboardAvoidingView>
@@ -103,6 +106,7 @@ export default function RegisterPage() {
               onChange={(birthDate) =>
                 setData((prev) => ({ ...prev, birthDate }))
               }
+              birthDate={data.birthDate}
               onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
             />
           </KeyboardAvoidingView>
@@ -130,6 +134,10 @@ export default function RegisterPage() {
                   postalCode,
                 }))
               }
+              streetName={data.streetName}
+              houseNumber={data.houseNumber}
+              municipality={data.municipality}
+              postalCode={data.postalCode}
               onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
             />
           </KeyboardAvoidingView>
@@ -146,6 +154,7 @@ export default function RegisterPage() {
               onChange={(phoneNumber) =>
                 setData((prev) => ({ ...prev, phoneNumber }))
               }
+              value={(data as any).phoneNumber}
               onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
             />
           </KeyboardAvoidingView>
@@ -158,10 +167,24 @@ export default function RegisterPage() {
             keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
           >
             <Step6Password
-              onNext={nextAndRegister}
+              onNext={goToNextStep}
               onChange={(password) =>
                 setData((prev) => ({ ...prev, password }))
               }
+              password={data.password}
+              onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
+            />
+          </KeyboardAvoidingView>
+        )}
+
+        {huidigeIndex === 6 && (
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
+          >
+            <Step7Neighborhood
+              postalCode={data.postalCode}
+              onNext={nextAndRegister}
               onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
             />
           </KeyboardAvoidingView>

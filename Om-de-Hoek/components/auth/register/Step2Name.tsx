@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React from "react";
 import { Text, ScrollView } from "react-native";
 import { WrittenInput } from "@/components/WrittenInput";
 import { PressableButton } from "@/components/PressableButton";
@@ -10,21 +10,30 @@ type Props = {
   onNext: () => void;
   onChange: (name: { firstName: string; lastName: string }) => void;
   onBack?: () => void;
+  firstName?: string;
+  lastName?: string;
 };
 
-export const Step2Name = ({ onNext, onChange, onBack }: Props) => {
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [isValid, setValid] = useState<boolean>(false);
-
+export const Step2Name = ({
+  onNext,
+  onChange,
+  onBack,
+  firstName: firstNameProp,
+  lastName: lastNameProp,
+}: Props) => {
   const { t } = useTranslation();
 
-  useEffect(() => {
-    const valid = firstName.length > 0 && lastName.length > 0;
-    setValid(valid);
+  const first = firstNameProp ?? "";
+  const last = lastNameProp ?? "";
+  const isValid = first.length > 0 && last.length > 0;
 
-    onChange({ firstName, lastName });
-  }, [firstName, lastName]);
+  const handleFirstChange = (text: string) => {
+    onChange({ firstName: text, lastName: last });
+  };
+
+  const handleLastChange = (text: string) => {
+    onChange({ firstName: first, lastName: text });
+  };
 
   return (
     <ScrollView
@@ -42,15 +51,15 @@ export const Step2Name = ({ onNext, onChange, onBack }: Props) => {
 
       <WrittenInput
         placeholder={t("register.name.firstname")}
-        value={firstName}
-        onChangeText={setFirstName}
+        value={first}
+        onChangeText={handleFirstChange}
         inputType="default"
       />
 
       <WrittenInput
         placeholder={t("register.name.lastname")}
-        value={lastName}
-        onChangeText={setLastName}
+        value={last}
+        onChangeText={handleLastChange}
         inputType="default"
       />
 

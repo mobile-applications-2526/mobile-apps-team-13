@@ -12,10 +12,16 @@ type Props = {
   onNext: () => void;
   onChange: (password: string) => void;
   onBack?: () => void;
+  password?: string;
 };
 
-export const Step6Password = ({ onNext, onChange, onBack }: Props) => {
-  const [password, setPassword] = useState<string>("");
+export const Step6Password = ({
+  onNext,
+  onChange,
+  onBack,
+  password: passwordProp,
+}: Props) => {
+  const [password, setPassword] = useState<string>(passwordProp ?? "");
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const [hasMinLength, setHasMinLength] = useState<boolean>(false);
   const [hasNumber, setHasNumber] = useState<boolean>(false);
@@ -25,6 +31,12 @@ export const Step6Password = ({ onNext, onChange, onBack }: Props) => {
   const [strength, setStrength] = useState<number>(0);
 
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (passwordProp !== undefined && passwordProp !== password) {
+      setPassword(passwordProp);
+    }
+  }, [passwordProp]);
 
   useEffect(() => {
     const minLengthValid = password.length >= 8;
@@ -48,14 +60,14 @@ export const Step6Password = ({ onNext, onChange, onBack }: Props) => {
       specialCharValid,
     ].filter(Boolean).length;
     setStrength(score);
-
-    onChange(password);
   }, [password]);
 
   const getStrengthFeedback = () => {
     if (!password) return { text: "", color: "text-gray" };
-    if (strength < 2) return { text: t("register.password.weak"), color: "text-red" };
-    if (strength < 4) return { text: t("register.password.good"), color: "text-yellow-500" };
+    if (strength < 2)
+      return { text: t("register.password.weak"), color: "text-red" };
+    if (strength < 4)
+      return { text: t("register.password.good"), color: "text-yellow-500" };
     return { text: t("register.password.strong"), color: "text-green-500" };
   };
 
@@ -77,15 +89,26 @@ export const Step6Password = ({ onNext, onChange, onBack }: Props) => {
 
       <View className="my-4">
         <View className="flex-row mb-2">
-          <Text className="font-comfortaa-semibold">{t("register.password.passwordstrong")}</Text>
+          <Text className="font-comfortaa-semibold">
+            {t("register.password.passwordstrong")}
+          </Text>
           <Text className={`font-comfortaa-bold ${strengthFeedback.color}`}>
             {strengthFeedback.text}
           </Text>
         </View>
 
-        <ValidationRow isValid={hasMinLength} text={t("register.password.characters")} />
-        <ValidationRow isValid={hasNumber} text={t("register.password.number")} />
-        <ValidationRow isValid={hasUppercase} text={t("register.password.uppercase")} />
+        <ValidationRow
+          isValid={hasMinLength}
+          text={t("register.password.characters")}
+        />
+        <ValidationRow
+          isValid={hasNumber}
+          text={t("register.password.number")}
+        />
+        <ValidationRow
+          isValid={hasUppercase}
+          text={t("register.password.uppercase")}
+        />
         <ValidationRow
           isValid={hasSpecialChar}
           text={t("register.password.special")}
@@ -96,7 +119,10 @@ export const Step6Password = ({ onNext, onChange, onBack }: Props) => {
         <WrittenInput
           placeholder={t("register.password.password")}
           value={password}
-          onChangeText={setPassword}
+          onChangeText={(text) => {
+            setPassword(text);
+            onChange(text);
+          }}
           inputType="password"
           secureTextEntry={!isPasswordVisible}
         />

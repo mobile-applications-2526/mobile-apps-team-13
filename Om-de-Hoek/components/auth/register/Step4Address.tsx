@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React from "react";
 import { ScrollView, Text } from "react-native";
 import { WrittenInput } from "@/components/WrittenInput";
 import { PressableButton } from "@/components/PressableButton";
@@ -17,31 +17,62 @@ type Props = {
   onNext: () => void;
   onChange: (data: AddressData) => void;
   onBack?: () => void;
+  streetName?: string;
+  houseNumber?: string;
+  municipality?: string;
+  postalCode?: string;
 };
 
-export const Step4Address = ({ onNext, onChange, onBack }: Props) => {
-  const [streetName, setStreetName] = useState<string>("");
-  const [houseNumber, setHouseNumber] = useState<string>("");
-  const [municipality, setMunicipality] = useState<string>("");
-  const [postalCode, setPostalCode] = useState<string>("");
-  const [isValid, setIsValid] = useState<boolean>(false);
-
+export const Step4Address = ({
+  onNext,
+  onChange,
+  onBack,
+  streetName: streetNameProp,
+  houseNumber: houseNumberProp,
+  municipality: municipalityProp,
+  postalCode: postalCodeProp,
+}: Props) => {
   const { t } = useTranslation();
 
-  useEffect(() => {
-    const areFieldsFilled =
-      streetName.length > 0 && municipality.length > 0 && postalCode.length > 0;
+  const street = streetNameProp ?? "";
+  const house = houseNumberProp ?? "";
+  const municipality = municipalityProp ?? "";
+  const postal = postalCodeProp ?? "";
 
-    const PostalCodeRegex = /^[1-9][0-9]{3}$/;
-    const isPostalCodeValid = PostalCodeRegex.test(postalCode);
+  const PostalCodeRegex = /^[1-9][0-9]{3}$/;
+  const areFieldsFilled =
+    street.length > 0 && municipality.length > 0 && postal.length > 0;
+  const isPostalCodeValid = PostalCodeRegex.test(postal);
+  const isValid = areFieldsFilled && isPostalCodeValid;
 
-    const valid = areFieldsFilled && isPostalCodeValid;
-    setIsValid(valid);
-
-    if (valid) {
-      onChange({ streetName, houseNumber, municipality, postalCode });
-    }
-  }, [streetName, houseNumber, municipality, postalCode]);
+  const handleStreet = (text: string) =>
+    onChange({
+      streetName: text,
+      houseNumber: house,
+      municipality,
+      postalCode: postal,
+    });
+  const handleHouse = (text: string) =>
+    onChange({
+      streetName: street,
+      houseNumber: text,
+      municipality,
+      postalCode: postal,
+    });
+  const handleMunicipality = (text: string) =>
+    onChange({
+      streetName: street,
+      houseNumber: house,
+      municipality: text,
+      postalCode: postal,
+    });
+  const handlePostal = (text: string) =>
+    onChange({
+      streetName: street,
+      houseNumber: house,
+      municipality,
+      postalCode: text,
+    });
 
   return (
     <ScrollView
@@ -59,29 +90,29 @@ export const Step4Address = ({ onNext, onChange, onBack }: Props) => {
 
       <WrittenInput
         placeholder={t("register.address.street")}
-        value={streetName}
-        onChangeText={setStreetName}
+        value={street}
+        onChangeText={handleStreet}
         inputType="default"
       />
 
       <WrittenInput
         placeholder={t("register.address.housenumber")}
-        value={houseNumber}
-        onChangeText={setHouseNumber}
+        value={house}
+        onChangeText={handleHouse}
         inputType="default"
       />
 
       <WrittenInput
         placeholder={t("register.address.municipality")}
         value={municipality}
-        onChangeText={setMunicipality}
+        onChangeText={handleMunicipality}
         inputType="default"
       />
 
       <WrittenInput
         placeholder={t("register.address.postalcode")}
-        value={postalCode}
-        onChangeText={setPostalCode}
+        value={postal}
+        onChangeText={handlePostal}
         inputType="default"
       />
 
