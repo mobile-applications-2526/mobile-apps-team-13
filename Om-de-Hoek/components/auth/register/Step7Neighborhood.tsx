@@ -1,12 +1,7 @@
 import Header from "@/components/Header";
 import { ActivityIndicator, ScrollView, View, Text } from "react-native";
-import AuthHeader from "../AuthHeader";
 import NeighborhoodGlassCard from "@/components/card/NeighborhoodGlassCard";
-import gemeenteService from "@/services/gemeenteService";
-import { Gemeente } from "@/types/gemeente";
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import UserService from "@/services/UserService";
 import neighborhoodService from "@/services/neighborhoodService";
 import { Neighborhoods } from "@/types/neighborhood";
 import { useTranslation } from "react-i18next";
@@ -24,7 +19,7 @@ export default function Step7Neighborhood({
   onBack,
 }: Props) {
 
-    const { t } = useTranslation();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(true);
   const [neighborhoods, setNeighborhoods] = useState<Array<string>>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
