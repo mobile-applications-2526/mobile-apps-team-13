@@ -16,14 +16,14 @@ public class UserController(UserService userService) : ControllerBase
     /// <summary>
     ///     Retrieves information about the currently logged-in user.
     /// </summary>
-    /// <param name="taal">The language for the returned data. Defaults to <see cref="Talen.En" />.</param>
+    /// <param name="taal">The language for the returned data. Defaults to <see cref="Languages.En" />.</param>
     /// <returns>>An <see cref="ActionResult{UserDto}" /> containing the user information.</returns>
     /// <remarks>
     ///     Requires authentication. The Authorization header bearer token is forwarded to the service.
     /// </remarks>
     [HttpGet("loggedIn")]
     [Authorize]
-    public async Task<ActionResult<UserDto>> GetLoggedInUser([FromQuery] Talen taal = Talen.En)
+    public async Task<ActionResult<UserDto>> GetLoggedInUser([FromQuery] Languages taal = Languages.En)
     {
         try
         {
@@ -45,7 +45,7 @@ public class UserController(UserService userService) : ControllerBase
     /// <returns>The updated user</returns>
     [HttpPut("update")]
     public async Task<ActionResult<UserDto>> UpdateUser([FromBody] UpdateUser updateDetails,
-        [FromQuery] Talen taal = Talen.En)
+        [FromQuery] Languages taal = Languages.En)
     {
         try
         {

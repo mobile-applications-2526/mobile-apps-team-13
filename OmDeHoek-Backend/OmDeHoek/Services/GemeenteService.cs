@@ -8,12 +8,12 @@ namespace OmDeHoek.Services;
 
 public class GemeenteService(UnitOfWork uow)
 {
-    public async Task<List<GemeenteDto>> GetAllAsync(Talen taal = Talen.En)
+    public async Task<List<MunicipalityDto>> GetAllAsync(Languages taal = Languages.En)
     {
-        return (await uow.GemeenteRepository.GetAllAsync()).Select(g => new GemeenteDto(g, taal)).ToList();
+        return (await uow.GemeenteRepository.GetAllAsync()).Select(g => new MunicipalityDto(g, taal)).ToList();
     }
 
-    public async Task<GemeenteDto> GetByNisCodeAsync(string nisCode, Talen taal = Talen.En)
+    public async Task<MunicipalityDto> GetByNisCodeAsync(string nisCode, Languages taal = Languages.En)
     {
         if (string.IsNullOrWhiteSpace(nisCode))
         {
@@ -26,10 +26,10 @@ public class GemeenteService(UnitOfWork uow)
             throw new ResourceNotFoundException($"Gemeente met NIS-code {nisCode} niet gevonden.", "NISCode");
         }
 
-        return new GemeenteDto(gemeente, taal);
+        return new MunicipalityDto(gemeente, taal);
     }
 
-    public async Task<GemeenteDto> GetByNaamAsync(string naam, Talen taal = Talen.En)
+    public async Task<MunicipalityDto> GetByNaamAsync(string naam, Languages taal = Languages.En)
     {
         if (string.IsNullOrWhiteSpace(naam))
         {
@@ -42,10 +42,10 @@ public class GemeenteService(UnitOfWork uow)
             throw new ResourceNotFoundException($"Gemeente met naam {naam} niet gevonden.", "Naam");
         }
 
-        return new GemeenteDto(gemeente, taal);
+        return new MunicipalityDto(gemeente, taal);
     }
 
-    public async Task<List<GemeenteDto>> SearchByPostCodeAsync(string postCode, Talen taal = Talen.En)
+    public async Task<List<MunicipalityDto>> SearchByPostCodeAsync(string postCode, Languages taal = Languages.En)
     {
         if (string.IsNullOrWhiteSpace(postCode))
         {
@@ -58,6 +58,6 @@ public class GemeenteService(UnitOfWork uow)
             throw new ResourceNotFoundException($"Geen gemeenten gevonden voor postcode {postCode}.", "PostCode");
         }
 
-        return gemeenten.Select(g => new GemeenteDto(g, taal)).ToList();
+        return gemeenten.Select(g => new MunicipalityDto(g, taal)).ToList();
     }
 }

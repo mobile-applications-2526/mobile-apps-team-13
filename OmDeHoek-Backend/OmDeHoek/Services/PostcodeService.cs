@@ -6,7 +6,7 @@ namespace OmDeHoek.Services;
 
 public class PostcodeService(UnitOfWork uow)
 {
-    public async Task<List<PostalcodeDto>> GetAllPostcodesAsync(Talen taal = Talen.En)
+    public async Task<List<PostalcodeDto>> GetAllPostcodesAsync(Languages taal = Languages.En)
     {
         var postcodes = await uow.PostcodeRepository.GetAllAsync();
         var list = postcodes

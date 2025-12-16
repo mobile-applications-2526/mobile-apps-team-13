@@ -1,6 +1,6 @@
 ﻿namespace OmDeHoek.Model.Enums;
 
-public enum Talen
+public enum Languages
 {
     Nl = 0,
     Fr = 1,

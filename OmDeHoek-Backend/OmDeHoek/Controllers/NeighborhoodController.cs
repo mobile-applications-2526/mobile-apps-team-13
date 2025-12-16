@@ -16,17 +16,17 @@ public class NeighborhoodController(BuurtService buurtService) : ControllerBase
     ///     Retrieve a single buurt by its statistical sector code.
     /// </summary>
     /// <param name="sectorcode">The statistical sector code of the buurt.</param>
-    /// <param name="language">Optional language for the returned data. Defaults to <see cref="Talen.En" /> when not provided.</param>
+    /// <param name="language">Optional language for the returned data. Defaults to <see cref="Languages.En" /> when not provided.</param>
     /// <returns>
     ///     An <see cref="ActionResult{BuurtDto}" /> containing the requested buurt on success,
     ///     or an appropriate error response produced by <see cref="ExceptionHandler.HandleException" />.
     /// </returns>
     [HttpGet("sectorcode/{sectorcode}")]
-    public async Task<ActionResult<NeighborhoodDto>> GetBuurtBySectorcode(string sectorcode, [FromQuery] Talen? language)
+    public async Task<ActionResult<NeighborhoodDto>> GetBuurtBySectorcode(string sectorcode, [FromQuery] Languages? language)
     {
         try
         {
-            var buurt = await buurtService.GetByStatistischeSectorCodeAsync(sectorcode, language ?? Talen.En);
+            var buurt = await buurtService.GetByStatistischeSectorCodeAsync(sectorcode, language ?? Languages.En);
             return Ok(buurt);
         }
         catch (Exception e)
@@ -40,7 +40,7 @@ public class NeighborhoodController(BuurtService buurtService) : ControllerBase
     ///     Retrieve all buurten for a given deelgemeente (by NIS6 code).
     /// </summary>
     /// <param name="nis6Code">The NIS6 code of the deelgemeente.</param>
-    /// <param name="language">Optional language for the returned data. Defaults to <see cref="Talen.En" /> when not provided.</param>
+    /// <param name="language">Optional language for the returned data. Defaults to <see cref="Languages.En" /> when not provided.</param>
     /// <returns>
     ///     An
     ///     <see>
@@ -51,11 +51,11 @@ public class NeighborhoodController(BuurtService buurtService) : ControllerBase
     /// </returns>
     [HttpGet("deelgemeente/{nis6Code}")]
     public async Task<ActionResult<List<NeighborhoodDto>>> GetBuurtenByDeelGemeenteNis6Code(string nis6Code,
-        [FromQuery] Talen? language)
+        [FromQuery] Languages? language)
     {
         try
         {
-            var buurten = await buurtService.GetByDeelGemeenteNis6CodeAsync(nis6Code, language ?? Talen.En);
+            var buurten = await buurtService.GetByDeelGemeenteNis6CodeAsync(nis6Code, language ?? Languages.En);
             return Ok(buurten);
         }
         catch (Exception e)
@@ -68,18 +68,18 @@ public class NeighborhoodController(BuurtService buurtService) : ControllerBase
     ///     Retrieve all buurten for a given gemeente (by NIS code).
     /// </summary>
     /// <param name="nisCode">The NIS code of the gemeente.</param>
-    /// <param name="language">Optional language for the returned data. Defaults to <see cref="Talen.En" /> when not provided.</param>
+    /// <param name="language">Optional language for the returned data. Defaults to <see cref="Languages.En" /> when not provided.</param>
     /// <returns>
     ///     An <see cref="ActionResult{List{BuurtDto}}" /> containing the list of buurten on success,
     ///     or an appropriate error response produced by <see cref="ExceptionHandler.HandleException" />.
     /// </returns>
     [HttpGet("municipality/{nisCode}")]
     public async Task<ActionResult<List<NeighborhoodDto>>> GetBuurtenByGemeenteNisCode(string nisCode,
-        [FromQuery] Talen? language)
+        [FromQuery] Languages? language)
     {
         try
         {
-            var buurten = await buurtService.GetByGemeenteNisCodeAsync(nisCode, language ?? Talen.En);
+            var buurten = await buurtService.GetByGemeenteNisCodeAsync(nisCode, language ?? Languages.En);
             return Ok(buurten);
         }
         catch (Exception e)
@@ -152,11 +152,11 @@ public class NeighborhoodController(BuurtService buurtService) : ControllerBase
     /// <returns>A list of neighborhoods within the municipality with the given postal code</returns>
     [HttpGet("postalcode/{postalcode}")]
     public async Task<ActionResult<List<NeighborhoodDto>>> GetBuurtenInPostcode(string postalcode,
-        [FromQuery] Talen? language)
+        [FromQuery] Languages? language)
     {
         try
         {
-            var result = await buurtService.GetByPostcode(postalcode, language ?? Talen.En);
+            var result = await buurtService.GetByPostcode(postalcode, language ?? Languages.En);
             return Ok(result);
         }
         catch (Exception e)

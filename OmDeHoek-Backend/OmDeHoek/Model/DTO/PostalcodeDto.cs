@@ -9,7 +9,7 @@ public class PostalcodeDto
     {
     }
 
-    public PostalcodeDto(Postcode postcode, Talen taal)
+    public PostalcodeDto(Postcode postcode, Languages taal)
     {
         Code = postcode.Code;
         Municipality = postcode.Gemeente != null ? postcode.Gemeente.GetNameInCorrectLanguage(taal) : string.Empty;
