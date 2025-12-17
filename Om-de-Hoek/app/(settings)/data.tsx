@@ -6,7 +6,7 @@ import { useRouter } from "expo-router";
 import LabeledInput  from "@/components/settings/LabeledInput";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/auth/context/AuthContext";
-import UserService from "@/services/UserService";
+import UserService from "@/services/userService";
 import { useTranslation } from "react-i18next";
 
 

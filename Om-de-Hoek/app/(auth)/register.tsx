@@ -12,6 +12,7 @@ import { useAuth } from "@/components/auth/context/AuthContext";
 import authService from "@/services/authService";
 import ProgressBar from "@/components/auth/register/ProgressBar";
 import Step7Neighborhood from "@/components/auth/register/Step7Neighborhood";
+import addressService from "@/services/addressService";
 
 const totalSteps = 7;
 
@@ -38,7 +39,7 @@ export default function RegisterPage() {
 
   const [huidigeIndex, setHuidigeIndex] = useState<number>(0);
 
-  const { signIn } = useAuth();
+  const { signIn, token } = useAuth();
   const router = useRouter();
 
   const goToNextStep = () => {
@@ -56,6 +57,11 @@ export default function RegisterPage() {
 
     await authService.authRegister(dataToRegister);
     const loginTokens = await authService.authLogin(dataToRegister);
+    // await addressService.RegisterAddress({
+    //   street: data.streetName,
+    //   houseNumber: data.houseNumber || "",
+    //   postalCode: data.postalCode,
+    //   residentId: loginTokens.id,}, token!); 
     await signIn(loginTokens.token, loginTokens.refreshToken);
   };
 

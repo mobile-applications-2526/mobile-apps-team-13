@@ -19,7 +19,7 @@ export default function Step7Neighborhood({
   onBack,
 }: Props) {
 
-    const { t } = useTranslation();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(true);
   const [neighborhoods, setNeighborhoods] = useState<Array<string>>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
