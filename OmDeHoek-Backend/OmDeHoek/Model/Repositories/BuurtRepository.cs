@@ -43,6 +43,8 @@ public class BuurtRepository(DataContext context) : GenericRepository<Buurt>(con
     {
         return await DbSet
             .Where(b => b.DeelGemeente.Gemeente.Postcodes.Any(p => p.Code == postcode))
+            .Include(b => b.Bewoners)
+            .ThenInclude(ub => ub.User)
             .ToListAsync();
     }
 }
