@@ -12,6 +12,13 @@ public static class ExceptionHandler
         {
             return returnableException.ToActionResult();
         }
-        return new ObjectResult("An unexpected error occurred.") { StatusCode = 500 };
+        return new ObjectResult("An unexpected error occurred.")
+        {
+            StatusCode = 500,
+            Value = new 
+            {
+                errorMessage = e.Message,
+            }
+        };
     }
 }

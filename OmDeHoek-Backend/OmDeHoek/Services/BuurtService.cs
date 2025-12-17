@@ -124,7 +124,7 @@ public class BuurtService(
                 throw new InvalidInputException("User is not a member of this buurt.", "BuurtMembership");
             }
 
-            await uow.UserBuurtRepository.Delete(userBuurt);
+            uow.UserBuurtRepository.Delete(userBuurt);
             await uow.Save();
 
             await uow.CommitTransaction();

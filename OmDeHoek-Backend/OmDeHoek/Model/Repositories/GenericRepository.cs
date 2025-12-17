@@ -54,13 +54,13 @@ public class GenericRepository<T>(DataContext context, DbSet<T> dbSet) where T :
         return result.Entity;
     }
 
-    public virtual async Task Delete(object id)
+    public virtual async Task DeleteById(object id)
     {
         T entityToDelete = await GetById(id);
         Delete(entityToDelete);
     }
 
-    protected virtual void Delete(T entityToDelete)
+    public virtual void Delete(T entityToDelete)
     {
         if (Ctx.Entry(entityToDelete).State == EntityState.Detached)
         {

@@ -33,6 +33,8 @@ public class BuurtRepository(DataContext context) : GenericRepository<Buurt>(con
             .Include(b => b.DeelGemeente)
             .ThenInclude(dg => dg.Gemeente)
             .ThenInclude(g => g.Postcodes)
+            .Include(b => b.Bewoners)
+            .ThenInclude(ub => ub.User)
             .Where(b => b.DeelGemeente.NisCodeGemeente == nisCode)
             .ToListAsync();
     }
