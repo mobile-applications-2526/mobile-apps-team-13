@@ -63,7 +63,9 @@ public partial class AuthService(
                 NormalizedUserName = username.ToUpper(),
                 PhoneNumber = newUser.PhoneNumber,
                 PhoneNumberConfirmed = newUser.PhoneNumber != null,
-                BirthDate = newUser.BirthDate
+                BirthDate = newUser.BirthDate,
+                Voornaam = newUser.FirstName,
+                Achternaam = newUser.LastName
             };
 
             var result = await userManager.CreateAsync(user,
