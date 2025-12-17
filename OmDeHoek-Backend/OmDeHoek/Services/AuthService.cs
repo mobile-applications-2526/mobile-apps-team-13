@@ -43,7 +43,7 @@ public partial class AuthService(
                 throw new InvalidInputException("email is not in email format", "email");
 
             if (await uow.UserRepository.GetByEmailAsync(newUser.Email) != null)
-                throw new DuplicateFieldException("emil already in use", "email");
+                throw new DuplicateFieldException("email already in use", "email");
 
             if (newUser.Password.Trim().Length < 3 || newUser.Password.Trim().Length > 31)
                 throw new InvalidInputException("password must be between 3 and 31 characters", "password");
