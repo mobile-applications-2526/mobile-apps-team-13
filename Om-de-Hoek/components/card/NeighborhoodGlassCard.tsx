@@ -16,6 +16,8 @@ const NeighborhoodGlassCard: React.FC<Props> = ({
   name,
   participants,
   action,
+  onJoin,
+  onLeave,
 }) => {
   
   const { t } = useTranslation();
@@ -53,7 +55,8 @@ const NeighborhoodGlassCard: React.FC<Props> = ({
         </View>
 
         {/* Rechterkant */}
-        <TouchableOpacity className="bg-blue px-3 py-2.5 rounded-xl self-center">
+        <TouchableOpacity className={`${action === "join" ? "bg-blue" : "bg-red"} px-3 py-2.5 rounded-xl self-center`}
+          onPress={action === "join" ? onJoin : onLeave}>
           <Text className="text-white font-comfortaa-bold text-xs">
             {action === "join" ? t("register.neighborhood.join") : t("register.neighborhood.leave")}
           </Text>
