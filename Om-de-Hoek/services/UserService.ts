@@ -1,3 +1,5 @@
+import { User } from "@/types/user";
+
 const API_URL = process.env.EXPO_PUBLIC_API_PATH;
 
 const loggedInuser = async (token: string | null) => {
@@ -20,7 +22,19 @@ const addressByLoggedInUser = async (token: string | null) => {
     });
 };
 
+const updateUser = async (user: User, token: string | null) => {
+    return await fetch(`${API_URL}/api/user`, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+    });
+}
+
 export default {
     loggedInuser,
     addressByLoggedInUser,
+    updateUser
 }
