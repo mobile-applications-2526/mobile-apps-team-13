@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { RegisterBody, RegisterRequestBody } from "@/types/auth";
+import type { AuthResponse, RegisterBody, RegisterRequestBody } from "@/types/auth";
 import { View, KeyboardAvoidingView, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import { Step1Email } from "@/components/auth/register/Step1Email";
@@ -24,6 +24,7 @@ const parseDate = (date: Date): string => {
 };
 
 export default function RegisterPage() {
+  const [logintokens, setLoginTokens] = useState<AuthResponse | null>(null);
   const [data, setData] = useState<RegisterBody>({
     email: "",
     firstName: "",
@@ -51,18 +52,19 @@ export default function RegisterPage() {
       email: data.email,
       phoneNumber: (data as any).phoneNumber || "",
       password: data.password,
-      username: `${data.firstName}${data.lastName}`,
+      firstName: data.firstName,
+      lastName: data.lastName,
       birthDate: parseDate(data.birthDate),
     };
-
+    console.log("Register body:", dataToRegister);
     await authService.authRegister(dataToRegister);
-    const loginTokens = await authService.authLogin(dataToRegister);
+   
+    setLoginTokens(await authService.authLogin(dataToRegister));
     // await addressService.RegisterAddress({
     //   street: data.streetName,
     //   houseNumber: data.houseNumber || "",
     //   postalCode: data.postalCode,
     //   residentId: loginTokens.id,}, token!); 
-    await signIn(loginTokens.token, loginTokens.refreshToken);
   };
 
   return (
@@ -173,7 +175,10 @@ export default function RegisterPage() {
             keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
           >
             <Step6Password
-              onNext={goToNextStep}
+              onNext={async () => {
+                await nextAndRegister();
+                goToNextStep();
+              }}
               onChange={(password) =>
                 setData((prev) => ({ ...prev, password }))
               }
@@ -190,8 +195,10 @@ export default function RegisterPage() {
           >
             <Step7Neighborhood
               postalCode={data.postalCode}
-              onNext={nextAndRegister}
+              onNext={async () =>  { await signIn(logintokens!.token, logintokens!.refreshToken); router.push("/"); }}
               onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
+              token={logintokens?.token}
+
             />
           </KeyboardAvoidingView>
         )}
