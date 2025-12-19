@@ -6,23 +6,27 @@ import neighborhoodService from "@/services/neighborhoodService";
 import { Neighborhoods } from "@/types/neighborhood";
 import { useTranslation } from "react-i18next";
 import { SearchBar } from "@/components/SearchBar";
+import PinnedBottomButton from "@/components/PinnedBottomButton";
 
 type Props = {
   postalCode: string;
   onNext?: () => void;
   onBack?: () => void;
+  token?: string;
 };
 
 export default function Step7Neighborhood({
   postalCode,
   onNext,
   onBack,
+  token,
 }: Props) {
 
   const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(true);
-  const [neighborhoods, setNeighborhoods] = useState<Array<string>>([]);
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhoods[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [joinedSectors, setJoinedSectors] = useState<string[]>([]);
 
   useEffect(() => {
     const LoadNeighborhoods = async () => {
@@ -30,7 +34,7 @@ export default function Step7Neighborhood({
         const response =
           await neighborhoodService.fetchNeighborhoodsByPostalCode(postalCode);
         const data: Neighborhoods[] = await response.json();
-        setNeighborhoods(data.map((neighborhood) => neighborhood.name));
+        setNeighborhoods(data);
       } catch (error) {
         console.error("Error fetching neighborhoods:", error);
       } finally {
@@ -40,9 +44,29 @@ export default function Step7Neighborhood({
     LoadNeighborhoods();
   }, [postalCode]);
 
-  const filteredNeighborhoods = neighborhoods.filter((neighborhood) => neighborhood.toLowerCase().includes(searchQuery.toLowerCase()));
+    const filteredNeighborhoods = neighborhoods.filter((neighborhood) => neighborhood.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
-  return (
+  const handleJoin = async (neighborhoodId: string) => {
+    try {
+      await neighborhoodService.addToNeighborhood(neighborhoodId, token!);
+      setJoinedSectors((prev) => [...prev, neighborhoodId]);
+    } catch (error) {
+      console.error("Error joining neighborhood:", error);
+    }
+  }
+
+  const handleLeave = async (neighborhoodId: string) => {
+    try {
+      await neighborhoodService.removeFromNeighborhood(neighborhoodId, token!);
+      setJoinedSectors((prev) => prev.filter(id => id !== neighborhoodId));
+    } catch (error) {
+      console.error("Error leaving neighborhood:", error);
+    }
+  };
+
+
+
+  return ( <>
     <ScrollView>
       <Header title={t("register.neighborhood.title")} subtitle={t("register.neighborhood.subtitle")} onBack={onBack} />
       <SearchBar onSearch={(text) => setSearchQuery(text)} />
@@ -50,9 +74,18 @@ export default function Step7Neighborhood({
         {loading ? (
           <ActivityIndicator size="large" color="#100D08" />
         ) : (
-          filteredNeighborhoods.map((item, index) => (
-            <NeighborhoodGlassCard key={index} name={item} action="join" />
-          ))
+          filteredNeighborhoods.map((item) => {
+            return (
+              <NeighborhoodGlassCard
+                key={item.statischeSectorCode}
+                name={item.name}
+                participants={item.residents.length + (joinedSectors.includes(item.statischeSectorCode) ? 1 : 0)}
+                action={joinedSectors.includes(item.statischeSectorCode) ? "leave" : "join"}
+                onJoin={() => handleJoin(item.statischeSectorCode)}
+                onLeave={() => handleLeave(item.statischeSectorCode)}
+              />
+            );
+          })
         )}
 
         {!loading && filteredNeighborhoods.length === 0 && searchQuery.length > 0 && (
@@ -62,5 +95,11 @@ export default function Step7Neighborhood({
         )}
       </View>
     </ScrollView>
+    {joinedSectors.length > 0 && (
+    <View>
+       <PinnedBottomButton count={joinedSectors.length} onNext={onNext} />
+    </View>
+    )}
+    </>
   );
 }
