@@ -1,6 +1,6 @@
 export type Neighborhoods = {
     name: string;
-    statistischeSectorCode: string;
+    statischeSectorCode: string;
     residents: any[]
 
 };
