@@ -40,8 +40,8 @@ export default function MyDataPage() {
                                        
                     setEmail(data.email || "");
                     setUsername(data.userName || "");
-                    setFirstName(data.voornaam || ""); 
-                    setLastName(data.achternaam || "");
+                    setFirstName(data.firstName || ""); 
+                    setLastName(data.lastName || "");
                     setBirthDate(data.birthDate || "");
                     setPhoneNumber(data.phoneNumber || "");
                     setAddress1(data.address1 || "");
