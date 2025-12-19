@@ -14,8 +14,9 @@ export type RegisterRequestBody = {
   email: string,
   phoneNumber: string,
   password: string,
-  username: string,
   birthDate: string
+  firstName: string,
+  lastName: string,
 }
 
 export type LoginBody = {
