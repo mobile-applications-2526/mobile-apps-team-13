@@ -1,8 +1,8 @@
-import { address } from "@/types/address";
+import { Address } from "@/types/address";
 
 const API_URL = process.env.EXPO_PUBLIC_API_PATH;
 
-const RegisterAddress = async (address: address, token: string) => {
+const RegisterAddress = async (address: Address, token: string) => {
     return await fetch(`${API_URL}/api/address`, {
         method: 'POST',
         headers: {
