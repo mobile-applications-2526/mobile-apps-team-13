@@ -27,8 +27,8 @@ export default function ProfilePage() {
                 const response = await UserService.loggedInuser(token);
                 if (response.ok) {
                     const data = await response.json();
-                    setFirstName(data.voornaam || "");
-                    setLastName(data.achternaam || "");
+                    setFirstName(data.firstName || "");
+                    setLastName(data.lastName || "");
                 }
             } catch (error) {
                 console.error("Failed to fetch user data", error);
