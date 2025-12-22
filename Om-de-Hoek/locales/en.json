@@ -105,6 +105,10 @@
             "Theme": "Theme",
             "mode": "Dark mode",
             "close": "close"
+        },
+        "neighborhoods": {
+            "title": "My",
+            "subtitle": "Neighborhoods"
         }   
     }
 }
