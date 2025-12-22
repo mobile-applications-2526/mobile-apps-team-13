@@ -22,10 +22,11 @@ const addressByLoggedInUser = async (token: string | null) => {
     });
 };
 
-const updateUser = async (user: User) => {
+const updateUser = async (user: User, token: string | null) => {
     return await fetch(`${API_URL}/api/user/update`, {
         method: 'PUT',
         headers: {
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(user),
