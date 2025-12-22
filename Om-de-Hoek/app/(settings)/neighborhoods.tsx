@@ -9,6 +9,7 @@ import { useAuth } from "@/components/auth/context/AuthContext";
 import NeighborhoodGlassCard from "@/components/card/NeighborhoodGlassCard";
 import neighborhoodService from "@/services/neighborhoodService";
 import { Neighborhoods } from "@/types/neighborhood";
+import { useTranslation } from "react-i18next";
 
 
 const PROFILE_PATH = "/(tabs)/profile";
@@ -21,6 +22,7 @@ export default function MyNeighborhoodsPage() {
 
     const router = useRouter();
     const { token } = useAuth();
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (!token) return;
@@ -88,8 +90,8 @@ export default function MyNeighborhoodsPage() {
                     <View className="flex-row items-center mt-2 mb-4">
                     <Back icon={<ArrowLeft color="#100D08" size={20}/>} onBack={() => router.push(PROFILE_PATH)}/>
                     <SettingsHeader
-                        title="Mijn"
-                        subtitle="Buurten"
+                        title= {t("settings.neighborhoods.title")}
+                        subtitle= {t("settings.neighborhoods.subtitle")}
                     />
                     </View>
                     {isLoading ? (
