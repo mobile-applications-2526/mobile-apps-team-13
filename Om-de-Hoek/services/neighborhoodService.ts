@@ -9,6 +9,15 @@ const fetchNeighborhoodsByPostalCode = async (postalcode: string) => {
     });
 }
 
+const fetchNeighborhoodsByStatisticalSectorCode = async (statisticalSectorCode: string) => {
+    return await fetch(`${API_URL}/api/neighborhood/sectorcode/${statisticalSectorCode}`, {
+        method: 'GET', 
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+}
+
 const addToNeighborhood = async (id: string, token: string | null) => {
     return await fetch(`${API_URL}/api/neighborhood/join/${id}`, {
         method: 'POST',
@@ -31,6 +40,7 @@ const removeFromNeighborhood = async (id: string, token: string | null) => {
 
 export default {
     fetchNeighborhoodsByPostalCode,
+    fetchNeighborhoodsByStatisticalSectorCode,
     addToNeighborhood,
     removeFromNeighborhood,
 }
