@@ -105,6 +105,10 @@
             "Theme": "Thema",
             "mode": "Donkere modus",
             "close": "sluiten"
+        },
+        "neighborhoods": {
+            "title": "Mijn",
+            "subtitle": "Buurten"
         }
     }
 }
