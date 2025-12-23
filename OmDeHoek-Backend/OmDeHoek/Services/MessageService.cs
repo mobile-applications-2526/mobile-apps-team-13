@@ -73,4 +73,32 @@ public class MessageService(
             throw;
         }
     }
+
+    public async Task<List<MessageDto>> GetFeedMessages(string token, int page, int pageSize, string? postcode, string? buurtSectorCode)
+    {
+        var userId = tokenService.GetUserIdFromToken(token);
+
+        var user = await uow.UserRepository.GetByIdAsync(userId);
+
+        if (user is null) throw new UnauthorizedException("User not found", "User");
+
+        if (page < 0) throw new InvalidInputException("Page must be greater than or equal to 0", "Page");
+        if (pageSize <= 0) throw new InvalidInputException("PageSize must be greater than 0", "PageSize");
+
+        if (postcode is not null)
+        {
+            var postcodeGemeente = (await uow.GemeenteRepository.SearchByPostCodeAsync(postcode)).FirstOrDefault();
+            if (postcodeGemeente is null) throw new ResourceNotFoundException($"No gemeente found with postcode {postcode}", "Postcode");
+        }
+        
+        if (buurtSectorCode is not null)
+        {
+            var buurt = await uow.BuurtRepository.GetByStatistischeSectorCodeAsync(buurtSectorCode);
+            if (buurt is null) throw new ResourceNotFoundException($"No buurt found with sector code {buurtSectorCode}", "BuurtSectorCode");
+        }
+        
+        var messages = await uow.MessageRepository.GetFeedMessagesAsync(page, pageSize, userId, postcode, buurtSectorCode);
+        
+        return messages.Select(m => new MessageDto(m)).ToList();
+    }
 }
