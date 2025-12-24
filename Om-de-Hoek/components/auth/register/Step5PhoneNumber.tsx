@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { ScrollView, Text } from "react-native";
+import {KeyboardAvoidingView, Platform, ScrollView, Text} from "react-native";
 import PhoneInput from "react-native-phone-number-input";
 import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
@@ -30,11 +30,11 @@ export const Step5PhoneNumber = ({
   const isValid = digits.length === 9;
 
   return (
-    <ScrollView
-      className="flex-1 p-6"
-      contentContainerStyle={{ flexGrow: 1 }}
-      keyboardShouldPersistTaps="handled"
-    >
+      <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          className="flex-1 justify-center"
+          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
+      >
       <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
         {t("register.phone.title")}
@@ -107,10 +107,10 @@ export const Step5PhoneNumber = ({
       />
       <PressableButton
         onPress={async () => onNext()}
-        disabled={!isValid}
+        disabled={false} // telefoonnummer is optioneel
         title={t("register.continue")}
         background={isValid ? Color.BLUE : Color.GRAY}
       />
-    </ScrollView>
+      </KeyboardAvoidingView>
   );
 };

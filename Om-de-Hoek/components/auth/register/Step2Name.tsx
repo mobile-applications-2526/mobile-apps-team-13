@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, ScrollView } from "react-native";
+import {Text, ScrollView, Platform, KeyboardAvoidingView} from "react-native";
 import { WrittenInput } from "@/components/WrittenInput";
 import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
@@ -36,11 +36,9 @@ export const Step2Name = ({
   };
 
   return (
-    <ScrollView
-      className="flex-1 p-6"
-      contentContainerStyle={{ flexGrow: 1 }}
-      keyboardShouldPersistTaps="handled"
-    >
+      <KeyboardAvoidingView
+          className="flex-1 justify-center"
+      >
       <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
         {t("register.name.title")}
@@ -69,6 +67,6 @@ export const Step2Name = ({
         title={t("register.continue")}
         background={isValid ? Color.BLUE : Color.GRAY}
       />
-    </ScrollView>
+      </KeyboardAvoidingView>
   );
 };
