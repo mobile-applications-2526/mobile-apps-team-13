@@ -2,10 +2,12 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
 using OmDeHoek.Model;
 using OmDeHoek.Model.Commands.auth;
 using OmDeHoek.Model.Commands.User;
+using OmDeHoek.Model.Commands.User.ExternalAuth;
 using OmDeHoek.Model.DTO;
 using OmDeHoek.Model.DTO.User;
 using OmDeHoek.Model.Entities;
@@ -219,6 +221,98 @@ public partial class AuthService(
             };
         }
         catch (Exception e)
+        {
+            await uow.RollbackTransaction();
+            throw;
+        }
+    }
+
+    public async Task<TokenDto> SignInWithGoogle(GoogleSigninRequest request)
+    {
+        GoogleJsonWebSignature.Payload payload;
+        try
+        {
+            var settings = new GoogleJsonWebSignature.ValidationSettings()
+            {
+                Audience = [Env.GoogleClientId]
+            };
+            payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken, settings);
+        }
+        catch (Exception)
+        {
+            throw new UnauthorizedException("Invalid Google ID token", "idToken");
+        }
+
+        try
+        {
+            var accountCreated = false;
+            
+            var user = await uow.UserRepository.GetByEmailAsync(payload.Email);
+            if (user == null)
+            {
+                await uow.StartTransaction();
+                var username = await GenerateUniqueUsername(payload.GivenName ?? "Google", payload.FamilyName ?? "User");
+                
+                user = new User
+                {
+                    UserName = username,
+                    Email = payload.Email,
+                    Role = Roles.User,
+                    NormalizedEmail = payload.Email.ToUpper(),
+                    NormalizedUserName = username.ToUpper(),
+                    Voornaam = payload.GivenName ?? "Google",
+                    Achternaam = payload.FamilyName ?? "User",
+                    EmailConfirmed = true,
+                    BirthDate = DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-_minimumOnlineLeeftijd - 1))
+                };
+                
+                var result = await userManager.CreateAsync(user);
+                if (!result.Succeeded)
+                {
+                    var errors = result.Errors.Select(e => e.Description);
+                    throw new CantCreateException("Could not create user: " + string.Join(", ", errors), "User");
+                }
+                
+                await userManager.AddLoginAsync(user, new UserLoginInfo("Google", payload.Subject, "Google"));
+
+                await uow.Save();
+                await uow.CommitTransaction();
+                
+                accountCreated = true;
+            }
+            
+            await uow.StartTransaction();
+            
+            var token = tokenService.CreateToken(user);
+            
+            var (refreshTokenPlain, encryptedRefreshToken) = tokenService.CreateRefreshToken();
+            
+            var refreshToken = new RefreshToken
+            {
+                TokenHash = encryptedRefreshToken,
+                ExpiresAt = DateTime.UtcNow.AddMonths(1),
+                UserId = user.Id,
+                CreatedAt = DateTime.UtcNow,
+                Id = Guid.NewGuid(),
+                IsRevoked = false
+            };
+            
+            await uow.RefreshTokenRepository.Insert(refreshToken);
+            
+            await uow.Save();
+            
+            await uow.CommitTransaction();
+            
+            return new TokenDto
+            {
+                Token = token,
+                Email = user.Email!,
+                Id = user.Id,
+                RefreshToken = refreshTokenPlain,
+                IsNewAccount = accountCreated
+            };
+        }
+        catch (Exception)
         {
             await uow.RollbackTransaction();
             throw;

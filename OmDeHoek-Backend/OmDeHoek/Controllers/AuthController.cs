@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OmDeHoek.Model.Commands.auth;
 using OmDeHoek.Model.Commands.User;
+using OmDeHoek.Model.Commands.User.ExternalAuth;
 using OmDeHoek.Model.DTO;
 using OmDeHoek.Model.DTO.User;
 using OmDeHoek.Model.Entities;
@@ -97,6 +98,21 @@ public class AuthController(AuthService authService) : ControllerBase
         try
         {
             var result = await authService.RefreshToken(token);
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return ExceptionHandler.HandleException(e);
+        }
+    }
+    
+    [HttpPost("external/google")]
+    [AllowAnonymous]
+    public async Task<ActionResult<TokenDto>> LoginWithGoogle([FromBody] GoogleSigninRequest command)
+    {
+        try
+        {
+            var result = await authService.SignInWithGoogle(command);
             return Ok(result);
         }
         catch (Exception e)
