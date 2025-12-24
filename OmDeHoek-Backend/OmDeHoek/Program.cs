@@ -27,7 +27,8 @@ namespace OmDeHoek
                 dbConnection: builder.Configuration.GetConnectionString("devConnection") ?? "",
                 environment: env.EnvironmentName,
                 isDevelopment: env.IsDevelopment() || env.IsStaging() || env.EnvironmentName == "Staging",
-                isProduction: env.IsProduction()
+                isProduction: env.IsProduction(),
+                googleClientId: builder.Configuration["Authentication:Google:ClientId"] ?? ""
                 );
 
             builder.Services.AddRouting(options => options.LowercaseUrls = true);

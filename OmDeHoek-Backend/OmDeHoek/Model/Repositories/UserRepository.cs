@@ -16,10 +16,14 @@ public class UserRepository(DataContext context) : GenericRepository<User>(conte
         return await DbSet
             .Include(u => u.Adressen)
             .Include(u => u.Buurten)
-            .ThenInclude(ub => ub.Buurt)
-            .ThenInclude(b => b.DeelGemeente)
-            .ThenInclude(dg => dg.Gemeente)
-            .ThenInclude(g => g.Postcodes)
+                .ThenInclude(ub => ub.Buurt)
+                    .ThenInclude(b => b.DeelGemeente)
+                        .ThenInclude(dg => dg.Gemeente)
+                            .ThenInclude(g => g.Postcodes)
+            .Include(u => u.Buurten)
+                .ThenInclude(ub => ub.Buurt)
+                    .ThenInclude(b => b.Bewoners)
+                        .ThenInclude(ub => ub.User)
             .FirstOrDefaultAsync(u => u.Id == id);
     }
 
