@@ -5,7 +5,9 @@ import Back from "@/components/Back";
 import { ArrowLeft } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { NotificationMessage } from "@/components/NotificationMessage";
+import CommentSection from "@/components/comments/CommentSection";
 
+ 
 const HOME_PATH = "/";
 
 const Warning = () => {
@@ -18,6 +20,7 @@ const Warning = () => {
                 <Header title="Waarschuwing" subtitle="Marter gespot: Handboogstraat 6u37" />
             </View>
             <NotificationMessage name="Jan Peeters" content="Op bovengenoemd tijdstip is er een marter waargenomen in de Handboogstraat. De melding betreft enkel een waarneming; er is momenteel geen melding gemaakt van specifieke overlast of schade (zoals aan voertuigkabels)." />
+            <CommentSection notificationId="1" />
         </SafeAreaView>
     );
 }
