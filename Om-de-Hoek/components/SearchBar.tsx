@@ -22,7 +22,7 @@ export const SearchBar = ({ onSearch }: Props) => {
     };
 
     return (
-        <View className="bg-white mx-4 mt-4 rounded-2xl px-4 shadow-xl flex-row items-center">
+        <View className="bg-white mx-4 mt-4 rounded-2xl px-4 py-2 border border-gray flex-row items-center">
             <Search color="#828282" size={20} />
             <TextInput
                 className="flex-1 text-gray-800 font-comfortaa-medium text-base ml-3"
