@@ -1,11 +1,12 @@
 import { useState } from "react";
 import {
-    Text,
-    View,
-    Platform,
-    Pressable,
-    ScrollView,
-    Modal, KeyboardAvoidingView,
+  Text,
+  View,
+  Platform,
+  Pressable,
+  ScrollView,
+  Modal,
+  KeyboardAvoidingView,
 } from "react-native";
 import DateTimePicker, {
   type DateTimePickerEvent,
@@ -16,6 +17,7 @@ import AuthHeader from "@/components/auth/AuthHeader";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
 import { useEffect } from "react";
+import { Calendar } from "lucide-react-native";
 
 type Props = {
   onNext: () => void;
@@ -72,11 +74,11 @@ export const Step3BirthDate = ({
   });
 
   return (
-      <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          className="flex-1 justify-center"
-          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
-      >
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 justify-center"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
+    >
       <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
         {t("register.birthdate.title")}
@@ -85,18 +87,44 @@ export const Step3BirthDate = ({
         {t("register.birthdate.subtitle")}
       </Text>
 
-      <Pressable onPress={showDatePicker} className="mb-4">
-        <View className="border border-gray py-3 px-4 rounded-lg">
-          <Text
-            className={`text-base text-center font-comfortaa-regular ${isDateSelected ? "text-black" : "text-gray"}`}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-          >
-            {isDateSelected ? formattedDate : t("register.birthdate.birthdate")}
-          </Text>
-        </View>
-      </Pressable>
+      {/* --- HIER BEGINT DE STYLING UPDATE --- */}
+      <View className="mb-4">
+        {/* 1. Het Label (precies zoals in LabeledInput) */}
+        <Text className="mb-1 font-comfortaa-regular text-[#828282] font-bold text-sm ml-1">
+          {t("register.birthdate.birthdate")}
+        </Text>
 
+        <Pressable onPress={showDatePicker}>
+          {/* 2. De Container (precies de style van LabeledInput container) */}
+          <View
+            className={`
+                flex-row items-center rounded-xl px-4 py-2
+                bg-[#F3F4F6] border-2
+                ${/* Blauwe rand als picker open is, anders transparant */ ""}
+                ${showPicker ? "border-[#2548BC]" : "border-transparent"}
+            `}
+          >
+            {/* 3. De Tekst (Placeholder grijs, of Waarde zwart) */}
+            <Text
+              className={`
+                flex-1 font-comfortaa-regular text-base
+                ${isDateSelected ? "text-[#100D08]" : "text-[#828282]"}
+              `}
+              numberOfLines={1}
+            >
+              {isDateSelected
+                ? formattedDate
+                : t("register.birthdate.birthdate")}
+            </Text>
+
+            {/* Optioneel: Je zou hier een kalender icoontje kunnen toevoegen */}
+            <Calendar size={20} color="#828282" />
+          </View>
+        </Pressable>
+      </View>
+      {/* --- HIER EINDIGT DE STYLING UPDATE --- */}
+
+      {/* Modal Logic blijft hetzelfde */}
       {showPicker && Platform.OS === "ios" && (
         <Modal
           transparent
@@ -105,7 +133,7 @@ export const Step3BirthDate = ({
           onRequestClose={closeDatePicker}
         >
           <View className="flex-1 justify-end bg-black/50">
-            <View className="bg-white rounded-t-3xl overflow-hidden">
+            <View className="bg-white rounded-t-3xl overflow-hidden pb-10">
               <View className="flex-row justify-between items-center px-4 py-4 border-b border-gray-200">
                 <Pressable onPress={closeDatePicker}>
                   <Text className="text-red font-comfortaa-semibold text-[16px]">
@@ -130,7 +158,7 @@ export const Step3BirthDate = ({
                   display="spinner"
                   onChange={onDateChange}
                   maximumDate={new Date()}
-                  textColor="'#100D08"
+                  textColor="#100D08"
                   themeVariant="light"
                 />
               </View>
@@ -168,6 +196,6 @@ export const Step3BirthDate = ({
         title={t("register.continue")}
         background={isDateSelected ? Color.BLUE : Color.GRAY}
       />
-      </KeyboardAvoidingView>
+    </KeyboardAvoidingView>
   );
 };
