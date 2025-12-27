@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, ScrollView, Platform, KeyboardAvoidingView } from "react-native";
+import { Text, KeyboardAvoidingView } from "react-native";
 import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
 import AuthHeader from "@/components/auth/AuthHeader";

@@ -1,9 +1,4 @@
-import {
-  ActivityIndicator,
-  View,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { ActivityIndicator, View, ScrollView } from "react-native";
 import SettingsHeader from "@/components/settings/SettingsHeader";
 import Back from "@/components/Back";
 import { ArrowLeft, Plus } from "lucide-react-native";

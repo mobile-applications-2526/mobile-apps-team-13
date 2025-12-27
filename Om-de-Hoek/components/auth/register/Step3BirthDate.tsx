@@ -4,7 +4,6 @@ import {
   View,
   Platform,
   Pressable,
-  ScrollView,
   Modal,
   KeyboardAvoidingView,
 } from "react-native";
@@ -15,7 +14,6 @@ import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
 import AuthHeader from "@/components/auth/AuthHeader";
 import { useTranslation } from "react-i18next";
-import i18n from "@/i18n";
 import { useEffect } from "react";
 import { Calendar } from "lucide-react-native";
 
@@ -87,24 +85,19 @@ export const Step3BirthDate = ({
         {t("register.birthdate.subtitle")}
       </Text>
 
-      {/* --- HIER BEGINT DE STYLING UPDATE --- */}
       <View className="mb-4">
-        {/* 1. Het Label (precies zoals in LabeledInput) */}
         <Text className="mb-1 font-comfortaa-regular text-[#828282] font-bold text-sm ml-1">
           {t("register.birthdate.birthdate")}
         </Text>
 
         <Pressable onPress={showDatePicker}>
-          {/* 2. De Container (precies de style van LabeledInput container) */}
           <View
             className={`
                 flex-row items-center rounded-xl px-4 py-2
                 bg-[#F3F4F6] border-2
-                ${/* Blauwe rand als picker open is, anders transparant */ ""}
                 ${showPicker ? "border-[#2548BC]" : "border-transparent"}
             `}
           >
-            {/* 3. De Tekst (Placeholder grijs, of Waarde zwart) */}
             <Text
               className={`
                 flex-1 font-comfortaa-regular text-base
@@ -117,14 +110,11 @@ export const Step3BirthDate = ({
                 : t("register.birthdate.birthdate")}
             </Text>
 
-            {/* Optioneel: Je zou hier een kalender icoontje kunnen toevoegen */}
             <Calendar size={20} color="#828282" />
           </View>
         </Pressable>
       </View>
-      {/* --- HIER EINDIGT DE STYLING UPDATE --- */}
 
-      {/* Modal Logic blijft hetzelfde */}
       {showPicker && Platform.OS === "ios" && (
         <Modal
           transparent

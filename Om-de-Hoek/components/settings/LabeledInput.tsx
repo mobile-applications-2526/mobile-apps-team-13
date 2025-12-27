@@ -1,12 +1,4 @@
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  KeyboardTypeOptions,
-} from "react-native";
-import { SquarePen } from "lucide-react-native";
-import { useState, useRef } from "react";
+import { View, Text, TextInput, KeyboardTypeOptions } from "react-native";
 
 type Props = {
   label?: string;
@@ -41,7 +33,6 @@ export default function LabeledInput({
 }: Props) {
   return (
     <View className="mb-6">
-      {/* Label blijft hetzelfde */}
       <Text className="mb-2 font-comfortaa-regular text-[#828282] font-bold text-base ml-1">
         {label}
       </Text>
@@ -50,7 +41,6 @@ export default function LabeledInput({
         className={`
           flex-row items-center rounded-xl px-4 py-2
           ${!editable ? "opacity-60" : ""}
-          ${/* Hier is de magie: Grijze achtergrond, blauwe border ALLEEN bij focus */ ""}
           ${
             isFocused
               ? "bg-[#F3F4F6] border-2 border-[#2548BC]"

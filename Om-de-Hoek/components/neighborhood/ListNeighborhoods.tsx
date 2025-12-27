@@ -3,7 +3,6 @@ import NeighborhoodGlassCard from "../card/NeighborhoodGlassCard";
 import { useState } from "react";
 import neighborhoodService from "@/services/neighborhoodService";
 import { useAuth } from "../auth/context/AuthContext";
-import { SearchBar } from "../SearchBar";
 import { View, Text } from "react-native";
 import { useTranslation } from "react-i18next";
 import LabeledInput from "../settings/LabeledInput";
