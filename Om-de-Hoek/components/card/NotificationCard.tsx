@@ -1,19 +1,33 @@
 import { useRouter } from "expo-router";
 import { ChevronRight } from "lucide-react-native";
-import { View, Text, TouchableOpacity, Pressable } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
+import { Message } from "@/types/message";
 
 type Props = {
-    icon?: React.ReactNode;
-    title: string;
-    subtitle: string;
-    time?: string;
-}
+  icon?: React.ReactNode;
+  title: string;
+  subtitle: string;
+  time?: string;
+  message: Message;
+};
 
-const NotificationCard: React.FC<Props> = ({ icon, title, subtitle, time }) => {
-    const router = useRouter();
+const NotificationCard: React.FC<Props> = ({
+  icon,
+  title,
+  subtitle,
+  time,
+  message,
+}) => {
+  const router = useRouter();
 
+  const handlePress = () => {
+    router.push({
+      pathname: "/(notifications)/MessageDetail/[id]",
+      params: { id: message.userTag },
+    });
+  };
 
-return (
+  return (
     <TouchableOpacity
       className="mx-0 my-2 rounded-3xl bg-white p-4 shadow-sm"
       style={{
@@ -23,7 +37,7 @@ return (
         shadowOffset: { width: 0, height: 2 },
         elevation: 2,
       }}
-      onPress={() => router.push("/warning")}
+      onPress={handlePress}
     >
       <View className="flex-row items-center">
         <View className="mr-4">
@@ -37,21 +51,23 @@ return (
             <Text className="text-black font-comfortaa-bold text-lg leading-tight">
               {title}
             </Text>
-            <Text className="text-gray font-comfortaa-medium text-xs">
-              {time}
-            </Text>
+            {time && (
+              <Text className="text-gray font-comfortaa-medium text-xs">
+                {time}
+              </Text>
+            )}
           </View>
 
-          <Text 
-            className="text-black font-comfortaa-regular text-sm leading-tight" 
+          <Text
+            className="text-black font-comfortaa-regular text-sm leading-tight"
             numberOfLines={1}
           >
             {subtitle}
           </Text>
         </View>
-        
+
         <View className="pl-2">
-            <ChevronRight color="#C7C7CC" size={20} />
+          <ChevronRight color="#C7C7CC" size={20} />
         </View>
       </View>
     </TouchableOpacity>
