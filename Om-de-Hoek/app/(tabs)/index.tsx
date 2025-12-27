@@ -1,35 +1,99 @@
-import { Pressable, ScrollView, Text, View } from "react-native";
-import Header from "@/components/Header";
+import { ScrollView, Text, View, Pressable } from "react-native";
+import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import NotificationCard from "@/components/card/NotificationCard";
-import { TriangleAlert, Siren } from "lucide-react-native";
 import { useRouter } from "expo-router";
 
-const router = useRouter();
+import Header from "@/components/Header";
+import NotificationCard from "@/components/card/NotificationCard";
+import messageService from "@/services/messageService";
+import { Message } from "@/types/message";
+import { TriangleAlert, Siren, Info } from "lucide-react-native";
+import { useAuth } from "@/components/auth/context/AuthContext";
 
 export default function TabTwoScreen() {
+  const router = useRouter();
+  const { token } = useAuth();
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const loadMessages = async () => {
+    if (!token) return;
+    setLoading(true);
+    try {
+      const data = await messageService.fetchMessageFeed(token, {
+        page: 0,
+        pageSize: 20,
+      });
+      setMessages(data);
+    } catch (error) {
+      console.error("Failed to fetch messages:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadMessages();
+  }, [token]);
+
+  const getSeverityConfig = (severity: Message["severity"]) => {
+    switch (severity) {
+      case "Critical":
+        return {
+          title: "Noodgeval",
+          icon: <Siren size={24} strokeWidth={2} color="#100D08" />,
+        };
+      case "Warning":
+        return {
+          title: "Waarschuwing",
+          icon: <TriangleAlert size={24} strokeWidth={2} color="#100D08" />,
+        };
+      case "Informational":
+      default:
+        return {
+          title: "Informatie",
+          icon: <Info size={24} strokeWidth={2} color="#100D08" />,
+        };
+    }
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="items-center">
-        <Header title="Boseind 3910 Neerpelt," subtitle="Pelt" />
+        <Header title="Placeholder" subtitle="Placeholder" />
       </View>
+
       <ScrollView className="mt-10 px-6">
-        <Text className="text-gray font-comfortaa-regular">
+        <Text className="text-gray font-comfortaa-regular mb-2">
           Laatste meldingen
         </Text>
-        <NotificationCard
-          icon={<TriangleAlert color="#100D08" size={24} strokeWidth={2} />}
-          title="Waarschuwing"
-          subtitle="Marter gespot: Handboogstraat 6u37"
-          time="16u47"
-        />
-        <NotificationCard
-          icon={<Siren color="#100D08" size={24} strokeWidth={2} />}
-          title="Noodgeval"
-          subtitle="Mogelijke gaslek: Boomstraat 49"
-          time="11u23"
-        />
+
+        {loading && messages.length === 0 && (
+          <Text className="text-gray-500 mt-4">Loading messages...</Text>
+        )}
+
+        {!loading && messages.length === 0 && (
+          <Text className="text-gray-500 mt-4">Geen meldingen beschikbaar</Text>
+        )}
+
+        {messages.map((message, index) => {
+          const { icon, title } = getSeverityConfig(message.severity);
+          return (
+            <NotificationCard
+              key={`${message.userTag}-${index}`}
+              icon={icon}
+              title={title}
+              subtitle={message.content}
+              time={new Date(message.createdAt).toLocaleTimeString("nl-BE", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+              message={message}
+            />
+          );
+        })}
       </ScrollView>
+
       <Pressable onPress={() => router.push("/createNotification")}>
         <View className="absolute bottom-10 right-6">
           <Text>Knop</Text>
