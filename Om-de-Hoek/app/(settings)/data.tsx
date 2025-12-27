@@ -23,8 +23,6 @@ export default function MyDataPage() {
     const [lastName, setLastName] = useState<string>("");
     const [birthDate, setBirthDate] = useState<string>("");
     const [phoneNumber, setPhoneNumber] = useState<string>("");
-    const [address1, setAddress1] = useState<string>("");
-    const [address2, setAddress2] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const { t } = useTranslation();
 
@@ -44,8 +42,6 @@ export default function MyDataPage() {
                     setLastName(data.lastName || "");
                     setBirthDate(data.birthDate || "");
                     setPhoneNumber(data.phoneNumber || "");
-                    setAddress1(data.address1 || "");
-                    setAddress2(data.address2 || "");
                 }
             } catch (error) {
                 console.error("Failed to fetch user data", error);
@@ -78,7 +74,7 @@ export default function MyDataPage() {
                 <View>
                 <LabeledInput
                     label={t('settings.data.username')}
-                    value={"@" + username}
+                    value={username}
                     onChange={setUsername}
                     editable={true}
                 />
@@ -113,20 +109,6 @@ export default function MyDataPage() {
                     label={t('settings.data.phone')}
                     value={phoneNumber}
                     onChange={setPhoneNumber}
-                    editable={true}
-                />
-
-                <LabeledInput
-                    label={t('settings.data.address') + " 1"}
-                    value={address1}
-                    onChange={setAddress1}
-                    editable={true}
-                />
-
-                <LabeledInput
-                    label={t('settings.data.address') + " 2"}
-                    value={address2}
-                    onChange={setAddress2}
                     editable={true}
                 />
                 </View>
