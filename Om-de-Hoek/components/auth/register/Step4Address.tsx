@@ -1,10 +1,10 @@
-import React from "react";
-import {KeyboardAvoidingView, Platform, ScrollView, Text} from "react-native";
-import { WrittenInput } from "@/components/WrittenInput";
+import React, { useState } from "react";
+import { KeyboardAvoidingView, Platform, ScrollView, Text } from "react-native";
 import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
 import AuthHeader from "@/components/auth/AuthHeader";
 import { useTranslation } from "react-i18next";
+import LabeledInput from "@/components/settings/LabeledInput";
 
 export interface AddressData {
   streetName: string;
@@ -32,6 +32,7 @@ export const Step4Address = ({
   municipality: municipalityProp,
   postalCode: postalCodeProp,
 }: Props) => {
+  const [focusedField, setFocusedField] = useState<string | null>(null);
   const { t } = useTranslation();
 
   const street = streetNameProp ?? "";
@@ -75,9 +76,7 @@ export const Step4Address = ({
     });
 
   return (
-      <KeyboardAvoidingView
-          className="flex-1 justify-center"
-      >
+    <KeyboardAvoidingView className="flex-1 justify-center">
       <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
         {t("register.address.title")}
@@ -86,32 +85,48 @@ export const Step4Address = ({
         {t("register.address.subtitle")}
       </Text>
 
-      <WrittenInput
-        placeholder={t("register.address.street")}
+      <LabeledInput
+        label={t("register.address.street")}
         value={street}
-        onChangeText={handleStreet}
-        inputType="default"
+        onChange={handleStreet}
+        keyboardType="default"
+        isFocused={focusedField === "streetName"}
+        onFocus={() => setFocusedField("streetName")}
+        onBlur={() => setFocusedField(null)}
+        placeholder={t("register.address.street")}
       />
 
-      <WrittenInput
-        placeholder={t("register.address.housenumber")}
+      <LabeledInput
+        label={t("register.address.housenumber")}
         value={house}
-        onChangeText={handleHouse}
-        inputType="default"
+        onChange={handleHouse}
+        keyboardType="default"
+        isFocused={focusedField === "houseNumber"}
+        onFocus={() => setFocusedField("houseNumber")}
+        onBlur={() => setFocusedField(null)}
+        placeholder={t("register.address.housenumber")}
       />
 
-      <WrittenInput
-        placeholder={t("register.address.municipality")}
+      <LabeledInput
+        label={t("register.address.municipality")}
         value={municipality}
-        onChangeText={handleMunicipality}
-        inputType="default"
+        onChange={handleMunicipality}
+        keyboardType="default"
+        isFocused={focusedField === "municipality"}
+        onFocus={() => setFocusedField("municipality")}
+        onBlur={() => setFocusedField(null)}
+        placeholder={t("register.address.municipality")}
       />
 
-      <WrittenInput
-        placeholder={t("register.address.postalcode")}
+      <LabeledInput
+        label={t("register.address.postalcode")}
         value={postal}
-        onChangeText={handlePostal}
-        inputType="default"
+        onChange={handlePostal}
+        keyboardType="default"
+        isFocused={focusedField === "postalCode"}
+        onFocus={() => setFocusedField("postalCode")}
+        onBlur={() => setFocusedField(null)}
+        placeholder={t("register.address.postalcode")}
       />
 
       <PressableButton
@@ -120,6 +135,6 @@ export const Step4Address = ({
         title={t("register.continue")}
         background={isValid ? Color.BLUE : Color.GRAY}
       />
-      </KeyboardAvoidingView>
+    </KeyboardAvoidingView>
   );
 };
