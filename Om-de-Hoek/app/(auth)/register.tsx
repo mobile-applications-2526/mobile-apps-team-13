@@ -5,7 +5,6 @@ import type {
   RegisterRequestBody,
 } from "@/types/auth";
 import {
-  View,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -23,7 +22,6 @@ import ProgressBar from "@/components/auth/register/ProgressBar";
 import { useAuth } from "@/components/auth/context/AuthContext";
 import authService from "@/services/authService";
 import addressService from "@/services/addressService";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const totalSteps = 7;
 

@@ -118,7 +118,7 @@ export default function LoginPage() {
           rightIcon={
             <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
               {isPasswordVisible ? (
-                <EyeClosed size={20} color="#828282" /> // Gebruik je gray hex
+                <EyeClosed size={20} color="#828282" />
               ) : (
                 <Eye size={20} color="#828282" />
               )}

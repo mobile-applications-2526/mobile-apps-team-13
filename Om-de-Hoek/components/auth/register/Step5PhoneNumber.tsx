@@ -21,7 +21,6 @@ export const Step5PhoneNumber = ({
 }: Props) => {
   const { t } = useTranslation();
 
-  // 1. State voor de blauwe border focus
   const [isFocused, setIsFocused] = useState(false);
 
   const phone = value ?? "";
@@ -29,7 +28,6 @@ export const Step5PhoneNumber = ({
 
   const digitsFrom = (text: string) => text.replace(/\D/g, "");
   const digits = digitsFrom(phone);
-  // Validatie: Pas aan naar jouw wensen (bv. minstens 9 cijfers)
   const isValid = digits.length >= 9;
 
   return (
@@ -46,37 +44,32 @@ export const Step5PhoneNumber = ({
         {t("register.phone.subtitle")}
       </Text>
 
-      {/* Wrapper View voor spacing (zoals mb-4 in LabeledInput) */}
       <View className="mb-4">
-        {/* 2. Het Label (Precies zoals LabeledInput) */}
         <Text className="mb-1 font-comfortaa-regular text-[#828282] font-bold text-base ml-1">
           {t("register.phone.label")}
         </Text>
 
-        {/* 3. De PhoneInput met gemapte styles */}
         <PhoneInput
           ref={phoneInputRef}
           value={phone}
           defaultCode="BE"
           layout="second"
-          placeholder={t("register.phone.placeholder")} // Placeholder tekst
+          placeholder={t("register.phone.placeholder")}
           onChangeText={(text) => {
             onChange(text);
           }}
           onChangeFormattedText={(text) => {
             onChange(text);
           }}
-          // Container Style: Hier regelen we de achtergrond, border en ronding
           containerStyle={{
             width: "100%",
-            backgroundColor: "#F3F4F6", // Zelfde als bg-[#F3F4F6]
-            borderRadius: 12, // Zelfde als rounded-xl
-            borderWidth: 2, // Zelfde als border-2
-            borderColor: isFocused ? "#2548BC" : "transparent", // De focus logica
-            height: 56, // Hoogte iets bijstellen zodat het past bij de rest
+            backgroundColor: "#F3F4F6",
+            borderRadius: 12,
+            borderWidth: 2,
+            borderColor: isFocused ? "#2548BC" : "transparent",
+            height: 56,
             paddingVertical: 0,
           }}
-          // Text Container: Moet transparant zijn zodat de parent kleur erdoorheen komt
           textContainerStyle={{
             backgroundColor: "transparent",
             paddingVertical: 0,
@@ -84,34 +77,30 @@ export const Step5PhoneNumber = ({
             borderTopRightRadius: 12,
             borderBottomRightRadius: 12,
           }}
-          // Input Veld: Het font en de tekstkleur
           textInputStyle={{
             fontFamily: "comfortaa-regular",
             fontSize: 16,
-            color: "#100D08", // Jouw zwart
+            color: "#100D08",
             height: 50,
-            paddingVertical: 0, // Belangrijk voor uitlijning
+            paddingVertical: 0,
           }}
-          // Code Text (+32): Het font en de tekstkleur
           codeTextStyle={{
             fontFamily: "comfortaa-regular",
             fontSize: 16,
-            color: "#100D08", // Jouw zwart
-            height: 24, // Fix voor alignment
+            color: "#100D08",
+            height: 24,
             lineHeight: 24,
           }}
-          // Country Picker Knopje
           countryPickerButtonStyle={{
             width: 50,
             borderTopLeftRadius: 12,
             borderBottomLeftRadius: 12,
           }}
-          // 4. Props doorgeven aan de onderliggende TextInput voor Focus/Blur
           textInputProps={{
-            placeholderTextColor: "#828282", // Jouw grijs
+            placeholderTextColor: "#828282",
             onFocus: () => setIsFocused(true),
             onBlur: () => setIsFocused(false),
-            selectionColor: "#2548BC", // Cursor kleur blauw maken
+            selectionColor: "#2548BC",
           }}
           withDarkTheme={false}
           withShadow={false}

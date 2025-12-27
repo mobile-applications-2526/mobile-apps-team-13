@@ -1,5 +1,3 @@
-import { router } from "expo-router";
-import { Plus } from "lucide-react-native";
 import { ActivityIndicator, TouchableOpacity } from "react-native";
 
 type Props = {

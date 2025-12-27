@@ -38,7 +38,7 @@ export const Step1Email = ({ onNext, onChange, value, onBack }: Props) => {
       </Text>
 
       <LabeledInput
-        label={t("register.email.email")} // Gebruik de vertaling als label
+        label={t("register.email.email")}
         value={value}
         onChange={handleEmailChange}
         keyboardType="email-address"

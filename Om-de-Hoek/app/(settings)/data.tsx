@@ -4,8 +4,6 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Alert,
-  TouchableOpacity,
-  Text,
   Platform,
 } from "react-native";
 import SettingsHeader from "@/components/settings/SettingsHeader";
@@ -111,11 +109,10 @@ export default function MyDataPage() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1 bg-white"
     >
-      {/* We maken deze View 'relative' zodat de absolute FAB zich hierop kan positioneren */}
       <View className="flex-1 relative">
         <ScrollView
           className="flex-1 px-6"
-          contentContainerStyle={{ paddingBottom: 100 }} // Genoeg ruimte onderaan zodat de FAB niet over tekst valt
+          contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
         >
           <View className="flex-row items-center mt-2 mb-4">
@@ -140,10 +137,7 @@ export default function MyDataPage() {
               onBlur={() => setFocusedField(null)}
             />
 
-            {/* ... (Al je andere inputs blijven hier precies hetzelfde) ... */}
-
             <View className="flex-row gap-3">
-              {/* Wrapper voor Voornaam (flex-1 zorgt voor 50% breedte) */}
               <View className="flex-1">
                 <LabeledInput
                   label={t("settings.data.firstname")}
@@ -156,7 +150,6 @@ export default function MyDataPage() {
                 />
               </View>
 
-              {/* Wrapper voor Achternaam (flex-1 zorgt voor 50% breedte) */}
               <View className="flex-1">
                 <LabeledInput
                   label={t("settings.data.lastname")}
