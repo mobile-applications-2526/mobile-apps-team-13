@@ -23,7 +23,10 @@ const NotificationCard: React.FC<Props> = ({
   const handlePress = () => {
     router.push({
       pathname: "/(notifications)/MessageDetail/[id]",
-      params: { id: message.userTag },
+      params: {
+        id: encodeURIComponent(message.id),
+        message: encodeURIComponent(JSON.stringify(message)),
+      },
     });
   };
 

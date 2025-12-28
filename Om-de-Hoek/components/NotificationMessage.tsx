@@ -16,7 +16,7 @@ export const NotificationMessage = ({ name, content }: Props) => {
                 elevation: 2,
             }}
         >
-            <Text className="text-gray font-comfortaa-regular mb-2">
+            <Text className="text-blue font-comfortaa-regular mb-2">
                 {name}
             </Text>
 

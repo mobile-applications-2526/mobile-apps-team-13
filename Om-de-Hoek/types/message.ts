@@ -3,6 +3,7 @@ export type MessageSeverity = "Informational" | "Warning" | "Critical";
 export type Message = {
     userName: string;
     userTag: string;
+    title: string;
     content: string;
     createdAt: string;
     severity: MessageSeverity;
@@ -11,4 +12,6 @@ export type Message = {
         content: string;
     }[];
     totalLikes: number;
+    id: string;
+    likedByUser: boolean;
 }

@@ -87,7 +87,7 @@ export default function TabTwoScreen() {
               key={`${message.userTag}-${index}`}
               icon={icon}
               title={title}
-              subtitle={message.content}
+              subtitle={message.title ?? message.content}
               time={new Date(message.createdAt).toLocaleTimeString("nl-BE", {
                 hour: "2-digit",
                 minute: "2-digit",
