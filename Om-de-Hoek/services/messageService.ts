@@ -79,4 +79,16 @@ const sendMessage = async (
   return data as Message;
 };
 
-export default { fetchMessageFeed, sendMessage };
+const likeMessage = async (token: string, messageId: string) => {
+  const url = `${API_URL}/api/message/like/${messageId}`;
+
+  return await fetch(url, {
+    method: "POST",
+    headers: {
+      "Authorization" : `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+export default { fetchMessageFeed, sendMessage, likeMessage };

@@ -12,4 +12,5 @@ export type Message = {
         content: string;
     }[];
     totalLikes: number;
+    id: string;
 }

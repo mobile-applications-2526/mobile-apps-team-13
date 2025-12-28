@@ -134,6 +134,13 @@
       "submit": "Send notification",
       "selectneighborhood": "Select neighborhood",
       "close": "Close"
+    },
+    "details": {
+      "likes": "Likes: ",
+      "comments": "Comments: ",
+      "addcomment": "Add a comment...",
+      "loading": "Loading notification...",
+      "error": "Error loading notification."
     }
   }
 }

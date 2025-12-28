@@ -1,7 +1,4 @@
 export type Comment = {
-  id: string;
-  notificationId: string;
-  authorId: string;
-  authorName: string;
+  author: string;
   content: string;
 };
