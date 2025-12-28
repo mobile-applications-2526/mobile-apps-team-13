@@ -3,9 +3,12 @@ import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
 import { useRouter } from "expo-router";
 import { ArrowLeft } from "lucide-react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, Switch, Pressable, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuth } from "@/components/auth/context/AuthContext";
+import userService from "@/services/userService";
+import { Neighborhoods } from "@/types/neighborhood";
 import { useTranslation } from "react-i18next";
 import Header from "@/components/Header";
 
@@ -34,10 +37,35 @@ export default function CreateNotification({
 
     const { t } = useTranslation();
     const router = useRouter();
+    const { token } = useAuth();
     const [title, setTitle] = useState(titleProp ?? "");
     const [content, setContent] = useState(contentProp ?? "");
     const [onlyMyNeighborhood, setOnlyMyNeighborhood] = useState<boolean>(onlyMyNeighborhoodProp ?? true);
     const [selectedType, setSelectedType] = useState<'informatief' | 'waarschuwing' | 'noodgeval'>(typeProp ?? 'informatief');
+    const [neighborhoods, setNeighborhoods] = useState<Neighborhoods[]>([]);
+
+    useEffect(() => {
+        const loadUser = async () => {
+            if (!token) return;
+            try {
+                const resp = await userService.loggedInuser(token);
+                if (!resp.ok) {
+                    if (resp.status === 401) {
+                        console.warn("Unauthorized when fetching logged in user");
+                        return;
+                    }
+                    throw new Error(`Failed to fetch logged in user: ${resp.status}`);
+                }
+
+                const data = await resp.json();
+                setNeighborhoods(data.neighborhoods ?? []);
+            } catch (e) {
+                console.error("Failed to load logged in user:", e);
+            }
+        };
+
+        loadUser();
+    }, [token]);
 
     const isValid = title.length > 0 && content.length > 0;
 
@@ -64,6 +92,7 @@ export default function CreateNotification({
     const handleSendNotification = () => {
         
         console.log(title, content, onlyMyNeighborhood, selectedType);
+        
         router.push(HOME_PATH);
     }
 

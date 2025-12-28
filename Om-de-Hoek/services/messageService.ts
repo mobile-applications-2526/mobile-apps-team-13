@@ -58,7 +58,7 @@ const sendMessage = async (
   if (!token) throw new Error("No token provided");
 
   const url = `${API_URL}/api/message/send`;
-  console.log("Sending message to:", url, "payload:", payload);
+  console.log("Sending message with", url, "payload:", payload);
 
   const response = await fetch(url, {
     method: "POST",
