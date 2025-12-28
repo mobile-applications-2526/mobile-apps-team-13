@@ -1,13 +1,13 @@
 import Back from "@/components/Back";
-import Header from "@/components/Header";
 import { PressableButton } from "@/components/PressableButton";
-import { WrittenInput } from "@/components/WrittenInput";
 import { Color } from "@/types/StyleOptions";
 import { useRouter } from "expo-router";
 import { ArrowLeft } from "lucide-react-native";
 import { useState } from "react";
 import { View, Text, Switch, Pressable, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
+import Header from "@/components/Header";
 
 type Props = {
   onChange?: (name: {
@@ -32,6 +32,7 @@ export default function CreateNotification({
   type: typeProp,
 }: Props)  {
 
+    const { t } = useTranslation();
     const router = useRouter();
     const [title, setTitle] = useState(titleProp ?? "");
     const [content, setContent] = useState(contentProp ?? "");
@@ -74,32 +75,31 @@ export default function CreateNotification({
                     <Back icon={<ArrowLeft color="#100D08" size={20}/>} onBack={() => router.push(HOME_PATH)}/>
                 </View>
                 <View className="items-center">
-                    <Text className="font-comfortaa-bold text-[24px] text-black">Laat van</Text>
-                    <Text className="font-comfortaa-medium text-[16px] text-gray">je horen</Text>
+                    <Header title={t("notifications.creation.title")} subtitle={t("notifications.creation.subtitle")} />
                 </View>
             </View>
             <View>
-                <Text className="text-black font-comfortaa-bold">Type Melding:</Text>
+                <Text className="text-black font-comfortaa-bold">{t("notifications.creation.type")}:</Text>
                 <View className="flex-row justify-between mt-2">
                     <Pressable onPress={() => selectType('informatief')}>
                         <Text className={`rounded-xl font-comfortaa-bold px-3 py-1 ${selectedType === 'informatief' ? 'text-white bg-[#2548BC] border border-[#2548BC]' : 'text-black border border-[#2548BC]'}`}>
-                            Informatief
+                            {t("notifications.creation.tags.info")}
                         </Text>
                     </Pressable>
                     <Pressable onPress={() => selectType('waarschuwing')}>
                         <Text className={`rounded-xl font-comfortaa-bold px-3 py-1 ${selectedType === 'waarschuwing' ? 'text-white bg-[#2548BC] border border-[#2548BC]' : 'text-black border border-[#2548BC]'}`}>
-                            Waarschuwing
+                            {t("notifications.creation.tags.warning")}
                         </Text>
                     </Pressable>
                     <Pressable onPress={() => selectType('noodgeval')}>
                         <Text className={`rounded-xl font-comfortaa-bold px-3 py-1 ${selectedType === 'noodgeval' ? 'text-white bg-[#2548BC] border border-[#2548BC]' : 'text-black border border-[#2548BC]'}`}>
-                            Noodgeval
+                            {t("notifications.creation.tags.emergency")}
                         </Text>
                     </Pressable>
                 </View>
             </View>
             <View className="flex-row items-center mt-4">
-                <Text className="text-black font-comfortaa-bold">Alleen mijn buurt</Text>
+                <Text className="text-black font-comfortaa-bold">{t("notifications.creation.neighborhood")}</Text>
                 <Switch
                     value={onlyMyNeighborhood}
                     onValueChange={toggleOnlyMyNeighborhood}
@@ -109,18 +109,18 @@ export default function CreateNotification({
             </View>
             <View className="flex-1 mt-4">
                 <View>
-                    <Text className="text-black font-comfortaa-bold">Titel:</Text>
-                    <WrittenInput
-                        placeholder={"Bv. Wegenwerken aan de straat"}
+                    <Text className="text-black font-comfortaa-bold">{t("notifications.creation.titleinput")}</Text>
+                    <TextInput
+                        className="border border-gray py-3 px-4 rounded-lg mb-4 font-comfortaa-regular "
+                        placeholder={t("notifications.creation.titleplaceholder")}
                         value={title}
                         onChangeText={handleTitleChange}
-                        inputType="default"
                     />
-                
-                    <Text className="text-black font-comfortaa-bold">Bericht:</Text>
+
+                    <Text className="text-black font-comfortaa-bold">{t("notifications.creation.messageinput")}</Text>
                     <TextInput
                         className="border border-gray py-3 px-4 rounded-lg mb-4 font-comfortaa-regular h-56"
-                        placeholder={"Typ hier ..."}
+                        placeholder={t("notifications.creation.messageplaceholder")}
                         placeholderTextColor="gray"
                         value={content}
                         onChangeText={handleContentChange}
@@ -136,7 +136,7 @@ export default function CreateNotification({
                     <PressableButton
                             onPress={async () => handleSendNotification()}
                             disabled={!isValid}
-                            title={"Verzenden"}
+                            title={t("notifications.creation.submit")}
                             background={isValid ? Color.BLUE : Color.GRAY}
                     />
                 </View>

@@ -1,22 +1,21 @@
 import { ScrollView, Text, View, Pressable } from "react-native";
 import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import NotificationCard from "@/components/card/NotificationCard";
-import { TriangleAlert, Siren, MessageCircle } from "lucide-react-native";
 import { useRouter } from "expo-router";
-
 import Header from "@/components/Header";
 import NotificationCard from "@/components/card/NotificationCard";
 import messageService from "@/services/messageService";
 import { Message } from "@/types/message";
-import { TriangleAlert, Siren, Info } from "lucide-react-native";
+import { TriangleAlert, Siren, Info , MessageCircle} from "lucide-react-native";
 import { useAuth } from "@/components/auth/context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 export default function TabTwoScreen() {
   const router = useRouter();
   const { token } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
 
   const loadMessages = async () => {
     if (!token) return;
@@ -42,18 +41,18 @@ export default function TabTwoScreen() {
     switch (severity) {
       case "Critical":
         return {
-          title: "Noodgeval",
+          title: t("notifications.creation.tags.emergency"),
           icon: <Siren size={24} strokeWidth={2} color="#100D08" />,
         };
       case "Warning":
         return {
-          title: "Waarschuwing",
+          title: t("notifications.creation.tags.warning"),
           icon: <TriangleAlert size={24} strokeWidth={2} color="#100D08" />,
         };
       case "Informational":
       default:
         return {
-          title: "Informatie",
+          title: t("notifications.creation.tags.info"),
           icon: <Info size={24} strokeWidth={2} color="#100D08" />,
         };
     }
@@ -67,15 +66,15 @@ export default function TabTwoScreen() {
 
       <ScrollView className="mt-10 px-6">
         <Text className="text-gray font-comfortaa-regular mb-2">
-          Laatste meldingen
+          {t("notifications.subtitle")}
         </Text>
 
         {loading && messages.length === 0 && (
-          <Text className="text-gray-500 mt-4">Loading messages...</Text>
+          <Text className="text-gray-500 mt-4">{t("notifications.loadmessage")}</Text>
         )}
 
         {!loading && messages.length === 0 && (
-          <Text className="text-gray-500 mt-4">Geen meldingen beschikbaar</Text>
+          <Text className="text-gray-500 mt-4">{t("notifications.empty")}</Text>
         )}
 
         {messages.map((message, index) => {
@@ -98,7 +97,7 @@ export default function TabTwoScreen() {
       <Pressable onPress={() => router.push('/createNotification')} className="absolute bottom-10 right-6">
         <View className="bg-[#2548BC] px-4 py-3 rounded-full flex-row items-center shadow-lg">
           <MessageCircle color="#FFFFFF" size={20} strokeWidth={2} />
-          <Text className="ml-3 text-white font-comfortaa-bold">Maak een melding</Text>
+          <Text className="ml-3 text-white font-comfortaa-bold">{t("notifications.create")}</Text>
         </View>
       </Pressable>
     </SafeAreaView>
