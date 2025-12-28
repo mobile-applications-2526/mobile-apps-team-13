@@ -9,6 +9,7 @@ import {
   Platform,
   ScrollView,
   Keyboard,
+  View,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Step1Email } from "@/components/auth/register/Step1Email";
@@ -101,22 +102,19 @@ export default function RegisterPage() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1, backgroundColor: "white" }}
     >
-      <ScrollView
-        ref={scrollRef}
-        contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 24 }}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
-        {huidigeIndex === 0 && (
+      {huidigeIndex === 0 && (
+        <View style={{ flexGrow: 1, paddingHorizontal: 24 }}>
           <Step1Email
             value={data.email}
             onChange={(email) => setData((prev) => ({ ...prev, email }))}
             onNext={goToNextStep}
             onBack={() => router.push("/(auth)/login")}
           />
-        )}
+        </View>
+      )}
 
-        {huidigeIndex === 1 && (
+      {huidigeIndex === 1 && (
+        <View style={{ flexGrow: 1, paddingHorizontal: 24 }}>
           <Step2Name
             firstName={data.firstName}
             lastName={data.lastName}
@@ -126,9 +124,11 @@ export default function RegisterPage() {
             onNext={goToNextStep}
             onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
           />
-        )}
+        </View>
+      )}
 
-        {huidigeIndex === 2 && (
+      {huidigeIndex === 2 && (
+        <View style={{ flexGrow: 1, paddingHorizontal: 24 }}>
           <Step3BirthDate
             birthDate={data.birthDate}
             onChange={(birthDate) =>
@@ -137,9 +137,16 @@ export default function RegisterPage() {
             onNext={goToNextStep}
             onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
           />
-        )}
+        </View>
+      )}
 
-        {huidigeIndex === 3 && (
+      {huidigeIndex === 3 && (
+        <ScrollView
+          ref={scrollRef}
+          contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 24 }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
           <Step4Address
             streetName={data.streetName}
             houseNumber={data.houseNumber}
@@ -157,9 +164,11 @@ export default function RegisterPage() {
             onNext={goToNextStep}
             onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
           />
-        )}
+        </ScrollView>
+      )}
 
-        {huidigeIndex === 4 && (
+      {huidigeIndex === 4 && (
+        <View style={{ flexGrow: 1, paddingHorizontal: 24 }}>
           <Step5PhoneNumber
             value={data.phoneNumber}
             onChange={(phoneNumber) =>
@@ -168,9 +177,11 @@ export default function RegisterPage() {
             onNext={goToNextStep}
             onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
           />
-        )}
+        </View>
+      )}
 
-        {huidigeIndex === 5 && (
+      {huidigeIndex === 5 && (
+        <View style={{ flexGrow: 1, paddingHorizontal: 24 }}>
           <Step6Password
             password={data.password}
             onChange={(password) => setData((prev) => ({ ...prev, password }))}
@@ -180,9 +191,13 @@ export default function RegisterPage() {
             }}
             onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
           />
-        )}
+        </View>
+      )}
 
-        {huidigeIndex === 6 && loginTokens && (
+      {huidigeIndex === 6 && loginTokens && (
+        <View
+          style={{ flex: 1, paddingHorizontal: 24, justifyContent: "center" }}
+        >
           <Step7Neighborhood
             postalCode={data.postalCode}
             token={loginTokens.token}
@@ -192,10 +207,9 @@ export default function RegisterPage() {
             }}
             onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
           />
-        )}
-
-        <ProgressBar currentStep={huidigeIndex} totalSteps={totalSteps} />
-      </ScrollView>
+        </View>
+      )}
+      <ProgressBar currentStep={huidigeIndex} totalSteps={totalSteps} />
     </KeyboardAvoidingView>
   );
 }
