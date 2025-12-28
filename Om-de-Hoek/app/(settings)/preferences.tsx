@@ -98,7 +98,7 @@ export default function MyPreferencesPage() {
               onPress={() => setModalVisible(false)}
               className="mt-4 p-3 bg-gray-200 rounded-xl items-center"
             >
-              <Text className="font-comfortaa-bold text-gray-800">
+              <Text className="font-comfortaa-bold text-[#CB0000]">
                 {t("settings.preferences.close")}
               </Text>
             </TouchableOpacity>
