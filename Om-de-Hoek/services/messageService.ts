@@ -46,4 +46,36 @@ const fetchMessageFeed = async (
   return data as Message[];
 };
 
-export default { fetchMessageFeed };
+const sendMessage = async (
+  token: string | null,
+  payload: {
+    content: string;
+    severity: string;
+    neighborhoodCode: string;
+    neighborhoodOnly: boolean;
+  }
+): Promise<Message> => {
+  if (!token) throw new Error("No token provided");
+
+  const url = `${API_URL}/api/message/send`;
+  console.log("Sending message to:", url, "payload:", payload);
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    if (response.status === 401) throw new Error("Unauthorized - Invalid or expired token");
+    throw new Error(`Request failed with status ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data as Message;
+};
+
+export default { fetchMessageFeed, sendMessage };
