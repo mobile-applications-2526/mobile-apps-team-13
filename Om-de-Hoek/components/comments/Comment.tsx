@@ -1,6 +1,7 @@
 import { View, Text, Image, Alert } from "react-native";
 import { Trash2 } from "lucide-react-native";
 import type { Comment as CommentType } from "@/types/comment";
+import { Color } from "@/types/StyleOptions";
 
 type Props = {
   comment: CommentType;
@@ -22,7 +23,7 @@ const Comment: React.FC<Props> = ({ comment, onDelete, showDelete = false }) => 
   return (
     <View className="bg-white rounded-3xl p-4 mx-0 my-1"
             style={{
-                shadowColor: "#000",
+                shadowColor: Color.BLACK,
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.05,
                 shadowRadius: 5,

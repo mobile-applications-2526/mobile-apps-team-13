@@ -6,7 +6,7 @@ import gemeenteService from "@/services/gemeenteService";
 import Header from "@/components/Header";
 import { SafeAreaView } from "react-native-safe-area-context";
 import NotificationCard from "@/components/card/NotificationCard";
-import { TriangleAlert, Siren } from "lucide-react-native";
+import { TriangleAlert, Siren, MessageCircle } from "lucide-react-native";
 import { useRouter } from "expo-router";
 
 const router = useRouter();
@@ -33,9 +33,10 @@ export default function TabTwoScreen() {
             time="11u23" 
         />
       </ScrollView>
-      <Pressable onPress={() => router.push('/createNotification')}>
-        <View className="absolute bottom-10 right-6">
-           <Text>Knop</Text>
+      <Pressable onPress={() => router.push('/createNotification')} className="absolute bottom-10 right-6">
+        <View className="bg-[#2548BC] px-4 py-3 rounded-full flex-row items-center shadow-lg">
+          <MessageCircle color="#FFFFFF" size={20} strokeWidth={2} />
+          <Text className="ml-3 text-white font-comfortaa-bold">Maak een melding</Text>
         </View>
       </Pressable>
     </SafeAreaView>
