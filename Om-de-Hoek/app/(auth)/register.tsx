@@ -1,6 +1,15 @@
-import { useState } from "react";
-import type { AuthResponse, RegisterBody, RegisterRequestBody } from "@/types/auth";
-import { View, KeyboardAvoidingView, Platform } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import type {
+  AuthResponse,
+  RegisterBody,
+  RegisterRequestBody,
+} from "@/types/auth";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Keyboard,
+} from "react-native";
 import { useRouter } from "expo-router";
 import { Step1Email } from "@/components/auth/register/Step1Email";
 import { Step2Name } from "@/components/auth/register/Step2Name";
@@ -8,23 +17,24 @@ import { Step3BirthDate } from "@/components/auth/register/Step3BirthDate";
 import { Step4Address } from "@/components/auth/register/Step4Address";
 import { Step5PhoneNumber } from "@/components/auth/register/Step5PhoneNumber";
 import { Step6Password } from "@/components/auth/register/Step6Password";
+import Step7Neighborhood from "@/components/auth/register/Step7Neighborhood";
+import ProgressBar from "@/components/auth/register/ProgressBar";
 import { useAuth } from "@/components/auth/context/AuthContext";
 import authService from "@/services/authService";
-import ProgressBar from "@/components/auth/register/ProgressBar";
-import Step7Neighborhood from "@/components/auth/register/Step7Neighborhood";
 import addressService from "@/services/addressService";
 
 const totalSteps = 7;
 
 const parseDate = (date: Date): string => {
   const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, "0"); //jan = 0 en moet 1 zijn
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const day = date.getDate().toString().padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
 
 export default function RegisterPage() {
-  const [logintokens, setLoginTokens] = useState<AuthResponse | null>(null);
+  const [loginTokens, setLoginTokens] = useState<AuthResponse | null>(null);
+
   const [data, setData] = useState<RegisterBody>({
     email: "",
     firstName: "",
@@ -38,10 +48,22 @@ export default function RegisterPage() {
     phoneNumber: undefined,
   });
 
-  const [huidigeIndex, setHuidigeIndex] = useState<number>(0);
+  const [huidigeIndex, setHuidigeIndex] = useState(0);
+  const scrollRef = useRef<ScrollView | null>(null);
 
-  const { signIn, token } = useAuth();
+  const { signIn } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    const onHide = () => {
+      setTimeout(() => {
+        scrollRef.current?.scrollTo({ animated: true, y: 0 });
+      }, 50);
+    };
+
+    const sub = Keyboard.addListener("keyboardDidHide", onHide);
+    return () => sub.remove();
+  }, []);
 
   const goToNextStep = () => {
     setHuidigeIndex((prev) => Math.min(prev + 1, totalSteps - 1));
@@ -50,160 +72,130 @@ export default function RegisterPage() {
   const nextAndRegister = async () => {
     const dataToRegister: RegisterRequestBody = {
       email: data.email,
-      phoneNumber: (data as any).phoneNumber || "",
+      phoneNumber: data.phoneNumber || "",
       password: data.password,
       firstName: data.firstName,
       lastName: data.lastName,
       birthDate: parseDate(data.birthDate),
     };
-    console.log("Register body:", dataToRegister);
+
     await authService.authRegister(dataToRegister);
-   
-    setLoginTokens(await authService.authLogin(dataToRegister));
-    // await addressService.RegisterAddress({
-    //   street: data.streetName,
-    //   houseNumber: data.houseNumber || "",
-    //   postalCode: data.postalCode,
-    //   residentId: loginTokens.id,}, token!); 
+
+    const loginResponse = await authService.authLogin(dataToRegister);
+
+    setLoginTokens(loginResponse);
+
+    await addressService.RegisterAddress(
+      {
+        street: data.streetName,
+        houseNumber: data.houseNumber || "",
+        postalCode: data.postalCode,
+        residentId: loginResponse.id,
+      },
+      loginResponse.token
+    );
   };
 
   return (
-    <View className="flex-1 bg-white px-6 pt-12 pb-8">
-      <View style={{ flex: 1 }}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1, backgroundColor: "white" }}
+    >
+      <ScrollView
+        ref={scrollRef}
+        contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 24 }}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
         {huidigeIndex === 0 && (
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            className="flex-1 justify-center"
-            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
-          >
-            <Step1Email
-              onNext={goToNextStep}
-              value={data.email}
-              onChange={(email) => setData((prev) => ({ ...prev, email }))}
-              onBack={() => router.push("/(auth)/login")}
-            />
-          </KeyboardAvoidingView>
+          <Step1Email
+            value={data.email}
+            onChange={(email) => setData((prev) => ({ ...prev, email }))}
+            onNext={goToNextStep}
+            onBack={() => router.push("/(auth)/login")}
+          />
         )}
 
         {huidigeIndex === 1 && (
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            className="flex-1 justify-center"
-            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
-          >
-            <Step2Name
-              onNext={goToNextStep}
-              onChange={({ firstName, lastName }) =>
-                setData((prev) => ({ ...prev, firstName, lastName }))
-              }
-              firstName={data.firstName}
-              lastName={data.lastName}
-              onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
-            />
-          </KeyboardAvoidingView>
+          <Step2Name
+            firstName={data.firstName}
+            lastName={data.lastName}
+            onChange={({ firstName, lastName }) =>
+              setData((prev) => ({ ...prev, firstName, lastName }))
+            }
+            onNext={goToNextStep}
+            onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
+          />
         )}
 
         {huidigeIndex === 2 && (
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            className="flex-1 justify-center"
-            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
-          >
-            <Step3BirthDate
-              onNext={goToNextStep}
-              onChange={(birthDate) =>
-                setData((prev) => ({ ...prev, birthDate }))
-              }
-              birthDate={data.birthDate}
-              onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
-            />
-          </KeyboardAvoidingView>
+          <Step3BirthDate
+            birthDate={data.birthDate}
+            onChange={(birthDate) =>
+              setData((prev) => ({ ...prev, birthDate }))
+            }
+            onNext={goToNextStep}
+            onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
+          />
         )}
 
         {huidigeIndex === 3 && (
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            className="flex-1 justify-center"
-            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
-          >
-            <Step4Address
-              onNext={goToNextStep}
-              onChange={({
+          <Step4Address
+            streetName={data.streetName}
+            houseNumber={data.houseNumber}
+            municipality={data.municipality}
+            postalCode={data.postalCode}
+            onChange={({ streetName, houseNumber, municipality, postalCode }) =>
+              setData((prev) => ({
+                ...prev,
                 streetName,
                 houseNumber,
                 municipality,
                 postalCode,
-              }) =>
-                setData((prev) => ({
-                  ...prev,
-                  streetName,
-                  houseNumber,
-                  municipality,
-                  postalCode,
-                }))
-              }
-              streetName={data.streetName}
-              houseNumber={data.houseNumber}
-              municipality={data.municipality}
-              postalCode={data.postalCode}
-              onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
-            />
-          </KeyboardAvoidingView>
+              }))
+            }
+            onNext={goToNextStep}
+            onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
+          />
         )}
 
         {huidigeIndex === 4 && (
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            className="flex-1 justify-center"
-            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
-          >
-            <Step5PhoneNumber
-              onNext={goToNextStep}
-              onChange={(phoneNumber) =>
-                setData((prev) => ({ ...prev, phoneNumber }))
-              }
-              value={(data as any).phoneNumber}
-              onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
-            />
-          </KeyboardAvoidingView>
+          <Step5PhoneNumber
+            value={data.phoneNumber}
+            onChange={(phoneNumber) =>
+              setData((prev) => ({ ...prev, phoneNumber }))
+            }
+            onNext={goToNextStep}
+            onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
+          />
         )}
 
         {huidigeIndex === 5 && (
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            className="flex-1 justify-center"
-            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
-          >
-            <Step6Password
-              onNext={async () => {
-                await nextAndRegister();
-                goToNextStep();
-              }}
-              onChange={(password) =>
-                setData((prev) => ({ ...prev, password }))
-              }
-              password={data.password}
-              onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
-            />
-          </KeyboardAvoidingView>
+          <Step6Password
+            password={data.password}
+            onChange={(password) => setData((prev) => ({ ...prev, password }))}
+            onNext={async () => {
+              await nextAndRegister();
+              goToNextStep();
+            }}
+            onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
+          />
         )}
 
-        {huidigeIndex === 6 && (
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
-          >
-            <Step7Neighborhood
-              postalCode={data.postalCode}
-              onNext={async () =>  { await signIn(logintokens!.token, logintokens!.refreshToken); router.push("/"); }}
-              onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
-              token={logintokens?.token}
-
-            />
-          </KeyboardAvoidingView>
+        {huidigeIndex === 6 && loginTokens && (
+          <Step7Neighborhood
+            postalCode={data.postalCode}
+            token={loginTokens.token}
+            onNext={async () => {
+              await signIn(loginTokens.token, loginTokens.refreshToken);
+              router.push("/");
+            }}
+            onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
+          />
         )}
-      </View>
-      <ProgressBar currentStep={huidigeIndex} totalSteps={totalSteps} />
-    </View>
+
+        <ProgressBar currentStep={huidigeIndex} totalSteps={totalSteps} />
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

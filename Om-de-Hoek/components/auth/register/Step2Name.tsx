@@ -1,10 +1,10 @@
-import React from "react";
-import { Text, ScrollView } from "react-native";
-import { WrittenInput } from "@/components/WrittenInput";
+import React, { useState } from "react";
+import { Text, KeyboardAvoidingView } from "react-native";
 import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
 import AuthHeader from "@/components/auth/AuthHeader";
 import { useTranslation } from "react-i18next";
+import LabeledInput from "@/components/settings/LabeledInput";
 
 type Props = {
   onNext: () => void;
@@ -21,6 +21,7 @@ export const Step2Name = ({
   firstName: firstNameProp,
   lastName: lastNameProp,
 }: Props) => {
+  const [focusedField, setFocusedField] = useState<string | null>(null);
   const { t } = useTranslation();
 
   const first = firstNameProp ?? "";
@@ -36,11 +37,7 @@ export const Step2Name = ({
   };
 
   return (
-    <ScrollView
-      className="flex-1 p-6"
-      contentContainerStyle={{ flexGrow: 1 }}
-      keyboardShouldPersistTaps="handled"
-    >
+    <KeyboardAvoidingView className="flex-1 justify-center">
       <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
         {t("register.name.title")}
@@ -49,18 +46,26 @@ export const Step2Name = ({
         {t("register.name.subtitle")}
       </Text>
 
-      <WrittenInput
-        placeholder={t("register.name.firstname")}
+      <LabeledInput
+        label={t("register.name.firstname")}
         value={first}
-        onChangeText={handleFirstChange}
-        inputType="default"
+        onChange={handleFirstChange}
+        keyboardType="default"
+        isFocused={focusedField === "firstName"}
+        onFocus={() => setFocusedField("firstName")}
+        onBlur={() => setFocusedField(null)}
+        placeholder={t("register.name.firstname")}
       />
 
-      <WrittenInput
-        placeholder={t("register.name.lastname")}
+      <LabeledInput
+        label={t("register.name.lastname")}
         value={last}
-        onChangeText={handleLastChange}
-        inputType="default"
+        onChange={handleLastChange}
+        keyboardType="default"
+        isFocused={focusedField === "lastName"}
+        onFocus={() => setFocusedField("lastName")}
+        onBlur={() => setFocusedField(null)}
+        placeholder={t("register.name.lastname")}
       />
 
       <PressableButton
@@ -69,6 +74,6 @@ export const Step2Name = ({
         title={t("register.continue")}
         background={isValid ? Color.BLUE : Color.GRAY}
       />
-    </ScrollView>
+    </KeyboardAvoidingView>
   );
 };

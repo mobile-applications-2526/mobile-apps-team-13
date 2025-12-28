@@ -73,4 +73,103 @@ public class MessageService(
             throw;
         }
     }
+
+    public async Task<List<MessageDto>> GetFeedMessages(string token, int page, int pageSize, string? postcode, string? buurtSectorCode)
+    {
+        var userId = tokenService.GetUserIdFromToken(token);
+
+        var user = await uow.UserRepository.GetByIdAsync(userId);
+
+        if (user is null) throw new UnauthorizedException("User not found", "User");
+
+        if (page < 0) throw new InvalidInputException("Page must be greater than or equal to 0", "Page");
+        if (pageSize <= 0) throw new InvalidInputException("PageSize must be greater than 0", "PageSize");
+
+        if (postcode is not null)
+        {
+            var postcodeGemeente = (await uow.GemeenteRepository.SearchByPostCodeAsync(postcode)).FirstOrDefault();
+            if (postcodeGemeente is null) throw new ResourceNotFoundException($"No gemeente found with postcode {postcode}", "Postcode");
+        }
+        
+        if (buurtSectorCode is not null)
+        {
+            var buurt = await uow.BuurtRepository.GetByStatistischeSectorCodeAsync(buurtSectorCode);
+            if (buurt is null) throw new ResourceNotFoundException($"No buurt found with sector code {buurtSectorCode}", "BuurtSectorCode");
+        }
+        
+        var messages = await uow.MessageRepository.GetFeedMessagesAsync(page, pageSize, userId, postcode, buurtSectorCode);
+        
+        return messages.Select(m => new MessageDto(m)).ToList();
+    }
+
+    public async Task<MessageReactionDto> RespondToMessage(string token, RespondToMessage response)
+    {
+        try
+        {
+            await uow.StartTransaction();
+            var userId = tokenService.GetUserIdFromToken(token);
+            var user = await uow.UserRepository.GetByIdAsync(userId);
+            if (user is null) throw new UnauthorizedException("User not found", "User");
+            
+            var message = await uow.MessageRepository.GetById(response.MessageId);
+            if (message is null) throw new ResourceNotFoundException($"Message with Id {response.MessageId} does not exist.", "MessageId");
+            
+            var reaction = new MessageReaction
+            {
+                MessageId = response.MessageId,
+                UserId = userId,
+                Reaction = response.Content,
+                CreatedAt = DateTime.UtcNow
+            };
+            
+            var savedReaction = await uow.MessageReactionRepository.Insert(reaction);
+            await uow.CommitTransaction();
+            return new MessageReactionDto(savedReaction);
+        }
+        catch (Exception e)
+        {
+            await uow.RollbackTransaction();
+            throw;
+        }
+    }
+
+    public async Task<MessageDto> LikeMessage(string token, Guid messageId)
+    {
+        try
+        {
+            await uow.StartTransaction();
+            var userId = tokenService.GetUserIdFromToken(token);
+            var user = await uow.UserRepository.GetByIdAsync(userId);
+            if (user is null) throw new UnauthorizedException("User not found", "User");
+            
+            var message = await uow.MessageRepository.GetById(messageId);
+            if (message is null) throw new ResourceNotFoundException($"Message with Id {messageId} does not exist.", "MessageId");
+
+            var existingLike = await uow.UserLikedPostRepository.GetUserLikeStatusAsync(userId, messageId);
+            if (existingLike is null)
+            {
+                var like = new UserLikedPost
+                {
+                    UserId = userId,
+                    PostId = messageId,
+                    IsLiked = true
+                };
+                
+                await uow.UserLikedPostRepository.Insert(like);
+                await uow.CommitTransaction();
+                return new MessageDto(message);
+            }
+            
+            existingLike.IsLiked = !existingLike.IsLiked;
+            uow.UserLikedPostRepository.Update(existingLike);
+            await uow.Save();
+            await uow.CommitTransaction();
+            return new MessageDto(message);
+        }
+        catch (Exception e)
+        {
+            await uow.RollbackTransaction();
+            throw;
+        }
+    }
 }

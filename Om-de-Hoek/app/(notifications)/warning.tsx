@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import Header from "@/components/Header";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Back from "@/components/Back";
@@ -11,7 +11,7 @@ import CommentSection from "@/components/comments/CommentSection";
 const HOME_PATH = "/";
 
 const Warning = () => {
-    const router = useRouter();
+  const router = useRouter();
 
     return (
         <SafeAreaView className="flex-1 bg-white px-6">

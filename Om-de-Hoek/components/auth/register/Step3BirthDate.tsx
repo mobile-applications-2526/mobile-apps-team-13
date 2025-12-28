@@ -4,8 +4,8 @@ import {
   View,
   Platform,
   Pressable,
-  ScrollView,
   Modal,
+  KeyboardAvoidingView,
 } from "react-native";
 import DateTimePicker, {
   type DateTimePickerEvent,
@@ -14,8 +14,8 @@ import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
 import AuthHeader from "@/components/auth/AuthHeader";
 import { useTranslation } from "react-i18next";
-import i18n from "@/i18n";
 import { useEffect } from "react";
+import { Calendar } from "lucide-react-native";
 
 type Props = {
   onNext: () => void;
@@ -72,10 +72,10 @@ export const Step3BirthDate = ({
   });
 
   return (
-    <ScrollView
-      className="flex-1 p-6"
-      contentContainerStyle={{ flexGrow: 1 }}
-      keyboardShouldPersistTaps="handled"
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 justify-center"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
     >
       <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
@@ -85,17 +85,35 @@ export const Step3BirthDate = ({
         {t("register.birthdate.subtitle")}
       </Text>
 
-      <Pressable onPress={showDatePicker} className="mb-4">
-        <View className="border border-gray py-3 px-4 rounded-lg">
-          <Text
-            className={`text-base text-center font-comfortaa-regular ${isDateSelected ? "text-black" : "text-gray"}`}
-            numberOfLines={1}
-            ellipsizeMode="tail"
+      <View className="mb-4">
+        <Text className="mb-1 font-comfortaa-regular text-[#828282] font-bold text-sm ml-1">
+          {t("register.birthdate.birthdate")}
+        </Text>
+
+        <Pressable onPress={showDatePicker}>
+          <View
+            className={`
+                flex-row items-center rounded-xl px-4 py-2
+                bg-[#F3F4F6] border-2
+                ${showPicker ? "border-[#2548BC]" : "border-transparent"}
+            `}
           >
-            {isDateSelected ? formattedDate : t("register.birthdate.birthdate")}
-          </Text>
-        </View>
-      </Pressable>
+            <Text
+              className={`
+                flex-1 font-comfortaa-regular text-base
+                ${isDateSelected ? "text-[#100D08]" : "text-[#828282]"}
+              `}
+              numberOfLines={1}
+            >
+              {isDateSelected
+                ? formattedDate
+                : t("register.birthdate.birthdate")}
+            </Text>
+
+            <Calendar size={20} color="#828282" />
+          </View>
+        </Pressable>
+      </View>
 
       {showPicker && Platform.OS === "ios" && (
         <Modal
@@ -105,7 +123,7 @@ export const Step3BirthDate = ({
           onRequestClose={closeDatePicker}
         >
           <View className="flex-1 justify-end bg-black/50">
-            <View className="bg-white rounded-t-3xl overflow-hidden">
+            <View className="bg-white rounded-t-3xl overflow-hidden pb-10">
               <View className="flex-row justify-between items-center px-4 py-4 border-b border-gray-200">
                 <Pressable onPress={closeDatePicker}>
                   <Text className="text-red font-comfortaa-semibold text-[16px]">
@@ -130,7 +148,7 @@ export const Step3BirthDate = ({
                   display="spinner"
                   onChange={onDateChange}
                   maximumDate={new Date()}
-                  textColor="'#100D08"
+                  textColor="#100D08"
                   themeVariant="light"
                 />
               </View>
@@ -168,6 +186,6 @@ export const Step3BirthDate = ({
         title={t("register.continue")}
         background={isDateSelected ? Color.BLUE : Color.GRAY}
       />
-    </ScrollView>
+    </KeyboardAvoidingView>
   );
 };

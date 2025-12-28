@@ -74,7 +74,7 @@ function InitialLayout() {
   }
 
   return (
-    <SafeAreaView edges={["top"]} className="flex-1 bg-black">
+    <SafeAreaView edges={["top"]} className="flex-1 bg-white">
       <Slot />
     </SafeAreaView>
   );

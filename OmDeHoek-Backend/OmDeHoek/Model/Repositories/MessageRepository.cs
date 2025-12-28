@@ -1,9 +1,37 @@
-﻿using OmDeHoek.Model.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using OmDeHoek.Model.Data;
 using OmDeHoek.Model.Entities;
 
 namespace OmDeHoek.Model.Repositories;
 
 public class MessageRepository(DataContext ctx) : GenericRepository<Message>(ctx, ctx.Messages)
 {
+    public async Task<List<Message>> GetFeedMessagesAsync(
+        int page, 
+        int pageSize, 
+        string userId,
+        string? postcode, 
+        string? buurtSectorCode)
+    {
+        IQueryable<Message> query = DbSet.AsNoTracking();
 
+        if (!string.IsNullOrEmpty(postcode))
+        {
+            query = query.Where(m => m.Buurt!.DeelGemeente!.Gemeente!.Postcodes.Any(p => p.Code == postcode));
+        }
+
+        if (!string.IsNullOrEmpty(buurtSectorCode))
+        {
+            query = query.Where(m => m.BuurtSectorCode == buurtSectorCode);
+        }
+        
+        query = query.Where(m => m.Buurt!.Bewoners.Any(ub => ub.UserId == userId));
+
+        query = query
+            .OrderByDescending(m => m.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize);
+
+        return await query.ToListAsync();
+    }
 }

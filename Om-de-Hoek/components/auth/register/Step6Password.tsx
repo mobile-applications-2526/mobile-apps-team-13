@@ -1,12 +1,18 @@
 import { useState, useEffect } from "react";
-import { Text, View, Pressable, ScrollView } from "react-native";
-import { WrittenInput } from "@/components/WrittenInput";
+import {
+  Text,
+  View,
+  Pressable,
+  Platform,
+  KeyboardAvoidingView,
+} from "react-native";
 import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
 import { Eye, EyeClosed } from "lucide-react-native";
 import { ValidationRow } from "@/components/ValidationRow";
 import AuthHeader from "@/components/auth/AuthHeader";
 import { useTranslation } from "react-i18next";
+import LabeledInput from "@/components/settings/LabeledInput";
 
 type Props = {
   onNext: () => void;
@@ -29,6 +35,7 @@ export const Step6Password = ({
   const [hasSpecialChar, setHasSpecialChar] = useState<boolean>(false);
   const [isValid, setIsValid] = useState<boolean>(false);
   const [strength, setStrength] = useState<number>(0);
+  const [isFocused, setIsFocused] = useState<boolean>(false);
 
   const { t } = useTranslation();
 
@@ -74,10 +81,10 @@ export const Step6Password = ({
   const strengthFeedback = getStrengthFeedback();
 
   return (
-    <ScrollView
-      className="flex-1 p-6"
-      contentContainerStyle={{ flexGrow: 1 }}
-      keyboardShouldPersistTaps="handled"
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 justify-center"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
     >
       <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
@@ -116,27 +123,30 @@ export const Step6Password = ({
       </View>
 
       <View className="relative justify-center">
-        <WrittenInput
-          placeholder={t("register.password.password")}
+        <LabeledInput
+          label={t("register.password.password")}
           value={password}
-          onChangeText={(text) => {
+          onChange={(text) => {
             setPassword(text);
             onChange(text);
           }}
-          inputType="password"
+          editable={true}
+          isFocused={isFocused}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          keyboardType="default"
+          placeholder={t("register.password.password")}
           secureTextEntry={!isPasswordVisible}
+          rightIcon={
+            <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+              {isPasswordVisible ? (
+                <EyeClosed size={20} color="#828282" />
+              ) : (
+                <Eye size={20} color="#828282" />
+              )}
+            </Pressable>
+          }
         />
-
-        <Pressable
-          onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-          className="absolute right-4 justify-center mb-4"
-        >
-          {isPasswordVisible ? (
-            <EyeClosed size={20} color="gray" />
-          ) : (
-            <Eye size={20} color="gray" />
-          )}
-        </Pressable>
       </View>
 
       <PressableButton
@@ -145,6 +155,6 @@ export const Step6Password = ({
         title={t("register.continue")}
         background={isValid ? Color.BLUE : Color.GRAY}
       />
-    </ScrollView>
+    </KeyboardAvoidingView>
   );
 };

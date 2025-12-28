@@ -15,6 +15,7 @@ public class AddressDto
         HouseNumber = adres.Huisnummer;
         PostalCode = adres.Postcode;
         VillageName = adres.Dorp;
+        FullAdress = adres.FullAdress;
     }
 
     public Guid AdresId { get; init; }
@@ -22,4 +23,5 @@ public class AddressDto
     public string? HouseNumber { get; init; }
     public string PostalCode { get; init; } = string.Empty;
     public string VillageName { get; init; } = string.Empty;
+    public string FullAdress { get; init; } = string.Empty;
 }

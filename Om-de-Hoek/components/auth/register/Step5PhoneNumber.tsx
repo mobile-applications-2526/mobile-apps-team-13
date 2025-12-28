@@ -1,5 +1,5 @@
-import { useRef } from "react";
-import { ScrollView, Text } from "react-native";
+import { useRef, useState } from "react";
+import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
 import PhoneInput from "react-native-phone-number-input";
 import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
@@ -21,19 +21,20 @@ export const Step5PhoneNumber = ({
 }: Props) => {
   const { t } = useTranslation();
 
-  const phone = value ?? "";
+  const [isFocused, setIsFocused] = useState(false);
 
+  const phone = value ?? "";
   const phoneInputRef = useRef<PhoneInput>(null);
 
   const digitsFrom = (text: string) => text.replace(/\D/g, "");
   const digits = digitsFrom(phone);
-  const isValid = digits.length === 9;
+  const isValid = digits.length >= 9;
 
   return (
-    <ScrollView
-      className="flex-1 p-6"
-      contentContainerStyle={{ flexGrow: 1 }}
-      keyboardShouldPersistTaps="handled"
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 justify-center"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
     >
       <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
@@ -43,74 +44,76 @@ export const Step5PhoneNumber = ({
         {t("register.phone.subtitle")}
       </Text>
 
-      <PhoneInput
-        ref={phoneInputRef}
-        value={phone}
-        defaultCode="BE"
-        layout="second"
-        placeholder={t("register.phone.phone")}
-        countryPickerProps={{
-          filterProps: {
-            placeholder: t("register.phone.country"),
-          },
-        }}
-        onChangeText={(text) => {
-          const d = digitsFrom(text);
-          if (d.length > 9) return;
-          onChange(text);
-        }}
-        onChangeFormattedText={(text) => {
-          const d = digitsFrom(text);
-          if (d.length > 9) return;
-          onChange(text);
-        }}
-        withDarkTheme={false}
-        withShadow={false}
-        autoFocus={false}
-        containerStyle={{
-          width: "100%",
-          borderColor: "gray",
-          borderWidth: 1,
-          borderRadius: 8,
-          marginBottom: 8,
-          backgroundColor: "transparent",
-          padding: 0,
-        }}
-        textContainerStyle={{
-          backgroundColor: "transparent",
-          paddingVertical: 0,
-          paddingHorizontal: 0,
-          height: 50,
-        }}
-        textInputStyle={{
-          width: "100%",
-          height: 50,
-          paddingVertical: 12,
-          paddingHorizontal: 16,
-          fontFamily: "comfortaa-regular",
-          fontSize: 16,
-          color: "black",
-        }}
-        codeTextStyle={{
-          fontFamily: "comfortaa-regular",
-          height: 50,
-          lineHeight: 50,
-          fontSize: 16,
-          color: "black",
-        }}
-        countryPickerButtonStyle={{
-          width: 80,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        textInputProps={{ placeholderTextColor: "#9CA3AF" }}
-      />
+      <View className="mb-4">
+        <Text className="mb-1 font-comfortaa-regular text-[#828282] font-bold text-base ml-1">
+          {t("register.phone.label")}
+        </Text>
+
+        <PhoneInput
+          ref={phoneInputRef}
+          value={phone}
+          defaultCode="BE"
+          layout="second"
+          placeholder={t("register.phone.placeholder")}
+          onChangeText={(text) => {
+            onChange(text);
+          }}
+          onChangeFormattedText={(text) => {
+            onChange(text);
+          }}
+          containerStyle={{
+            width: "100%",
+            backgroundColor: "#F3F4F6",
+            borderRadius: 12,
+            borderWidth: 2,
+            borderColor: isFocused ? "#2548BC" : "transparent",
+            height: 56,
+            paddingVertical: 0,
+          }}
+          textContainerStyle={{
+            backgroundColor: "transparent",
+            paddingVertical: 0,
+            paddingHorizontal: 0,
+            borderTopRightRadius: 12,
+            borderBottomRightRadius: 12,
+          }}
+          textInputStyle={{
+            fontFamily: "comfortaa-regular",
+            fontSize: 16,
+            color: "#100D08",
+            height: 50,
+            paddingVertical: 0,
+          }}
+          codeTextStyle={{
+            fontFamily: "comfortaa-regular",
+            fontSize: 16,
+            color: "#100D08",
+            height: 24,
+            lineHeight: 24,
+          }}
+          countryPickerButtonStyle={{
+            width: 50,
+            borderTopLeftRadius: 12,
+            borderBottomLeftRadius: 12,
+          }}
+          textInputProps={{
+            placeholderTextColor: "#828282",
+            onFocus: () => setIsFocused(true),
+            onBlur: () => setIsFocused(false),
+            selectionColor: "#2548BC",
+          }}
+          withDarkTheme={false}
+          withShadow={false}
+          autoFocus={false}
+        />
+      </View>
+
       <PressableButton
         onPress={async () => onNext()}
-        disabled={!isValid}
+        disabled={false}
         title={t("register.continue")}
-        background={isValid ? Color.BLUE : Color.GRAY}
+        background={Color.BLUE}
       />
-    </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
