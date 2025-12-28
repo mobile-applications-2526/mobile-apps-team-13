@@ -6,9 +6,10 @@ import Header from "@/components/Header";
 import NotificationCard from "@/components/card/NotificationCard";
 import messageService from "@/services/messageService";
 import { Message } from "@/types/message";
-import { TriangleAlert, Siren, Info , MessageCircle} from "lucide-react-native";
+import { TriangleAlert, Siren, Info, MessageCircle } from "lucide-react-native";
 import { useAuth } from "@/components/auth/context/AuthContext";
 import { useTranslation } from "react-i18next";
+import FloatingActionButton from "@/components/FloatingActionButton";
 
 export default function TabTwoScreen() {
   const router = useRouter();
@@ -70,7 +71,9 @@ export default function TabTwoScreen() {
         </Text>
 
         {loading && messages.length === 0 && (
-          <Text className="text-gray-500 mt-4">{t("notifications.loadmessage")}</Text>
+          <Text className="text-gray-500 mt-4">
+            {t("notifications.loadmessage")}
+          </Text>
         )}
 
         {!loading && messages.length === 0 && (
@@ -94,12 +97,11 @@ export default function TabTwoScreen() {
           );
         })}
       </ScrollView>
-      <Pressable onPress={() => router.push('/createNotification')} className="absolute bottom-10 right-6">
-        <View className="bg-[#2548BC] px-4 py-3 rounded-full flex-row items-center shadow-lg">
-          <MessageCircle color="#FFFFFF" size={20} strokeWidth={2} />
-          <Text className="ml-3 text-white font-comfortaa-bold">{t("notifications.create")}</Text>
-        </View>
-      </Pressable>
+
+      <FloatingActionButton
+        onPress={() => router.push("/createNotification")}
+        icon={<MessageCircle color="#FFFFFF" size={24} strokeWidth={2} />}
+      />
     </SafeAreaView>
   );
 }
