@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, Text } from "react-native";
+import { Text, View } from "react-native";
 import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
 import AuthHeader from "@/components/auth/AuthHeader";
@@ -76,7 +76,7 @@ export const Step4Address = ({
     });
 
   return (
-    <KeyboardAvoidingView className="flex-1 justify-center">
+    <View className="flex-1 justify-center">
       <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
         {t("register.address.title")}
@@ -135,6 +135,6 @@ export const Step4Address = ({
         title={t("register.continue")}
         background={isValid ? Color.BLUE : Color.GRAY}
       />
-    </KeyboardAvoidingView>
+    </View>
   );
 };

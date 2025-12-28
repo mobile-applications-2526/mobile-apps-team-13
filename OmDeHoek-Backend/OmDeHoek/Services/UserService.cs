@@ -61,13 +61,18 @@ public class UserService(
                 : updatedValues.Username.ToUpper();
 
             user.PhoneNumber = updatedValues.PhoneNumber ?? user.PhoneNumber;
+            
+            user.Voornaam = updatedValues.FirstName ?? user.Voornaam;
+            user.Achternaam = updatedValues.LastName ?? user.Achternaam;
 
             await userManager.UpdateAsync(user);
+            
+            var newUser = uow.UserRepository.Update(user);
 
             await uow.Save();
             await uow.CommitTransaction();
 
-            return new UserDto(user, taal);
+            return new UserDto(newUser, taal);
         }
         catch (Exception e)
         {

@@ -74,6 +74,7 @@ export default function CreateNotification({
 
         loadUser();
     }, [token]);
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const isValid = title.length > 0 && content.length > 0;
 
@@ -210,14 +211,22 @@ export default function CreateNotification({
             placeholder={t("notifications.creation.titleplaceholder")}
             value={title}
             onChange={handleTitleChange}
-            />
+              isFocused={focusedField === "title"}
+          onFocus={() => setFocusedField("title")}
+          onBlur={() => setFocusedField(null)}
+          keyboardType="default"
+        />
 
             <LabeledInput
             label={t("notifications.creation.messageinput")}
             placeholder={t("notifications.creation.messageplaceholder")}
             value={content}
             onChange={handleContentChange}
-            multiline={true}
+            isFocused={focusedField === "content"}
+          onFocus={() => setFocusedField("content")}
+          onBlur={() => setFocusedField(null)}
+          keyboardType="default"
+          multiline={true}
             numberOfLines={10}
             containerStyle="h-80"
             />

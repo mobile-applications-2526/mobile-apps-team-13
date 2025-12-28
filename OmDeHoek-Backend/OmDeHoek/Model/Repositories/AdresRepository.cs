@@ -18,4 +18,11 @@ public class AdresRepository(DataContext ctx) : GenericRepository<Adres>(ctx, ct
             .Where(a => a.BewonerId == userId)
             .ToListAsync();
     }
+
+    public virtual async Task<List<Adres>> GetByIds(List<Guid> guids)
+    {
+        return await DbSet
+            .Where(a => guids.Contains(a.Id))
+            .ToListAsync();
+    }
 }

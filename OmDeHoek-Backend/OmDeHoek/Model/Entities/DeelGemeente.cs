@@ -15,6 +15,7 @@ public class DeelGemeente : IDataBaseEntity<DeelGemeente>
     [MaxLength(255)]
     public string NaamFr { get; set; } = string.Empty;
     public List<Buurt> Buurten { get; init; } = [];
+    public List<Message> ExternalMessages { get; init; } = [];
 
     public DeelGemeente() { }
 

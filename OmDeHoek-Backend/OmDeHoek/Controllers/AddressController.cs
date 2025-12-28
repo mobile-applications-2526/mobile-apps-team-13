@@ -68,4 +68,60 @@ public class AddressController(AdresService adresService) : ControllerBase
             return ExceptionHandler.HandleException(e);
         }
     }
+
+    /// <summary>
+    ///   Updates one or more addresses for the authenticated user.
+    /// </summary>
+    /// <param name="addresses">
+    ///  The list of addresses to update with their new details.
+    /// </param>
+    /// <returns>
+    ///    An <see cref="ActionResult{AddressDto}"/> containing the updated addresses on success,
+    /// </returns>
+    /// <remarks>
+    ///  Requires authentication. The Authorization header bearer token is forwarded to the service.
+    /// </remarks>
+    [HttpPut]
+    [Authorize]
+    public async Task<ActionResult<AddressDto>> UpdateAdres([FromBody] List<UpdateAdress> addresses)
+    {
+        try
+        {
+            var token = Request.Headers.Authorization.ToString().Replace("Bearer ", "");
+            var result = await adresService.UpdateAdressen(addresses, token);
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return ExceptionHandler.HandleException(e);
+        }
+    }
+    
+    /// <summary>
+    ///  Deletes an address by its ID for the authenticated user.
+    /// </summary>
+    /// <param name="addressId">
+    /// The ID of the address to delete.
+    /// </param>
+    /// <returns>
+    ///   An <see cref="ActionResult{MessageResponseDto}"/> indicating success or an error response
+    /// </returns>
+    /// <remarks>
+    ///  Requires authentication. The Authorization header bearer token is forwarded to the service.
+    /// </remarks>
+    [HttpDelete("{addressId}")]
+    [Authorize]
+    public async Task<ActionResult<MessageResponseDto>> DeleteAdres(Guid addressId)
+    {
+        try
+        {
+            var token = Request.Headers.Authorization.ToString().Replace("Bearer ", "");
+            await adresService.DeleteAdress(addressId, token);
+            return Ok(new MessageResponseDto("Address successfully deleted"));
+        }
+        catch (Exception e)
+        {
+            return ExceptionHandler.HandleException(e);
+        }
+    }
 }

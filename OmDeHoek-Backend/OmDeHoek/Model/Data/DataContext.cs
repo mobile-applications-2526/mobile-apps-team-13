@@ -81,6 +81,11 @@ public class DataContext : IdentityUserContext<User>
                 .WithMany(g => g.DeelGemeentes)
                 .HasForeignKey(dg => dg.NisCodeGemeente)
                 .OnDelete(DeleteBehavior.Cascade);
+            
+            entity.HasMany(dg => dg.ExternalMessages)
+                .WithOne()
+                .HasForeignKey(em => em.Nis6DeelGemeente)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         builder.Entity<Buurt>(entity =>

@@ -16,6 +16,11 @@ public class Message() : IDataBaseEntity<Message>
     public string Content { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public MessageSeverity Severity { get; set; }
+    
+    [MaxLength(6)]
+    public string? Nis6DeelGemeente { get; set; } // For shared messages in 1 deelgemeente
+    public DeelGemeente? DeelGemeente { get; set; }
+    
     public List<MessageReaction> Comments { get; init; } = [];
     public List<UserLikedPost> LikedBy { get; init; } = [];
 

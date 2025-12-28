@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  Text,
-  View,
-  Platform,
-  Pressable,
-  Modal,
-  KeyboardAvoidingView,
-} from "react-native";
+import { Text, View, Platform, Pressable, Modal } from "react-native";
 import DateTimePicker, {
   type DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
@@ -72,11 +65,7 @@ export const Step3BirthDate = ({
   });
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 justify-center"
-      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
-    >
+    <View className="flex-1 justify-center">
       <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
         {t("register.birthdate.title")}
@@ -86,7 +75,7 @@ export const Step3BirthDate = ({
       </Text>
 
       <View className="mb-4">
-        <Text className="mb-1 font-comfortaa-regular text-[#828282] font-bold text-sm ml-1">
+        <Text className="mb-1 font-comfortaa-regular text-[#828282] font-bold text-base ml-1">
           {t("register.birthdate.birthdate")}
         </Text>
 
@@ -186,6 +175,6 @@ export const Step3BirthDate = ({
         title={t("register.continue")}
         background={isDateSelected ? Color.BLUE : Color.GRAY}
       />
-    </KeyboardAvoidingView>
+    </View>
   );
 };

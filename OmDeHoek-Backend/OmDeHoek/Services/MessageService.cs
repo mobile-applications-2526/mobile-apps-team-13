@@ -2,7 +2,6 @@
 using OmDeHoek.Model.Commands.Message;
 using OmDeHoek.Model.DTO.Message;
 using OmDeHoek.Model.Entities;
-using OmDeHoek.Model.Enums;
 using OmDeHoek.Model.Exceptions;
 
 namespace OmDeHoek.Services;
@@ -28,23 +27,21 @@ public class MessageService(
                 throw new ResourceNotFoundException($"Neighborhood with Id {message.NeighborhoodCode} does not exist.",
                     "NeighborhoodCode");
 
-            if (!Enum.TryParse(message.Severity, out MessageSeverity severity))
-                throw new InvalidInputException(
-                    "Message severity has to be one of the following: \"Informational\",\"Warning\", \"Critical\"",
-                    "Severity");
-
             var newMessage = new Message
             {
                 Buurt = buurt,
                 CreatedAt = DateTime.UtcNow,
                 Content = message.Content,
                 User = user,
-                Severity = severity,
+                Severity = message.Severity,
                 BuurtSectorCode = buurt.StatistischeSectorCode,
-                UserId = userId
+                UserId = userId,
+                Title = message.Title
             };
 
-            var ontvangendeBuurten = new HashSet<string> { buurt.StatistischeSectorCode };
+            // voor notifications
+            var ontvangendeBuurten = new HashSet<string> {buurt.StatistischeSectorCode};
+
             if (!message.NeighborhoodOnly)
             {
                 var deelgemeente = await uow.DeelgemeenteRepository.GetByNis6Async(buurt.Nis6DeelGemeente);
@@ -52,8 +49,13 @@ public class MessageService(
                     throw new ResourceNotFoundException($"Borough with Nis6 {buurt.Nis6DeelGemeente} does not exist",
                         "deelgemeenteId");
                 foreach (var b in deelgemeente.Buurten) ontvangendeBuurten.Add(b.StatistischeSectorCode);
+
+                newMessage.Nis6DeelGemeente = deelgemeente.Nis6Code;
+                newMessage.DeelGemeente = deelgemeente;
             }
 
+            // voor notifications
+            /*
             var eventName = severity switch
             {
                 MessageSeverity.Informational => "ReceiveInformationalMessage",
@@ -61,8 +63,11 @@ public class MessageService(
                 MessageSeverity.Critical => "ReceiveCriticalMessage",
                 _ => throw new InvalidInputException("Invalid message severity", "Severity")
             };
+            */
 
             var savedMessage = await uow.MessageRepository.Insert(newMessage);
+
+            await uow.Save();
             await uow.CommitTransaction();
 
             return new MessageDto(savedMessage);
@@ -74,7 +79,8 @@ public class MessageService(
         }
     }
 
-    public async Task<List<MessageDto>> GetFeedMessages(string token, int page, int pageSize, string? postcode, string? buurtSectorCode)
+    public async Task<List<MessageDto>> GetFeedMessages(string token, int page, int pageSize, string? postcode,
+        string? buurtSectorCode)
     {
         var userId = tokenService.GetUserIdFromToken(token);
 
@@ -88,18 +94,22 @@ public class MessageService(
         if (postcode is not null)
         {
             var postcodeGemeente = (await uow.GemeenteRepository.SearchByPostCodeAsync(postcode)).FirstOrDefault();
-            if (postcodeGemeente is null) throw new ResourceNotFoundException($"No gemeente found with postcode {postcode}", "Postcode");
+            if (postcodeGemeente is null)
+                throw new ResourceNotFoundException($"No gemeente found with postcode {postcode}", "Postcode");
         }
-        
+
         if (buurtSectorCode is not null)
         {
             var buurt = await uow.BuurtRepository.GetByStatistischeSectorCodeAsync(buurtSectorCode);
-            if (buurt is null) throw new ResourceNotFoundException($"No buurt found with sector code {buurtSectorCode}", "BuurtSectorCode");
+            if (buurt is null)
+                throw new ResourceNotFoundException($"No buurt found with sector code {buurtSectorCode}",
+                    "BuurtSectorCode");
         }
-        
-        var messages = await uow.MessageRepository.GetFeedMessagesAsync(page, pageSize, userId, postcode, buurtSectorCode);
-        
-        return messages.Select(m => new MessageDto(m)).ToList();
+
+        var messages =
+            await uow.MessageRepository.GetFeedMessagesAsync(page, pageSize, userId, postcode, buurtSectorCode);
+
+        return messages.Select(m => new MessageDto(m, m.LikedBy.Any(lb => lb.UserId == userId && lb.IsLiked))).ToList();
     }
 
     public async Task<MessageReactionDto> RespondToMessage(string token, RespondToMessage response)
@@ -110,10 +120,12 @@ public class MessageService(
             var userId = tokenService.GetUserIdFromToken(token);
             var user = await uow.UserRepository.GetByIdAsync(userId);
             if (user is null) throw new UnauthorizedException("User not found", "User");
-            
+
             var message = await uow.MessageRepository.GetById(response.MessageId);
-            if (message is null) throw new ResourceNotFoundException($"Message with Id {response.MessageId} does not exist.", "MessageId");
-            
+            if (message is null)
+                throw new ResourceNotFoundException($"Message with Id {response.MessageId} does not exist.",
+                    "MessageId");
+
             var reaction = new MessageReaction
             {
                 MessageId = response.MessageId,
@@ -121,8 +133,9 @@ public class MessageService(
                 Reaction = response.Content,
                 CreatedAt = DateTime.UtcNow
             };
-            
+
             var savedReaction = await uow.MessageReactionRepository.Insert(reaction);
+            await uow.Save();
             await uow.CommitTransaction();
             return new MessageReactionDto(savedReaction);
         }
@@ -141,9 +154,10 @@ public class MessageService(
             var userId = tokenService.GetUserIdFromToken(token);
             var user = await uow.UserRepository.GetByIdAsync(userId);
             if (user is null) throw new UnauthorizedException("User not found", "User");
-            
+
             var message = await uow.MessageRepository.GetById(messageId);
-            if (message is null) throw new ResourceNotFoundException($"Message with Id {messageId} does not exist.", "MessageId");
+            if (message is null)
+                throw new ResourceNotFoundException($"Message with Id {messageId} does not exist.", "MessageId");
 
             var existingLike = await uow.UserLikedPostRepository.GetUserLikeStatusAsync(userId, messageId);
             if (existingLike is null)
@@ -154,12 +168,13 @@ public class MessageService(
                     PostId = messageId,
                     IsLiked = true
                 };
-                
+
                 await uow.UserLikedPostRepository.Insert(like);
+                await uow.Save();
                 await uow.CommitTransaction();
                 return new MessageDto(message);
             }
-            
+
             existingLike.IsLiked = !existingLike.IsLiked;
             uow.UserLikedPostRepository.Update(existingLike);
             await uow.Save();

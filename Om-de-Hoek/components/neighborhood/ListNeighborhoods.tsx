@@ -12,7 +12,8 @@ type Props = {
   neighborhoods: Neighborhoods[];
   onJoined?: (neighboorhoodId: string) => void;
   onLeft?: (neighboorhoodId: string) => void;
-  authToken?: string;
+  authToken?: string | null;
+  isMemberView?: boolean;
 };
 
 const ListNeighborhoods = ({
@@ -20,6 +21,7 @@ const ListNeighborhoods = ({
   onJoined,
   onLeft,
   authToken,
+  isMemberView = false,
 }: Props) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { token } = useAuth();
@@ -73,19 +75,23 @@ const ListNeighborhoods = ({
       </View>
       <View className="px-1 mt-6 mb-10">
         {filteredNeighborhoods.map((item) => {
+          const isJustJoined = joinedSectors.includes(item.statischeSectorCode);
+
+          let action: "join" | "leave" = isJustJoined ? "leave" : "join";
+          if (isMemberView) {
+            action = "leave";
+          }
+
+          const participantCount =
+            (item.residents?.length || 0) +
+            (isJustJoined && !isMemberView ? 1 : 0);
+
           return (
             <NeighborhoodGlassCard
               key={item.statischeSectorCode}
               name={item.name}
-              participants={
-                item.residents.length +
-                (joinedSectors.includes(item.statischeSectorCode) ? 1 : 0)
-              }
-              action={
-                joinedSectors.includes(item.statischeSectorCode)
-                  ? "leave"
-                  : "join"
-              }
+              participants={participantCount}
+              action={action}
               onJoin={() => handleJoin(item.statischeSectorCode)}
               onLeave={() => handleLeave(item.statischeSectorCode)}
             />
