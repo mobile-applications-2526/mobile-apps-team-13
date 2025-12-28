@@ -130,7 +130,9 @@
       "titleplaceholder": "Bv. Wegenwerken aan de straat",
       "messageinput": "Bericht:",
       "messageplaceholder": "Typ hier...",
-      "submit": "Verzenden"
+      "submit": "Verzenden",
+      "selectneighborhood": "Selecteer buurt",
+      "close": "Sluiten"
     }
   }
 }

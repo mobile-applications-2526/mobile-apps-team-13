@@ -1,15 +1,24 @@
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import messageService from "@/services/messageService";
 import { Message } from "@/types/message";
 import { useAuth } from "@/components/auth/context/AuthContext";
+import Back from "@/components/Back";
+import { ArrowLeft } from "lucide-react-native";
+import Header from "@/components/Header";
+import { NotificationMessage } from "@/components/NotificationMessage";
+import CommentSection from "@/components/comments/CommentSection";
+import { useTranslation } from "react-i18next";
 
 export default function MessageDetailScreen() {
   const { token } = useAuth();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [message, setMessage] = useState<Message | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const HOME_PATH = "/";
+  const { t } = useTranslation();
 
   useEffect(() => {
     const loadMessage = async () => {
@@ -54,6 +63,12 @@ export default function MessageDetailScreen() {
       )}
 
       <Text className="font-bold">Likes: {message.totalLikes}</Text>
+       <View className="flex-row items-center mt-2 mb-4">
+                <Back icon={<ArrowLeft color="#100D08" size={20}/>} onBack={() => router.push(HOME_PATH)}/>
+                <Header title="Waarschuwing" subtitle="Marter gespot: Handboogstraat 6u37" />
+            </View>
+            <NotificationMessage name="Jan Peeters" content="Op bovengenoemd tijdstip is er een marter waargenomen in de Handboogstraat. De melding betreft enkel een waarneming; er is momenteel geen melding gemaakt van specifieke overlast of schade (zoals aan voertuigkabels)." />
+            <CommentSection notificationId="1" />
     </ScrollView>
   );
 }

@@ -49,13 +49,14 @@ const fetchMessageFeed = async (
 const sendMessage = async (
   token: string | null,
   payload: {
+    title: string;
     content: string;
     severity: string;
-    neighborhoodCode: string;
+    neighborhoodCode: string | null;
     neighborhoodOnly: boolean;
   }
 ): Promise<Message> => {
-  if (!token) throw new Error("No token provided");
+  if (!token) throw new Error("No token provide");
 
   const url = `${API_URL}/api/message/send`;
   console.log("Sending message with", url, "payload:", payload);

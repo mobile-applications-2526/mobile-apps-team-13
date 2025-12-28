@@ -3,6 +3,7 @@ export type MessageSeverity = "Informational" | "Warning" | "Critical";
 export type Message = {
     userName: string;
     userTag: string;
+    title: string;
     content: string;
     createdAt: string;
     severity: MessageSeverity;

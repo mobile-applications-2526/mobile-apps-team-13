@@ -131,7 +131,9 @@
       "titleplaceholder": "E.g. Roadworks on the street",
       "messageinput": "Message:",
       "messageplaceholder": "Type here...",
-      "submit": "Send notification"
+      "submit": "Send notification",
+      "selectneighborhood": "Select neighborhood",
+      "close": "Close"
     }
   }
 }
