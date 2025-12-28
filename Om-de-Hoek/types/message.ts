@@ -13,4 +13,5 @@ export type Message = {
     }[];
     totalLikes: number;
     id: string;
+    likedByUser: boolean;
 }

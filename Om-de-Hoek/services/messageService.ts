@@ -1,4 +1,5 @@
 import { Message } from "@/types/message";
+import type { Comment } from "@/types/comment";
 
 const API_URL = process.env.EXPO_PUBLIC_API_PATH;
 
@@ -27,7 +28,6 @@ const fetchMessageFeed = async (
   const query = params.toString();
   const url = `${API_URL}/api/message/feed?${query}`;
 
-  console.log("Fetching messages from:", url);
 
   const response = await fetch(url, {
     method: "GET",
@@ -59,7 +59,6 @@ const sendMessage = async (
   if (!token) throw new Error("No token provide");
 
   const url = `${API_URL}/api/message/send`;
-  console.log("Sending message with", url, "payload:", payload);
 
   const response = await fetch(url, {
     method: "POST",
@@ -91,4 +90,22 @@ const likeMessage = async (token: string, messageId: string) => {
   });
 };
 
-export default { fetchMessageFeed, sendMessage, likeMessage };
+type RespondPayload = {
+  messageId: string;
+  content: string;
+};
+
+const respondToMessage = async (token: string , payload: RespondPayload) => {
+  const url = `${API_URL}/api/message/respond`;
+
+  await fetch(url, {
+    method: "POST",
+    headers: {
+      "Authorization" : `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+};
+
+export default { fetchMessageFeed, sendMessage, likeMessage, respondToMessage };

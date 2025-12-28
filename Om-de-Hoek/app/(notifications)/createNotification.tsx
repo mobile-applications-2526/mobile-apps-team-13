@@ -122,7 +122,6 @@ export default function CreateNotification({
     };
 
     const handleSendNotification = async () => {
-        console.log(title, content, onlyMyNeighborhood, selectedType, selectedNeighborhoodCode);
         try {
              await messageService.sendMessage(token, {
                 title,
