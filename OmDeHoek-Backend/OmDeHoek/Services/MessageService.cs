@@ -41,19 +41,31 @@ public class MessageService(
                 User = user,
                 Severity = severity,
                 BuurtSectorCode = buurt.StatistischeSectorCode,
-                UserId = userId
+                UserId = userId,
+                Title = message.Title
             };
-
+            
+            // voor notifications
             var ontvangendeBuurten = new HashSet<string> { buurt.StatistischeSectorCode };
+            
             if (!message.NeighborhoodOnly)
             {
                 var deelgemeente = await uow.DeelgemeenteRepository.GetByNis6Async(buurt.Nis6DeelGemeente);
                 if (deelgemeente is null)
                     throw new ResourceNotFoundException($"Borough with Nis6 {buurt.Nis6DeelGemeente} does not exist",
                         "deelgemeenteId");
-                foreach (var b in deelgemeente.Buurten) ontvangendeBuurten.Add(b.StatistischeSectorCode);
+                foreach (var b in deelgemeente.Buurten)
+                {
+                    
+                    ontvangendeBuurten.Add(b.StatistischeSectorCode);
+                }
+                
+                newMessage.Nis6DeelGemeente = deelgemeente.Nis6Code;
+                newMessage.DeelGemeente = deelgemeente;
             }
 
+            // voor notifications
+            /*
             var eventName = severity switch
             {
                 MessageSeverity.Informational => "ReceiveInformationalMessage",
@@ -61,8 +73,11 @@ public class MessageService(
                 MessageSeverity.Critical => "ReceiveCriticalMessage",
                 _ => throw new InvalidInputException("Invalid message severity", "Severity")
             };
+            */
 
             var savedMessage = await uow.MessageRepository.Insert(newMessage);
+            
+            await uow.Save();
             await uow.CommitTransaction();
 
             return new MessageDto(savedMessage);
@@ -156,6 +171,7 @@ public class MessageService(
                 };
                 
                 await uow.UserLikedPostRepository.Insert(like);
+                await uow.Save();
                 await uow.CommitTransaction();
                 return new MessageDto(message);
             }

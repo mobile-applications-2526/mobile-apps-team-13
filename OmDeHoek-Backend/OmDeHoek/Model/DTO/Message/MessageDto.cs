@@ -7,10 +7,12 @@ public class MessageDto
     public string UserName { get; set; } = "";
     public string UserTag { get; set; } = "";
     public string Content { get; set; } = "";
+    public string Title { get; set; } = "";
     public DateTime CreatedAt { get; set; }
     public MessageSeverity Severity { get; set; }
     public List<MessageReactionDto> Reactions { get; set; }
     public uint TotalLikes { get; init; }
+    public Guid Id { get; set; }
 
     public MessageDto() { }
 
@@ -24,5 +26,8 @@ public class MessageDto
         Reactions = message.Comments
             .Select(r => new MessageReactionDto(r))
             .ToList();
+        Title = message.Title;
+        TotalLikes = (uint)message.LikedBy.Count;
+        Id = message.Id;
     }
 }

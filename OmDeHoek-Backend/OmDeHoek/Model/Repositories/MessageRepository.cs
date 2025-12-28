@@ -25,12 +25,16 @@ public class MessageRepository(DataContext ctx) : GenericRepository<Message>(ctx
             query = query.Where(m => m.BuurtSectorCode == buurtSectorCode);
         }
         
-        query = query.Where(m => m.Buurt!.Bewoners.Any(ub => ub.UserId == userId));
+        query = query.Where(m => m.Buurt!.Bewoners.Any(ub => ub.UserId == userId) || 
+                                 (m.DeelGemeente != null && m.DeelGemeente.Buurten.Any(b => b.Bewoners.Any(ub => ub.UserId == userId))));
 
         query = query
             .OrderByDescending(m => m.CreatedAt)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize);
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .Include(m => m.User)
+            .Include(m => m.Comments)
+            .Include(m => m.LikedBy);
 
         return await query.ToListAsync();
     }
