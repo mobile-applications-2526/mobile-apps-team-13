@@ -42,6 +42,7 @@ export default function CreateNotification({
   const [selectedType, setSelectedType] = useState<
     "informatief" | "waarschuwing" | "noodgeval"
   >(typeProp ?? "informatief");
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const isValid = title.length > 0 && content.length > 0;
 
@@ -146,6 +147,10 @@ export default function CreateNotification({
           placeholder={t("notifications.creation.titleplaceholder")}
           value={title}
           onChange={handleTitleChange}
+          isFocused={focusedField === "title"}
+          onFocus={() => setFocusedField("title")}
+          onBlur={() => setFocusedField(null)}
+          keyboardType="default"
         />
 
         <LabeledInput
@@ -153,6 +158,10 @@ export default function CreateNotification({
           placeholder={t("notifications.creation.messageplaceholder")}
           value={content}
           onChange={handleContentChange}
+          isFocused={focusedField === "content"}
+          onFocus={() => setFocusedField("content")}
+          onBlur={() => setFocusedField(null)}
+          keyboardType="default"
           multiline={true}
           numberOfLines={10}
           containerStyle="h-80"
