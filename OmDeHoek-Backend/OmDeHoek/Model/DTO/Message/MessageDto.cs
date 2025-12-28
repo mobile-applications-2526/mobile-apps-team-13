@@ -13,11 +13,13 @@ public class MessageDto
     public List<MessageReactionDto> Reactions { get; set; }
     public uint TotalLikes { get; init; }
     public Guid Id { get; set; }
+    public bool LikedByUser { get; set; } = false;
 
     public MessageDto() { }
 
-    public MessageDto(Entities.Message message)
+    public MessageDto(Entities.Message message, bool likedByUser = false) 
     {
+        LikedByUser = likedByUser;
         UserName = message.User is not null ? $"{message.User.Voornaam} {message.User.Achternaam}" : "verwijderd account";
         UserTag = message.User?.UserName ?? "unkown";
         Content = message.Content;

@@ -109,7 +109,7 @@ public class MessageService(
         var messages =
             await uow.MessageRepository.GetFeedMessagesAsync(page, pageSize, userId, postcode, buurtSectorCode);
 
-        return messages.Select(m => new MessageDto(m)).ToList();
+        return messages.Select(m => new MessageDto(m, m.LikedBy.Any(lb => lb.UserId == userId && lb.IsLiked))).ToList();
     }
 
     public async Task<MessageReactionDto> RespondToMessage(string token, RespondToMessage response)
