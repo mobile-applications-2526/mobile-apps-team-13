@@ -11,7 +11,7 @@ import Back from "@/components/Back";
 import { ArrowLeft, Save } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import LabeledInput from "@/components/settings/LabeledInput";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/components/auth/context/AuthContext";
 import UserService from "@/services/userService";
 import { useTranslation } from "react-i18next";
@@ -37,6 +37,9 @@ export default function MyDataPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [initialValues, setInitialValues] = useState<{ [key: string]: string }>(
+    {}
+  );
 
   useEffect(() => {
     if (!token) return;
@@ -48,20 +51,38 @@ export default function MyDataPage() {
 
         const data = await response.json();
 
-        setEmail(data.email || "");
-        setUsername(data.userName || "");
-        setFirstName(data.firstName || "");
-        setLastName(data.lastName || "");
-        setBirthDate(data.birthDate || "");
-        setPhoneNumber(data.phoneNumber || "");
+        const initialEmail = data.email || "";
+        const initialUsername = data.userName || "";
+        const initialFirstName = data.firstName || "";
+        const initialLastName = data.lastName || "";
+        const initialBirthDate = data.birthDate || "";
+        const initialPhoneNumber = data.phoneNumber || "";
+        let initialAddress1 = "";
+        let initialAddress2 = "";
 
         if (Array.isArray(data.addresses)) {
-          setAddress1(data.addresses[0]?.fullAdress || "");
-          setAddress2(data.addresses[1]?.fullAdress || "");
-        } else {
-          setAddress1("");
-          setAddress2("");
+          initialAddress1 = data.addresses[0]?.fullAdress || "";
+          initialAddress2 = data.addresses[1]?.fullAdress || "";
         }
+
+        setEmail(initialEmail);
+        setUsername(initialUsername);
+        setFirstName(initialFirstName);
+        setLastName(initialLastName);
+        setBirthDate(initialBirthDate);
+        setPhoneNumber(initialPhoneNumber);
+        setAddress1(initialAddress1);
+        setAddress2(initialAddress2);
+
+        setInitialValues({
+          email: initialEmail,
+          username: initialUsername,
+          firstName: initialFirstName,
+          lastName: initialLastName,
+          phoneNumber: initialPhoneNumber,
+          address1: initialAddress1,
+          address2: initialAddress2,
+        });
       } catch (error) {
         console.error("Failed to fetch user data", error);
       } finally {
@@ -71,6 +92,29 @@ export default function MyDataPage() {
 
     fetchUserData();
   }, [token]);
+
+  const hasChanges = useMemo(() => {
+    if (!initialValues) return false;
+
+    return (
+      email !== initialValues.email ||
+      username !== initialValues.username ||
+      firstName !== initialValues.firstName ||
+      lastName !== initialValues.lastName ||
+      phoneNumber !== initialValues.phoneNumber ||
+      address1 !== initialValues.address1 ||
+      address2 !== initialValues.address2
+    );
+  }, [
+    email,
+    username,
+    firstName,
+    lastName,
+    phoneNumber,
+    address1,
+    address2,
+    initialValues,
+  ]);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -87,6 +131,14 @@ export default function MyDataPage() {
       if (!response.ok) {
         throw new Error("Failed to update user data");
       }
+
+      setInitialValues({
+        email,
+        username,
+        firstName,
+        lastName,
+        phoneNumber,
+      });
 
       Alert.alert("Succes", "Je gegevens zijn opgeslagen.");
     } catch (error) {
@@ -223,6 +275,7 @@ export default function MyDataPage() {
         <FloatingActionButton
           onPress={handleSave}
           isLoading={isSaving}
+          disabled={!hasChanges}
           icon={<Save color="white" size={24} />}
         />
       </View>
