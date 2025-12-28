@@ -138,6 +138,7 @@ public class MessageService(
             };
             
             var savedReaction = await uow.MessageReactionRepository.Insert(reaction);
+            await uow.Save();
             await uow.CommitTransaction();
             return new MessageReactionDto(savedReaction);
         }

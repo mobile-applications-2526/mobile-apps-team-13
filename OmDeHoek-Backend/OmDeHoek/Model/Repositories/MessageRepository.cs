@@ -34,6 +34,7 @@ public class MessageRepository(DataContext ctx) : GenericRepository<Message>(ctx
             .Take(pageSize)
             .Include(m => m.User)
             .Include(m => m.Comments)
+                .ThenInclude(c => c.User)
             .Include(m => m.LikedBy);
 
         return await query.ToListAsync();
