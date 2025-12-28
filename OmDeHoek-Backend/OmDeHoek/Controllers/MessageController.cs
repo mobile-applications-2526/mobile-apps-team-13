@@ -16,10 +16,14 @@ public class MessageController(MessageService service) : ControllerBase
     /// <summary>
     /// Sends a message.
     /// </summary>
-    /// <param name="message">The message to send.</param>
+    /// <param name="message">
+    ///  The message to send.
+    /// </param>
     /// <returns>An <see cref="ActionResult{MessageDto}"/> containing the sent message.</returns>
     /// <remarks>
     /// Requires authentication. The Authorization header bearer token is forwarded to the service.
+    /// If neighborhoodOnly is true, the message will only be sent to users in the same neighborhood.
+    /// If neighborhoodOnly is false, the message will be sent to all users in the same borough.
     /// </remarks>
     [HttpPost("send")]
     [Authorize]
