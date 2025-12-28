@@ -14,6 +14,8 @@ type Props = {
   secureTextEntry?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
+  multiline?: boolean;
+  numberOfLines?: number;
 };
 
 export default function LabeledInput({
@@ -30,6 +32,8 @@ export default function LabeledInput({
   secureTextEntry = false,
   leftIcon,
   rightIcon,
+  multiline = false,
+  numberOfLines,
 }: Props) {
   return (
     <View className="mb-6">
@@ -39,7 +43,7 @@ export default function LabeledInput({
 
       <View
         className={`
-          flex-row items-center rounded-xl px-4 py-2
+          flex-row rounded-xl px-4 py-2
           ${!editable ? "opacity-60" : ""}
           ${
             isFocused
@@ -47,12 +51,17 @@ export default function LabeledInput({
               : "bg-[#F3F4F6] border-2 border-transparent"
           } 
           ${containerStyle}
+          ${multiline ? "items-start pt-3" : "items-center"} 
         `}
       >
-        {leftIcon && <View className="mr-2">{leftIcon}</View>}
+        {leftIcon && (
+          <View className={`mr-2 ${multiline ? "mt-1" : ""}`}>{leftIcon}</View>
+        )}
+
         <TextInput
           className={`
             flex-1 font-comfortaa-regular text-base text-[#100D08]
+            ${multiline ? "h-full" : ""}
           `}
           value={value}
           onChangeText={onChange}
@@ -63,8 +72,14 @@ export default function LabeledInput({
           placeholder={placeholder}
           placeholderTextColor="#828282"
           secureTextEntry={secureTextEntry}
+          multiline={multiline}
+          numberOfLines={numberOfLines}
+          style={{ textAlignVertical: multiline ? "top" : "center" }}
         />
-        {rightIcon && <View className="ml-2">{rightIcon}</View>}
+
+        {rightIcon && (
+          <View className={`ml-2 ${multiline ? "mt-1" : ""}`}>{rightIcon}</View>
+        )}
       </View>
     </View>
   );
