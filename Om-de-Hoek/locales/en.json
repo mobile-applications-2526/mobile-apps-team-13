@@ -111,5 +111,27 @@
       "title": "My",
       "subtitle": "Neighborhoods"
     }
+  },
+  "notifications": {
+    "subtitle": "Latest notifications",
+    "empty": "No notifications available",
+    "create": "Create notification",
+    "loadmessage": "Loading messages...",
+    "creation": {
+      "title": "Speak",
+      "subtitle": "Up",
+      "type": "Type of notification",
+      "tags":{
+        "info": "Informative",
+        "warning": "Warning",
+        "emergency": "Emergency"
+      },
+      "neighborhood": "Only my neighborhood",
+      "titleinput": "Title:",
+      "titleplaceholder": "E.g. Roadworks on the street",
+      "messageinput": "Message:",
+      "messageplaceholder": "Type here...",
+      "submit": "Send notification"
+    }
   }
 }

@@ -110,5 +110,27 @@
       "title": "Mijn",
       "subtitle": "Buurten"
     }
+  },
+  "notifications": {
+    "subtitle": "Laatste meldingen",
+    "empty": "Geen meldingen beschikbaar",
+    "create": "Maak een melding",
+    "loadmessage": "Berichten laden...",
+    "creation": {
+      "title": "Laat van",
+      "subtitle": "je horen",
+      "type": "Type melding",
+      "tags":{
+        "info": "Informatief",
+        "warning": "Waarschuwing",
+        "emergency": "Noodgeval"
+      },
+      "neighborhood": "Alleen mijn buurt",
+      "titleinput": "Titel:",
+      "titleplaceholder": "Bv. Wegenwerken aan de straat",
+      "messageinput": "Bericht:",
+      "messageplaceholder": "Typ hier...",
+      "submit": "Verzenden"
+    }
   }
 }
