@@ -1,15 +1,11 @@
 import {Modal, Pressable, Text, TouchableOpacity, View} from "react-native";
 import {Check} from "lucide-react-native";
-import {useRouter} from "expo-router";
 import {useState} from "react";
 import SelectInput from "@/components/settings/SelectInput";
 import {useTranslation} from "react-i18next";
 import SettingsHeader from "@/components/settings/SettingsHeader";
 
-const PROFILE_PATH = "/(tabs)/profile";
-
 export default function MyPreferencesPage() {
-  const router = useRouter();
 
   const { t, i18n } = useTranslation();
 

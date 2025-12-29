@@ -10,10 +10,7 @@ import {User} from "@/types/user";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import SettingsHeader from "@/components/settings/SettingsHeader";
 
-const PROFILE_PATH = "/(tabs)/profile";
-
 export default function MyDataPage() {
-  const router = useRouter();
   const { token } = useAuth();
   const { t } = useTranslation();
 

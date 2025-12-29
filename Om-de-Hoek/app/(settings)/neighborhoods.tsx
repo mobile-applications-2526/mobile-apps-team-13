@@ -11,8 +11,6 @@ import FloatingActionButton from "@/components/FloatingActionButton";
 import SettingsHeader from "@/components/settings/SettingsHeader";
 import ListNeighborhoods from "@/components/neighborhood/ListNeighborhoods";
 
-const PROFILE_PATH = "/(tabs)/profile";
-
 export default function MyNeighborhoodsPage() {
   const [neighborhoods, setNeighborhoods] = useState<Neighborhoods[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);

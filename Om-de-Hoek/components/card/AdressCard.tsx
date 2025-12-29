@@ -22,7 +22,6 @@ const AdressCard = ({
                         isOpened,
                         startEditing,
                         onChange,
-                        onClose,
                         onSave,
                         onCancel,
                         onDelete} : Props) => {
@@ -31,7 +30,7 @@ const AdressCard = ({
 
     const { t } = useTranslation();
 
-    const onStartEditing = (e: GestureResponderEvent) => {
+    const onStartEditing = () => {
         setBgEditButton('#0080ff20');
 
         startEditing();
