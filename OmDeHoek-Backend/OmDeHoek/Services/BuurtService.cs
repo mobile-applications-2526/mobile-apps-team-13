@@ -141,4 +141,11 @@ public class BuurtService(
         var buurten = await uow.BuurtRepository.GetByGemeentePostcodeAsync(postcode.Trim());
         return buurten.Select(b => new NeighborhoodDto(b, taal, negeerDeelgemeente: true)).ToList();
     }
+    
+    public async Task<List<NeighborhoodDto>> GetRecommendedForUser(string token, Languages taal = Languages.En)
+    {
+        var userId = tokenService.GetUserIdFromToken(token);
+        var buurten = await uow.BuurtRepository.GetRecommendedForUser(userId);
+        return buurten.Select(b => new NeighborhoodDto(b, taal)).ToList();
+    }
 }
