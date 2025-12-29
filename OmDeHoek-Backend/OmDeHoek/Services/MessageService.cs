@@ -187,4 +187,27 @@ public class MessageService(
             throw;
         }
     }
+    
+    public async Task<List<MessageDto>> GetMessagesByUser(string token, int pageSize = 20, int page = 0)
+    {
+        var userId = tokenService.GetUserIdFromToken(token);
+
+        var user = await uow.UserRepository.GetByIdAsync(userId);
+
+        if (user is null) throw new UnauthorizedException("User not found", "User");
+
+        var messages = await uow.MessageRepository.GetMessagesByUserIdAsync(userId, page, pageSize);
+
+        return messages.Select(m => new MessageDto(m, m.LikedBy.Any(lb => lb.UserId == userId && lb.IsLiked))).ToList();
+    }
+    
+    public async Task<MessageDto> GetMessageById(Guid messageId){
+
+        var message = await uow.MessageRepository.GetMessageByIdAsync(messageId);
+
+        if (message is null)
+            throw new ResourceNotFoundException($"Message with Id {messageId} does not exist.", "MessageId");
+
+        return new MessageDto(message);
+    }
 }
