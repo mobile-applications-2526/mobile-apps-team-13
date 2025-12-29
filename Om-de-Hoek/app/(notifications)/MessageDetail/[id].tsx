@@ -1,15 +1,22 @@
-import {router, useLocalSearchParams} from "expo-router";
-import {useEffect, useState} from "react";
-import {ScrollView, Text, View} from "react-native";
-import {Message} from "@/types/message";
+import { router, useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
+import {
+  ScrollView,
+  Text,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  ActivityIndicator,
+} from "react-native";
+import { Message } from "@/types/message";
 import Back from "@/components/Back";
-import {ArrowLeft} from "lucide-react-native";
+import { ArrowLeft, Key } from "lucide-react-native";
 import Header from "@/components/Header";
-import {NotificationMessage} from "@/components/NotificationMessage";
+import { NotificationMessage } from "@/components/NotificationMessage";
 import CommentSection from "@/components/comments/CommentSection";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 import userService from "@/services/userService";
-import {useAuth} from "@/components/auth/context/AuthContext";
+import { useAuth } from "@/components/auth/context/AuthContext";
 
 export default function MessageDetailScreen() {
   const { message: messageParam } = useLocalSearchParams<{
@@ -17,6 +24,7 @@ export default function MessageDetailScreen() {
   }>();
   const [message, setMessage] = useState<Message | null>(null);
   const [userTag, setUserTag] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const HOME_PATH = "/";
   const { t } = useTranslation();
@@ -33,6 +41,8 @@ export default function MessageDetailScreen() {
         } catch (e) {
           console.error("Failed to parse message param:", e);
           setMessage(null);
+        } finally {
+          setIsLoading(false);
         }
       } else {
         console.warn(
@@ -53,6 +63,8 @@ export default function MessageDetailScreen() {
         setUserTag(userData.userName);
       } catch (error) {
         console.error("Failed to fetch user data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -87,31 +99,52 @@ export default function MessageDetailScreen() {
   if (!message)
     return <Text className="p-4">{t("notifications.details.error")}</Text>;
 
+  if (isLoading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-white">
+        <ActivityIndicator size="large" color="#2548BC" animating={true} />
+      </View>
+    );
+  }
+
   return (
-    <ScrollView className="p-4 bg-white pt-12">
-      <View className="absolute left-0">
-        <Back
-          icon={<ArrowLeft color="#100D08" size={20} />}
-          onBack={() => router.push(HOME_PATH)}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1, backgroundColor: "white" }}
+    >
+      <ScrollView
+        className="p-4 bg-white pt-12"
+        style={{ flex: 1, paddingHorizontal: 24 }}
+        contentContainerStyle={{ paddingBottom: 100 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View className="absolute left-0">
+          <Back
+            icon={<ArrowLeft color="#100D08" size={20} />}
+            onBack={() => router.push(HOME_PATH)}
+          />
+        </View>
+        <View className="items-center mt-2 mb-4">
+          <Header
+            title={getSeverityConfig(message.severity).title}
+            subtitle={message.title}
+          />
+        </View>
+        <Text className="text-sm text-gray-500 mb-4">
+          {new Date(message.createdAt).toLocaleString("nl-BE")}
+        </Text>
+        <NotificationMessage
+          name={getDisplayName()}
+          content={message.content}
         />
-      </View>
-      <View className="items-center mt-2 mb-4">
-        <Header
-          title={getSeverityConfig(message.severity).title}
-          subtitle={message.title}
+        <CommentSection
+          notificationId={message.id}
+          initialComments={message.reactions}
+          initialLikes={message.totalLikes}
+          currentUserTag={userTag}
+          initialLiked={message.likedByUser}
         />
-      </View>
-      <Text className="text-sm text-gray-500 mb-4">
-        {new Date(message.createdAt).toLocaleString("nl-BE")}
-      </Text>
-      <NotificationMessage name={getDisplayName()} content={message.content} />
-      <CommentSection
-        notificationId={message.id}
-        initialComments={message.reactions}
-        initialLikes={message.totalLikes}
-        currentUserTag={userTag}
-        initialLiked={message.likedByUser}
-      />
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

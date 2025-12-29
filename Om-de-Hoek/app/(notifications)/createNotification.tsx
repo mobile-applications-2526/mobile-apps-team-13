@@ -1,15 +1,15 @@
 import Back from "@/components/Back";
-import {PressableButton} from "@/components/PressableButton";
-import {Color} from "@/types/StyleOptions";
-import {useRouter} from "expo-router";
-import {ArrowLeft} from "lucide-react-native";
-import {useEffect, useState} from "react";
-import {Pressable, Switch, Text, View} from "react-native";
-import {SafeAreaView} from "react-native-safe-area-context";
-import {useAuth} from "@/components/auth/context/AuthContext";
+import { PressableButton } from "@/components/PressableButton";
+import { Color } from "@/types/StyleOptions";
+import { useRouter } from "expo-router";
+import { ArrowLeft } from "lucide-react-native";
+import { useEffect, useState } from "react";
+import { Pressable, Switch, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuth } from "@/components/auth/context/AuthContext";
 import userService from "@/services/userService";
-import {Neighborhoods} from "@/types/neighborhood";
-import {useTranslation} from "react-i18next";
+import { Neighborhoods } from "@/types/neighborhood";
+import { useTranslation } from "react-i18next";
 import Header from "@/components/Header";
 import LabeledInput from "@/components/settings/LabeledInput";
 import Dropdown from "@/components/Dropdown";
@@ -56,7 +56,6 @@ export default function CreateNotification({
 
   useEffect(() => {
     const loadUser = async () => {
-      if (!token) return;
       try {
         const data = await userService.loggedInuser(token);
         setNeighborhoods(data.neighborhoods ?? []);

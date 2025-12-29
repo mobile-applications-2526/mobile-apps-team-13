@@ -6,6 +6,7 @@ import { Send } from "lucide-react-native";
 import { Color } from "@/types/StyleOptions";
 import messageService from "@/services/messageService";
 import { useTranslation } from "react-i18next";
+import LabeledInput from "../settings/LabeledInput";
 
 type Props = {
   notificationId: string;
@@ -13,15 +14,20 @@ type Props = {
   onCommentPosted?: (comment: any) => void;
 };
 
-const NewCommentForm: React.FC<Props> = ({ notificationId, currentUserTag = "", onCommentPosted }) => {
+const NewCommentForm: React.FC<Props> = ({
+  notificationId,
+  currentUserTag = "",
+  onCommentPosted,
+}) => {
   const [text, setText] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const { token } = useAuth();
+  const [isFocused, setIsFocused] = useState(false);
 
   const { t } = useTranslation();
 
   const submit = async () => {
-     if (!text.trim() || !token) return;
+    if (!text.trim() || !token) return;
 
     setSubmitting(true);
     try {
@@ -30,8 +36,9 @@ const NewCommentForm: React.FC<Props> = ({ notificationId, currentUserTag = "", 
         content: text.trim(),
       });
 
-      const newComment = { //dummy comment met zelfde input, voor display zonder opnieuw een request te maken.
-        author: currentUserTag, 
+      const newComment = {
+        //dummy comment met zelfde input, voor display zonder opnieuw een request te maken.
+        author: currentUserTag,
         content: text.trim(),
       };
 
@@ -42,29 +49,26 @@ const NewCommentForm: React.FC<Props> = ({ notificationId, currentUserTag = "", 
     } finally {
       setSubmitting(false);
     }
-    
   };
 
   return (
-    <View className="mt-4">
-      <View className="flex-row items-center border border-gray-200 rounded-lg">
-        <TextInput
-          placeholder={t("notifications.details.comments.addcomment")}
-          value={text}
-          onChangeText={setText}
-          multiline
-          className="flex-1 p-3 min-h-[48px] text-black"
+    <LabeledInput
+      placeholder={t("notifications.details.comments.addcomment")}
+      value={text}
+      onChange={setText}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
+      isFocused={isFocused}
+      rightIcon={
+        <Send
+          color={submitting || !text.trim() ? "#828282" : Color.BLUE}
+          size={20}
         />
-        <Pressable
-          onPress={submit}
-          disabled={submitting || !text.trim()}
-          className="p-3"
-          style={{ opacity: submitting || !text.trim() ? 0.5 : 1 }}
-        >
-          <Send color={Color.BLUE} size={20} />
-        </Pressable>
-      </View>
-    </View>
+      }
+      pressableRight
+      onRightIconPress={submit}
+      editable={!submitting}
+    />
   );
 };
 

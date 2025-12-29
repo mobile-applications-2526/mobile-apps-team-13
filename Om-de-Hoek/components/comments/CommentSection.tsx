@@ -58,8 +58,7 @@ const CommentsSection: React.FC<Props> = ({
     onLikeChange?.(nextLiked, count);
 
     try {
-      if (!token) throw new Error("No token provided");
-      const updated = await messageService.likeMessage(token, notificationId);
+      const updated = await messageService.likeMessage(token!, notificationId);
       if (updated && typeof (updated as any).totalLikes === "number") {
         setLikesCount((updated as any).totalLikes);
       }

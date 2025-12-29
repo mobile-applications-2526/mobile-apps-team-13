@@ -1,11 +1,18 @@
-import {ActivityIndicator, Alert, KeyboardAvoidingView, Platform, ScrollView, View,} from "react-native";
-import {Lock, Save} from "lucide-react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  View,
+} from "react-native";
+import { Lock, Save } from "lucide-react-native";
 import LabeledInput from "@/components/settings/LabeledInput";
-import {useEffect, useMemo, useState} from "react";
-import {useAuth} from "@/components/auth/context/AuthContext";
+import { useEffect, useMemo, useState } from "react";
+import { useAuth } from "@/components/auth/context/AuthContext";
 import UserService from "@/services/userService";
-import {useTranslation} from "react-i18next";
-import {User} from "@/types/user";
+import { useTranslation } from "react-i18next";
+import { User } from "@/types/user";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import SettingsHeader from "@/components/settings/SettingsHeader";
 
@@ -29,8 +36,6 @@ export default function MyDataPage() {
   );
 
   useEffect(() => {
-    if (!token) return;
-
     const fetchUserData = async () => {
       try {
         const data = await UserService.loggedInuser(token);
@@ -129,14 +134,6 @@ export default function MyDataPage() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <View className="flex-1 justify-center items-center bg-white">
-        <ActivityIndicator size="large" color="#100D08" />
-      </View>
-    );
-  }
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -148,111 +145,119 @@ export default function MyDataPage() {
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
         >
-            <SettingsHeader
-              title={t("settings.data.title")}
-              subtitle={t("settings.data.subtitle")}
-            />
+          <SettingsHeader
+            title={t("settings.data.title")}
+            subtitle={t("settings.data.subtitle")}
+          />
 
-          <View>
-            <LabeledInput
-              label={t("settings.data.username")}
-              value={username.startsWith("@") ? username : `@${username}`}
-              onChange={(text) => setUsername(text.replace("@", ""))}
-              editable
-              isFocused={focusedField === "username"}
-              onFocus={() => setFocusedField("username")}
-              onBlur={() => setFocusedField(null)}
-            />
-
-            <View className="flex-row gap-3">
-              <View className="flex-1">
-                <LabeledInput
-                  label={t("settings.data.firstname")}
-                  value={firstName}
-                  onChange={setFirstName}
-                  editable
-                  isFocused={focusedField === "firstname"}
-                  onFocus={() => setFocusedField("firstname")}
-                  onBlur={() => setFocusedField(null)}
-                />
-              </View>
-
-              <View className="flex-1">
-                <LabeledInput
-                  label={t("settings.data.lastname")}
-                  value={lastName}
-                  onChange={setLastName}
-                  editable
-                  isFocused={focusedField === "lastname"}
-                  onFocus={() => setFocusedField("lastname")}
-                  onBlur={() => setFocusedField(null)}
-                />
-              </View>
+          {isLoading ? (
+            <View className="mt-10">
+              <ActivityIndicator size="large" color="#2548BC" />
             </View>
-
-            <LabeledInput
-              label={t("settings.data.email")}
-              value={email}
-              onChange={setEmail}
-              editable
-              keyboardType="email-address"
-              isFocused={focusedField === "email"}
-              onFocus={() => setFocusedField("email")}
-              onBlur={() => setFocusedField(null)}
-            />
-
-            <View className="relative">
+          ) : (
+            <View>
               <LabeledInput
-                label={t("settings.data.birthdate")}
-                value={birthDate}
-                onChange={setBirthDate}
-                editable={false}
-                containerStyle="bg-gray-50 border-gray-200"
+                label={t("settings.data.username")}
+                value={username.startsWith("@") ? username : `@${username}`}
+                onChange={(text) => setUsername(text.replace("@", ""))}
+                editable
+                isFocused={focusedField === "username"}
+                onFocus={() => setFocusedField("username")}
+                onBlur={() => setFocusedField(null)}
               />
-              <View className="absolute right-4 top-9 items-center justify-center">
-                <Lock size={16} color="#828282" />
+
+              <View className="flex-row gap-3">
+                <View className="flex-1">
+                  <LabeledInput
+                    label={t("settings.data.firstname")}
+                    value={firstName}
+                    onChange={setFirstName}
+                    editable
+                    isFocused={focusedField === "firstname"}
+                    onFocus={() => setFocusedField("firstname")}
+                    onBlur={() => setFocusedField(null)}
+                  />
+                </View>
+
+                <View className="flex-1">
+                  <LabeledInput
+                    label={t("settings.data.lastname")}
+                    value={lastName}
+                    onChange={setLastName}
+                    editable
+                    isFocused={focusedField === "lastname"}
+                    onFocus={() => setFocusedField("lastname")}
+                    onBlur={() => setFocusedField(null)}
+                  />
+                </View>
               </View>
+
+              <LabeledInput
+                label={t("settings.data.email")}
+                value={email}
+                onChange={setEmail}
+                editable
+                keyboardType="email-address"
+                isFocused={focusedField === "email"}
+                onFocus={() => setFocusedField("email")}
+                onBlur={() => setFocusedField(null)}
+              />
+
+              <View className="relative">
+                <LabeledInput
+                  label={t("settings.data.birthdate")}
+                  value={birthDate}
+                  onChange={setBirthDate}
+                  editable={false}
+                  containerStyle="bg-gray-50 border-gray-200"
+                />
+                <View className="absolute right-4 top-9 items-center justify-center">
+                  <Lock size={16} color="#828282" />
+                </View>
+              </View>
+
+              <LabeledInput
+                label={t("settings.data.phone")}
+                value={phoneNumber}
+                onChange={setPhoneNumber}
+                editable
+                keyboardType="phone-pad"
+                isFocused={focusedField === "phone"}
+                onFocus={() => setFocusedField("phone")}
+                onBlur={() => setFocusedField(null)}
+              />
+
+              <LabeledInput
+                label={`${t("settings.data.address")} 1`}
+                value={address1}
+                onChange={setAddress1}
+                editable
+                isFocused={focusedField === "address1"}
+                onFocus={() => setFocusedField("address1")}
+                onBlur={() => setFocusedField(null)}
+              />
+
+              <LabeledInput
+                label={`${t("settings.data.address")} 2`}
+                value={address2}
+                onChange={setAddress2}
+                editable
+                isFocused={focusedField === "address2"}
+                onFocus={() => setFocusedField("address2")}
+                onBlur={() => setFocusedField(null)}
+              />
             </View>
-
-            <LabeledInput
-              label={t("settings.data.phone")}
-              value={phoneNumber}
-              onChange={setPhoneNumber}
-              editable
-              keyboardType="phone-pad"
-              isFocused={focusedField === "phone"}
-              onFocus={() => setFocusedField("phone")}
-              onBlur={() => setFocusedField(null)}
-            />
-
-            <LabeledInput
-              label={`${t("settings.data.address")} 1`}
-              value={address1}
-              onChange={setAddress1}
-              editable
-              isFocused={focusedField === "address1"}
-              onFocus={() => setFocusedField("address1")}
-              onBlur={() => setFocusedField(null)}
-            />
-
-            <LabeledInput
-              label={`${t("settings.data.address")} 2`}
-              value={address2}
-              onChange={setAddress2}
-              editable
-              isFocused={focusedField === "address2"}
-              onFocus={() => setFocusedField("address2")}
-              onBlur={() => setFocusedField(null)}
-            />
-          </View>
+          )}
         </ScrollView>
 
-        <FloatingActionButton
-          onPress={handleSave}
-          isLoading={isSaving}
-          disabled={!hasChanges}
-          icon={<Save color="white" size={24} />}
-        />
+        {!isLoading && (
+          <FloatingActionButton
+            onPress={handleSave}
+            isLoading={isSaving}
+            disabled={!hasChanges}
+            icon={<Save color="white" size={24} />}
+          />
+        )}
       </View>
     </KeyboardAvoidingView>
   );

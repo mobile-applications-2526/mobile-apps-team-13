@@ -50,6 +50,7 @@
       "title": "Wat is uw telefoonnummer?",
       "subtitle": "Waar kan men u in geval van nood bereiken?",
       "label": "Telefoonnummer (optioneel)",
+      "placeholder": "111 222 333",
       "country": "Vul de naam van uw land in"
     },
     "password": {
@@ -86,7 +87,7 @@
     "addresses": {
       "menu": "Mijn adressen",
       "title": "Mijn",
-        "subtitle": "Adressen"
+      "subtitle": "Adressen"
     },
     "data": {
       "title": "Mijn",
@@ -153,7 +154,7 @@
       },
       "loading": "Laden van melding...",
       "error": "Error bij laden melding.",
-      "me":"Ik"
+      "me": "Ik"
     }
   },
   "common": {

@@ -38,7 +38,12 @@ const NeighborhoodsWithPostalCode = ({ postalCode, token, onNext }: Props) => {
   return (
     <View className="flex-1 relative">
       {isLoading ? (
-        <ActivityIndicator size="large" color="#100D08" className="mt-10" />
+        <ActivityIndicator
+          size="large"
+          color="#2548BC"
+          className="mt-10"
+          animating={true}
+        />
       ) : (
         <ScrollView
           className="flex-1"
