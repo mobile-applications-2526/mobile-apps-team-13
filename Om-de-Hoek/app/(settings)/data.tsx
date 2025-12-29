@@ -1,6 +1,5 @@
 import {ActivityIndicator, Alert, KeyboardAvoidingView, Platform, ScrollView, View,} from "react-native";
 import {Lock, Save} from "lucide-react-native";
-import {useRouter} from "expo-router";
 import LabeledInput from "@/components/settings/LabeledInput";
 import {useEffect, useMemo, useState} from "react";
 import {useAuth} from "@/components/auth/context/AuthContext";
