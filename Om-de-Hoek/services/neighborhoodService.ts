@@ -1,5 +1,15 @@
 import { fetchData } from "./requestService";
 
+const fetchRecommendedNeighborhoods = async (token: string) => {
+  return await fetchData(`/neighborhood/recommended`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+};
+
 const fetchNeighborhoodsByPostalCode = async (postalcode: string) => {
   return await fetchData(`/neighborhood/postalcode/${postalcode}`, {
     method: "GET",
@@ -41,6 +51,7 @@ const removeFromNeighborhood = async (id: string, token: string | null) => {
 };
 
 export default {
+  fetchRecommendedNeighborhoods,
   fetchNeighborhoodsByPostalCode,
   fetchNeighborhoodsByStatisticalSectorCode,
   addToNeighborhood,
