@@ -112,12 +112,11 @@ export default function TabTwoScreen() {
         </ScrollView>
       )}
 
-      {!isLoading && (
-        <FloatingActionButton
-          onPress={() => router.push("/createNotification")}
-          icon={<MessageCircle color="#FFFFFF" size={24} strokeWidth={2} />}
-        />
-      )}
+      <FloatingActionButton
+        onPress={() => router.push("/createNotification")}
+        icon={<MessageCircle color="#FFFFFF" size={24} strokeWidth={2} />}
+        isLoading={isLoading}
+      />
     </SafeAreaView>
   );
 }
