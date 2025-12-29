@@ -1,7 +1,6 @@
 import { Message } from "@/types/message";
 import type { Comment } from "@/types/comment";
-
-const API_URL = process.env.EXPO_PUBLIC_API_PATH;
+import { fetchData } from "./requestService";
 
 const fetchMessageFeed = async (
   token: string | null,
@@ -23,13 +22,12 @@ const fetchMessageFeed = async (
   params.append("pageSize", pageSize.toString());
 
   if (options?.postalCode) params.append("postcode", options.postalCode);
-  if (options?.buurtSectorCode) params.append("buurtSectorCode", options.buurtSectorCode);
+  if (options?.buurtSectorCode)
+    params.append("buurtSectorCode", options.buurtSectorCode);
 
   const query = params.toString();
-  const url = `${API_URL}/api/message/feed?${query}`;
 
-
-  const response = await fetch(url, {
+  const data = await fetchData(`/message/feed?${query}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -37,12 +35,6 @@ const fetchMessageFeed = async (
     },
   });
 
-  if (!response.ok) {
-    if (response.status === 401) throw new Error("Unauthorized - Invalid or expired token");
-    throw new Error(`Request failed with status ${response.status}`);
-  }
-
-  const data = await response.json();
   return data as Message[];
 };
 
@@ -58,9 +50,7 @@ const sendMessage = async (
 ): Promise<Message> => {
   if (!token) throw new Error("No token provide");
 
-  const url = `${API_URL}/api/message/send`;
-
-  const response = await fetch(url, {
+  const data = await fetchData(`/message/send`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -69,22 +59,14 @@ const sendMessage = async (
     body: JSON.stringify(payload),
   });
 
-  if (!response.ok) {
-    if (response.status === 401) throw new Error("Unauthorized - Invalid or expired token");
-    throw new Error(`Request failed with status ${response.status}`);
-  }
-
-  const data = await response.json();
   return data as Message;
 };
 
 const likeMessage = async (token: string, messageId: string) => {
-  const url = `${API_URL}/api/message/like/${messageId}`;
-
-  return await fetch(url, {
+  return await fetchData(`/message/like/${messageId}`, {
     method: "POST",
     headers: {
-      "Authorization" : `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   });
@@ -95,13 +77,11 @@ type RespondPayload = {
   content: string;
 };
 
-const respondToMessage = async (token: string , payload: RespondPayload) => {
-  const url = `${API_URL}/api/message/respond`;
-
-  await fetch(url, {
+const respondToMessage = async (token: string, payload: RespondPayload) => {
+  await fetchData(`/message/respond`, {
     method: "POST",
     headers: {
-      "Authorization" : `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(payload),

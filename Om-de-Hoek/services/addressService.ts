@@ -1,18 +1,17 @@
 import { Address } from "@/types/address";
-
-const API_URL = process.env.EXPO_PUBLIC_API_PATH;
+import { fetchData } from "./requestService";
 
 const RegisterAddress = async (address: Address, token: string) => {
-    return await fetch(`${API_URL}/api/address`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(address),
-    })
+  return await fetchData(`/address`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(address),
+  });
 };
 
 export default {
-    RegisterAddress,
-}
+  RegisterAddress,
+};
