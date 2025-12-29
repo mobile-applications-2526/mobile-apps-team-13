@@ -11,7 +11,7 @@ const API_URL = process.env.EXPO_PUBLIC_API_PATH;
  * @throws UnauthorizedError if the response status is 401 - handle token refresh and try again
  * @throws Error for other non-ok responses
  */
-const fetchData = async (endpoint: string, options = {}) => {
+const fetchData = async (endpoint: string, options : RequestInit = {}) : Promise<any> => {
     const response = await fetch(`${API_URL}/api/${endpoint}`, options);
 
     if (!response.ok) {

@@ -83,6 +83,11 @@
     "mynotifications": "Mijn meldingen",
     "myneighborhoods": "Mijn buurten",
     "logout": "Uitloggen",
+    "addresses": {
+      "menu": "Mijn adressen",
+      "title": "Mijn",
+        "subtitle": "Adressen"
+    },
     "data": {
       "title": "Mijn",
       "subtitle": "Gegevens",
@@ -132,5 +137,15 @@
       "messageplaceholder": "Typ hier...",
       "submit": "Verzenden"
     }
+  },
+  "common": {
+    "next": "Volgende",
+    "back": "Terug",
+    "save": "Opslaan",
+    "edit": "Aanpassen",
+    "delete": "Verwijderen",
+    "confirm": "Bevestigen",
+    "cancel": "Annuleren",
+    "loading": "Laden..."
   }
 }

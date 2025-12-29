@@ -1,5 +1,5 @@
 import { ActivityIndicator, View, ScrollView } from "react-native";
-import SettingsHeader from "@/components/settings/SettingsHeader";
+import SettingsTitles from "@/components/settings/SettingsTitles";
 import Back from "@/components/Back";
 import { ArrowLeft, Plus } from "lucide-react-native";
 import { useRouter } from "expo-router";
@@ -11,6 +11,7 @@ import neighborhoodService from "@/services/neighborhoodService";
 import { Neighborhoods } from "@/types/neighborhood";
 import { useTranslation } from "react-i18next";
 import FloatingActionButton from "@/components/FloatingActionButton";
+import SettingsHeader from "@/components/settings/SettingsHeader";
 
 const PROFILE_PATH = "/(tabs)/profile";
 
@@ -95,16 +96,10 @@ export default function MyNeighborhoodsPage() {
           contentContainerStyle={{ paddingBottom: 100 }}
         >
           <View className="px-6">
-            <View className="flex-row items-center mt-2 mb-4">
-              <Back
-                icon={<ArrowLeft color="#100D08" size={20} />}
-                onBack={() => router.push(PROFILE_PATH)}
-              />
               <SettingsHeader
                 title={t("settings.neighborhoods.title")}
                 subtitle={t("settings.neighborhoods.subtitle")}
               />
-            </View>
             {isLoading ? (
               <ActivityIndicator size="large" color="#100D08" />
             ) : (

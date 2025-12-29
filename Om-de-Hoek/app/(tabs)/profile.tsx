@@ -2,13 +2,14 @@ import { useAuth } from "@/components/auth/context/AuthContext";
 import { View, Text, ActivityIndicator } from "react-native";
 import { PressableButton } from "@/components/PressableButton";
 import MenuItem from "@/components/settings/MenuItem";
-import SettingsHeader from "@/components/settings/SettingsHeader";
+import SettingsTitles from "@/components/settings/SettingsTitles";
 import { Color } from "@/types/StyleOptions";
 import {
   UserRoundPen,
   Wrench,
   BellRing,
   UsersRound,
+    MapPinHouse
 } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -54,13 +55,18 @@ export default function ProfilePage() {
 
   return (
     <View className="flex-1 bg-white px-6">
-      <SettingsHeader title={firstName} subtitle={lastName} />
+      <SettingsTitles title={firstName} subtitle={lastName} />
 
       <MenuItem
         icon={<UserRoundPen color="#2548BC" size={20} fill="#2548BC" />}
         label={t("settings.mydata")}
         onPress={() => router.push("/data")}
       />
+        
+      <MenuItem icon={<MapPinHouse color='#1548BC' size={20} fill="#2548Bc" />}
+                label={t("settings.addresses.menu")}
+                onPress={() => router.push("/adresses")}
+        />
 
       <View className="mt-8 mb-2">
         <Text className="text-black font-comfortaa-semibold text-[14px]">

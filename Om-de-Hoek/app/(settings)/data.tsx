@@ -6,7 +6,7 @@ import {
   Alert,
   Platform,
 } from "react-native";
-import SettingsHeader from "@/components/settings/SettingsHeader";
+import SettingsTitles from "@/components/settings/SettingsTitles";
 import Back from "@/components/Back";
 import { ArrowLeft, Save } from "lucide-react-native";
 import { useRouter } from "expo-router";
@@ -18,6 +18,7 @@ import { useTranslation } from "react-i18next";
 import { Lock } from "lucide-react-native";
 import { User } from "@/types/user";
 import FloatingActionButton from "@/components/FloatingActionButton";
+import SettingsHeader from "@/components/settings/SettingsHeader";
 
 const PROFILE_PATH = "/(tabs)/profile";
 
@@ -167,16 +168,10 @@ export default function MyDataPage() {
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
         >
-          <View className="flex-row items-center mt-2 mb-4">
-            <Back
-              icon={<ArrowLeft color="#100D08" size={20} />}
-              onBack={() => router.push(PROFILE_PATH)}
-            />
             <SettingsHeader
               title={t("settings.data.title")}
               subtitle={t("settings.data.subtitle")}
             />
-          </View>
 
           <View>
             <LabeledInput
