@@ -254,14 +254,12 @@ export default function CreateNotification({
           containerStyle="h-80"
         />
 
-        <View className="mt-auto">
-          <PressableButton
-            onPress={async () => handleSendNotification()}
-            disabled={!isValid}
-            title={t("notifications.creation.submit")}
-            background={isValid ? Color.BLUE : Color.GRAY}
-          />
-        </View>
+        <PressableButton
+          onPress={async () => handleSendNotification()}
+          disabled={!isValid}
+          title={t("notifications.creation.submit")}
+          background={isValid ? Color.BLUE : Color.GRAY}
+        />
       </View>
     </View>
   );
