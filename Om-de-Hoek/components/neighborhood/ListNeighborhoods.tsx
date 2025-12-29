@@ -46,7 +46,7 @@ const ListNeighborhoods = ({
 
   const handleLeave = async (neighborhoodId: string) => {
     try {
-      await neighborhoodService.removeFromNeighborhood(neighborhoodId, token!);
+      await neighborhoodService.removeFromNeighborhood(neighborhoodId, token ?? authToken!);
       setJoinedSectors((prev) => prev.filter((id) => id !== neighborhoodId));
       if (onLeft) {
         onLeft(neighborhoodId);
