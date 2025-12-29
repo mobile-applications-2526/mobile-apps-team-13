@@ -26,8 +26,6 @@ export default function MyDataPage() {
   const [lastName, setLastName] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [address1, setAddress1] = useState("");
-  const [address2, setAddress2] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
@@ -46,13 +44,6 @@ export default function MyDataPage() {
         const initialLastName = data.lastName || "";
         const initialBirthDate = data.birthDate || "";
         const initialPhoneNumber = data.phoneNumber || "";
-        let initialAddress1 = "";
-        let initialAddress2 = "";
-
-        if (Array.isArray(data.addresses)) {
-          initialAddress1 = data.addresses[0]?.fullAdress || "";
-          initialAddress2 = data.addresses[1]?.fullAdress || "";
-        }
 
         setEmail(initialEmail);
         setUsername(initialUsername);
@@ -60,8 +51,6 @@ export default function MyDataPage() {
         setLastName(initialLastName);
         setBirthDate(initialBirthDate);
         setPhoneNumber(initialPhoneNumber);
-        setAddress1(initialAddress1);
-        setAddress2(initialAddress2);
 
         setInitialValues({
           email: initialEmail,
@@ -69,8 +58,6 @@ export default function MyDataPage() {
           firstName: initialFirstName,
           lastName: initialLastName,
           phoneNumber: initialPhoneNumber,
-          address1: initialAddress1,
-          address2: initialAddress2,
         });
       } catch (error) {
         console.error("Failed to fetch user data", error);
@@ -90,20 +77,9 @@ export default function MyDataPage() {
       username !== initialValues.username ||
       firstName !== initialValues.firstName ||
       lastName !== initialValues.lastName ||
-      phoneNumber !== initialValues.phoneNumber ||
-      address1 !== initialValues.address1 ||
-      address2 !== initialValues.address2
+      phoneNumber !== initialValues.phoneNumber
     );
-  }, [
-    email,
-    username,
-    firstName,
-    lastName,
-    phoneNumber,
-    address1,
-    address2,
-    initialValues,
-  ]);
+  }, [email, username, firstName, lastName, phoneNumber, initialValues]);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -140,11 +116,7 @@ export default function MyDataPage() {
       className="flex-1 bg-white"
     >
       <View className="flex-1 relative">
-        <ScrollView
-          className="flex-1 px-6"
-          contentContainerStyle={{ paddingBottom: 100 }}
-          showsVerticalScrollIndicator={false}
-        >
+        <View className="flex-1 px-6">
           <SettingsHeader
             title={t("settings.data.title")}
             subtitle={t("settings.data.subtitle")}
@@ -226,29 +198,9 @@ export default function MyDataPage() {
                 onFocus={() => setFocusedField("phone")}
                 onBlur={() => setFocusedField(null)}
               />
-
-              <LabeledInput
-                label={`${t("settings.data.address")} 1`}
-                value={address1}
-                onChange={setAddress1}
-                editable
-                isFocused={focusedField === "address1"}
-                onFocus={() => setFocusedField("address1")}
-                onBlur={() => setFocusedField(null)}
-              />
-
-              <LabeledInput
-                label={`${t("settings.data.address")} 2`}
-                value={address2}
-                onChange={setAddress2}
-                editable
-                isFocused={focusedField === "address2"}
-                onFocus={() => setFocusedField("address2")}
-                onBlur={() => setFocusedField(null)}
-              />
             </View>
           )}
-        </ScrollView>
+        </View>
 
         {!isLoading && (
           <FloatingActionButton
