@@ -44,7 +44,11 @@
       "street": "Straatnaam",
       "housenumber": "Huisnummer (optioneel)",
       "municipality": "Gemeente",
-      "postalcode": "Postcode"
+      "postalcode": "Postcode",
+      "mandatoryStreet": "Straatnaam *",
+      "mandatoryMunicipality": "Gemeente *",
+      "mandatoryPostalcode": "Postcode *",
+      "edit": "Adres aanpassen"
     },
     "phone": {
       "title": "Wat is uw telefoonnummer?",
