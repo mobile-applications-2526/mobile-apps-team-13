@@ -1,6 +1,5 @@
 import { ScrollView, Text, View, ActivityIndicator } from "react-native";
 import { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import Header from "@/components/Header";
 import NotificationCard from "@/components/card/NotificationCard";
@@ -55,24 +54,29 @@ export default function TabTwoScreen() {
       case "Critical":
         return {
           title: t("notifications.creation.tags.emergency"),
-          icon: <Siren size={24} strokeWidth={2} color="#100D08" />,
+          icon: <Siren size={24} strokeWidth={2} color="#CB0000" />,
+          cardBackground: "bg-[#FEF2F2]",
+          iconBackground: "bg-[#FEE2E2]",
         };
       case "Warning":
         return {
           title: t("notifications.creation.tags.warning"),
-          icon: <TriangleAlert size={24} strokeWidth={2} color="#100D08" />,
+          icon: <TriangleAlert size={24} strokeWidth={2} color="#D97706" />,
+          cardBackground: "bg-[#FFFBEB]",
+          iconBackground: "bg-[#FEF3C7]",
         };
       case "Informational":
       default:
         return {
           title: t("notifications.creation.tags.info"),
-          icon: <Info size={24} strokeWidth={2} color="#100D08" />,
+          icon: <Info size={24} strokeWidth={2} color="#2548BC" />,
+          cardBackground: "bg-[#EFF6FF]",
+          iconBackground: "bg-[#DBEAFE]",
         };
     }
   };
-
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <View className="flex-1 bg-white">
       <View className="items-center">
         <Header title="Placeholder" subtitle="Placeholder" />
       </View>
@@ -83,7 +87,7 @@ export default function TabTwoScreen() {
         </View>
       ) : (
         <ScrollView className="mt-10 px-6">
-          <Text className="text-gray font-comfortaa-regular mb-2">
+          <Text className="text-gray font-comfortaa-bold text-base mt-6 ">
             {t("notifications.subtitle")}
           </Text>
 
@@ -94,7 +98,9 @@ export default function TabTwoScreen() {
           )}
 
           {messages.map((message, index) => {
-            const { icon, title } = getSeverityConfig(message.severity);
+            const { icon, title, cardBackground, iconBackground } =
+              getSeverityConfig(message.severity);
+
             return (
               <NotificationCard
                 key={`${message.userTag}-${index}`}
@@ -106,6 +112,8 @@ export default function TabTwoScreen() {
                   minute: "2-digit",
                 })}
                 message={message}
+                containerClass={cardBackground}
+                iconContainerClass={iconBackground}
               />
             );
           })}
@@ -117,6 +125,6 @@ export default function TabTwoScreen() {
         icon={<MessageCircle color="#FFFFFF" size={24} strokeWidth={2} />}
         isLoading={isLoading}
       />
-    </SafeAreaView>
+    </View>
   );
 }
