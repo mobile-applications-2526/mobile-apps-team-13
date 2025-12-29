@@ -3,7 +3,7 @@ name: Deploy Omdehoek Backend - Staging
 on:
   push:
     branches:
-      - development
+      - Development
     paths:
       - 'OmDeHoek-Backend/**' # Only triggers if files in this folder change
 
