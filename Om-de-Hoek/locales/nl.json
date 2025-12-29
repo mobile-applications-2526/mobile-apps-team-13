@@ -169,6 +169,9 @@
     "delete": "Verwijderen",
     "confirm": "Bevestigen",
     "cancel": "Annuleren",
-    "loading": "Laden..."
+    "loading": "Laden...",
+    "sure": "Weet je het zeker?",
+    "addressConfirmation": "Wil je dit adres definitief verwijderen?",
+    "addressEmpty": "Geen adressen beschikbaar. Voel je vrij om er een toe te voegen."
   }
 }
