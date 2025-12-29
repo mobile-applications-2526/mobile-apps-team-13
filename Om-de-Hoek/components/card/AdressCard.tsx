@@ -1,4 +1,4 @@
-import {GestureResponderEvent, KeyboardAvoidingView, Platform, Pressable, Text, View} from "react-native"
+import {KeyboardAvoidingView, Platform, Pressable, Text, View} from "react-native"
 import {Address} from "@/types/address";
 import {Save, SquarePen, Trash, Undo} from "lucide-react-native";
 import {useState} from "react";
@@ -11,7 +11,6 @@ type Props = {
     isOpened: boolean,
     startEditing: () => void,
     onChange: (address: Address) => void,
-    onClose: () => void,
     onSave: (address: Address) => void,
     onDelete: () => void,
     onCancel: () => void,

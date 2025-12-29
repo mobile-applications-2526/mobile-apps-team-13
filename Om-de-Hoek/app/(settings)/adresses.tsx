@@ -96,7 +96,6 @@ const AddressSettings = () => {
                             )
                         );
                     }}
-                    onClose={() => setOpenedAddresss(undefined)}
                     onSave={async (updatedAddress) => {
                         await handleUpdateAddress(updatedAddress);
                         setOpenedAddresss(undefined);
