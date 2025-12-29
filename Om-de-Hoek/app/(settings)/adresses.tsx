@@ -14,6 +14,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import FloatingActionButton from "@/components/FloatingActionButton";
 import { Plus } from "lucide-react-native";
 import { Color } from "@/types/StyleOptions";
+import { Text } from "react-native";
 
 const AddressSettings = () => {
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -196,6 +197,11 @@ const AddressSettings = () => {
         subtitle={t("settings.addresses.subtitle")}
       />
 
+      {addresses.length === 0 && !addingNew && !isLoading && (
+        <Text className="text-center font-comfortaa-medium text-base text-red mt-10">
+          {t("common.addressEmpty")}
+        </Text>
+      )}
       {addresses.map((address) => (
         <AdressCard
           key={address.adresId}
