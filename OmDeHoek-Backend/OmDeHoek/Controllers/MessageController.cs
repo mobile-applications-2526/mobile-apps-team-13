@@ -59,15 +59,16 @@ public class MessageController(MessageService service) : ControllerBase
     [Authorize]
     public async Task<ActionResult<List<MessageDto>>> GetFeedMessages(
         [FromQuery] int page = 0,
-        [FromQuery] int pageSize = 20, 
-        [FromQuery] string? postcode = null, 
+        [FromQuery] int pageSize = 20,
+        [FromQuery] string? postcode = null,
         [FromQuery] string? buurtSectorCode = null
-        )
+    )
     {
         try
         {
             var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            var result = await service.GetFeedMessages(token: token, page: page, pageSize: pageSize, postcode: postcode, buurtSectorCode: buurtSectorCode);
+            var result = await service.GetFeedMessages(token: token, page: page, pageSize: pageSize, postcode: postcode,
+                buurtSectorCode: buurtSectorCode);
             return Ok(result);
         }
         catch (Exception e)
@@ -116,6 +117,44 @@ public class MessageController(MessageService service) : ControllerBase
         {
             var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             var result = await service.LikeMessage(token: token, messageId: messageId);
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return ExceptionHandler.HandleException(e);
+        }
+    }
+
+    [HttpGet("byLoggedInUser")]
+    [Authorize]
+    public async Task<ActionResult<List<MessageDto>>> GetMessagesByLoggedInUser([FromQuery] int page = 0,
+        [FromQuery] int pageSize = 20)
+    {
+        try
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var result = await service.GetMessagesByUser(
+                token: token,
+                page: page,
+                pageSize: pageSize
+            );
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return ExceptionHandler.HandleException(e);
+        }
+    }
+
+    [HttpGet("{messageId}")]
+    [Authorize]
+    public async Task<ActionResult<MessageDto>> GetMessageById(Guid messageId)
+    {
+        try
+        {
+            var result = await service.GetMessageById(
+                messageId: messageId
+            );
             return Ok(result);
         }
         catch (Exception e)

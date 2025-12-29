@@ -39,4 +39,29 @@ public class MessageRepository(DataContext ctx) : GenericRepository<Message>(ctx
 
         return await query.ToListAsync();
     }
+    
+    public async Task<List<Message>> GetMessagesByUserIdAsync(string userId, int page = 0, int pageSize = 20)
+    {
+        return await DbSet
+            .Where(m => m.UserId == userId)
+            .OrderByDescending(m => m.CreatedAt)
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .Include(m => m.Comments)
+                .ThenInclude(c => c.User)
+            .Include(m => m.LikedBy)
+            .ToListAsync();
+    }
+    
+    public async Task<Message?> GetMessageByIdAsync(Guid messageId)
+    {
+        var message = await DbSet
+            .Include(m => m.User)
+            .Include(m => m.Comments)
+                .ThenInclude(c => c.User)
+            .Include(m => m.LikedBy)
+            .FirstOrDefaultAsync(m => m.Id == messageId);
+
+        return message;
+    }
 }
