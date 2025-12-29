@@ -91,7 +91,6 @@ export default function RegisterPage() {
         street: data.streetName,
         houseNumber: data.houseNumber || "",
         postalCode: data.postalCode,
-        residentId: loginResponse.id,
       },
       loginResponse.token
     );

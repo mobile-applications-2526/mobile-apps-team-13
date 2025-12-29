@@ -1,7 +1,7 @@
-import {Address, UpdateAddressCommand} from "@/types/address";
+import {Address, CreateAddressCommand, UpdateAddressCommand} from "@/types/address";
 import {fetchData} from "@/services/requestService";
 
-const RegisterAddress = async (address: Address, token: string) => {
+const RegisterAddress = async (address: CreateAddressCommand, token: string) => {
   return await fetchData(`/address`, {
     method: "POST",
     headers: {

@@ -15,3 +15,9 @@ export type UpdateAddressCommand = {
     villageName: string;
     adresId: string;
 }
+
+export type CreateAddressCommand = {
+    street: string;
+    houseNumber?: string;
+    postalCode: string;
+}

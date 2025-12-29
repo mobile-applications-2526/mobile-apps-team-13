@@ -17,7 +17,9 @@ const SettingsHeader = ({title, subtitle, onBack} : Props) => {
         if (onBack) {
             onBack();
         }
-        router.push(PROFILE_PATH);
+        else {
+            router.push(PROFILE_PATH);
+        }
     }
 
     return(

@@ -1,4 +1,4 @@
-import {KeyboardAvoidingView, Platform, Pressable, Text, View} from "react-native"
+import {Pressable, Text, View} from "react-native"
 import {Address} from "@/types/address";
 import {Save, SquarePen, Trash, Undo} from "lucide-react-native";
 import {useState} from "react";
@@ -9,11 +9,11 @@ import {Color} from "@/types/StyleOptions";
 type Props = {
     address: Address,
     isOpened: boolean,
-    startEditing: () => void,
-    onChange: (address: Address) => void,
-    onSave: (address: Address) => void,
-    onDelete: () => void,
-    onCancel: () => void,
+    startEditing?: () => void,
+    onChange?: (address: Address) => void,
+    onSave?: (address: Address) => void,
+    onDelete?: () => void,
+    onCancel?: () => void,
 }
 
 const AdressCard = ({
@@ -32,7 +32,7 @@ const AdressCard = ({
     const onStartEditing = () => {
         setBgEditButton('#0080ff20');
 
-        startEditing();
+        if (startEditing) startEditing();
 
         setTimeout(() => {
             setBgEditButton('#66666600');
@@ -42,38 +42,38 @@ const AdressCard = ({
     const handleChangeStreet = (text: string) => {
         const newAddress = {...updatedAddress, street: text};
         setUpdatedAddress(newAddress);
-        onChange(newAddress);
+        if(onChange) onChange(newAddress);
     }
 
     const handleChangeNumber = (text: string) => {
         const newAddress = {...updatedAddress, houseNumber: text};
         setUpdatedAddress(newAddress);
-        onChange(newAddress);
+        if(onChange) onChange(newAddress);
     }
 
     const handleChangePostalCode = (text: string) => {
         const newAddress = {...updatedAddress, postalCode: text};
         setUpdatedAddress(newAddress);
-        onChange(newAddress);
+        if(onChange) onChange(newAddress);
     }
 
     const handleChangeCity = (text: string) => {
         const newAddress = {...updatedAddress, villageName: text};
         setUpdatedAddress(newAddress);
-        onChange(newAddress);
+        if(onChange) onChange(newAddress);
     }
 
     const save = () => {
-        onSave(updatedAddress);
+        if(onSave) onSave(updatedAddress);
     }
 
     const handleDelete = () => {
-        onDelete();
+        if(onDelete) onDelete();
     }
 
     const onCancelEditing = () => {
         setUpdatedAddress({...address});
-        onCancel();
+        if(onCancel) onCancel();
     }
 
     return(
@@ -85,14 +85,15 @@ const AdressCard = ({
                 shadowRadius: 3,
                 shadowOffset: { width: 0, height: 1 },
                 elevation: 2,
+                borderColor: isOpened ? Color.BLUE : 'transparent',
+                borderWidth: isOpened ? 2 : 0,
             }}
         >
             {isOpened && (
-                <KeyboardAvoidingView
+                <View
                     className="flex-col gap-2 p-2"
-                    behavior={Platform.OS === "ios" ? "padding" : "height"}
                 >
-                    <LabeledInput value={updatedAddress.street} onChange={handleChangeStreet} label={t("register.address.street")} />
+                    <LabeledInput value={updatedAddress.street} onChange={handleChangeStreet} label={t("register.address.street")}/>
                     <LabeledInput value={updatedAddress.houseNumber ?? ""} onChange={handleChangeNumber} label={t("register.address.housenumber")} />
                     <LabeledInput value={updatedAddress.postalCode} onChange={handleChangePostalCode} label={t("register.address.postalcode")} />
                     <LabeledInput value={updatedAddress.villageName} onChange={handleChangeCity} label={t("register.address.municipality")} />
@@ -100,7 +101,7 @@ const AdressCard = ({
                     <View
                         className="flex-row gap-4 justify-between mt-2"
                     >
-                        <Pressable
+                        {onDelete && <Pressable
                             onPress={handleDelete}
                             style={{
                                 backgroundColor: Color.WHITE,
@@ -111,11 +112,11 @@ const AdressCard = ({
                             }}
                             className="flex-col gap-2 items-center"
                         >
-                            <Trash size={16} color={Color.RED} />
+                            <Trash size={16} color={Color.RED}/>
                             <Text className="font-comfortaa-semibold text-xs text-gray">{t("common.delete")}</Text>
-                        </Pressable>
+                        </Pressable>}
 
-                        <Pressable
+                        {onCancel && <Pressable
                             onPress={onCancelEditing}
                             style={{
                                 backgroundColor: Color.WHITE,
@@ -126,11 +127,11 @@ const AdressCard = ({
                             }}
                             className="flex-col gap-2 items-center"
                         >
-                            <Undo size={16} color={Color.BLUE} />
+                            <Undo size={16} color={Color.BLUE}/>
                             <Text className="font-comfortaa-semibold text-xs text-gray">{t("common.cancel")}</Text>
-                        </Pressable>
+                        </Pressable>}
 
-                        <Pressable
+                        {onSave && <Pressable
                             onPress={save}
                             style={{
                                 backgroundColor: Color.WHITE,
@@ -141,12 +142,12 @@ const AdressCard = ({
                             }}
                             className="flex-col gap-2 items-center"
                         >
-                            <Save size={16} color={Color.GREEN} />
+                            <Save size={16} color={Color.GREEN}/>
                             <Text className="font-comfortaa-semibold text-xs text-gray">{t("common.save")}</Text>
-                        </Pressable>
+                        </Pressable>}
                     </View>
 
-                </KeyboardAvoidingView>
+                </View>
             )}
             {!isOpened && (
                 <View
