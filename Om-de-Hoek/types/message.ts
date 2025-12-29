@@ -5,7 +5,7 @@ export type Message = {
     userTag: string;
     title: string;
     content: string;
-    createdAt: string;
+    createdAt: Date;
     severity: MessageSeverity;
     reactions: {
         author: string;

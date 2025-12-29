@@ -5,20 +5,18 @@ import { Message } from "@/types/message";
 
 type Props = {
   icon?: React.ReactNode;
-  title: string;
-  subtitle: string;
-  time?: string;
   message: Message;
 };
 
 const NotificationCard: React.FC<Props> = ({
   icon,
-  title,
-  subtitle,
-  time,
   message,
 }) => {
   const router = useRouter();
+
+  const title = message.title;
+  const subtitle = message.content;
+  const time = new Date(message.createdAt).toLocaleString("nl-BE");
 
   const handlePress = () => {
     router.push({
