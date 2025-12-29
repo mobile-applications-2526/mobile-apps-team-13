@@ -114,6 +114,7 @@ export default function MessageDetailScreen() {
     >
       <ScrollView
         className="p-4 bg-white pt-12"
+        style={{ flex: 1, paddingHorizontal: 24 }}
         contentContainerStyle={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
       >
