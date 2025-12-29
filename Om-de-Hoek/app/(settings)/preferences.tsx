@@ -1,17 +1,11 @@
-import { Modal, Pressable, View, Text, TouchableOpacity } from "react-native";
-import SettingsHeader from "@/components/settings/SettingsHeader";
-import Back from "@/components/Back";
-import { ArrowLeft, Check } from "lucide-react-native";
-import { useRouter } from "expo-router";
-import { useState } from "react";
+import {Modal, Pressable, Text, TouchableOpacity, View} from "react-native";
+import {Check} from "lucide-react-native";
+import {useState} from "react";
 import SelectInput from "@/components/settings/SelectInput";
-import ThemeToggle from "@/components/settings/ThemeToggle";
-import { useTranslation } from "react-i18next";
-
-const PROFILE_PATH = "/(tabs)/profile";
+import {useTranslation} from "react-i18next";
+import SettingsHeader from "@/components/settings/SettingsHeader";
 
 export default function MyPreferencesPage() {
-  const router = useRouter();
 
   const { t, i18n } = useTranslation();
 
@@ -32,16 +26,10 @@ export default function MyPreferencesPage() {
   return (
     <View className="flex-1 bg-white">
       <View className="flex-1 px-6">
-        <View className="flex-row items-center mt-2 mb-4">
-          <Back
-            icon={<ArrowLeft color="#100D08" size={20} />}
-            onBack={() => router.push(PROFILE_PATH)}
-          />
           <SettingsHeader
             title={t("settings.preferences.title")}
             subtitle={t("settings.preferences.subtitle")}
           />
-        </View>
 
         <View className="ml-10 mr-10">
           <SelectInput
@@ -52,14 +40,15 @@ export default function MyPreferencesPage() {
             }}
           />
 
-          <ThemeToggle
-            title={t("settings.preferences.Theme")}
-            label={t("settings.preferences.mode")}
-            isEnabled={false}
-            onToggle={(val) => {
-              // Handle theme toggle
-            }}
-          />
+          {/*  voor later, wanneer we dark mode gaan gebruiken */}
+          {/*<ThemeToggle*/}
+          {/*  title={t("settings.preferences.Theme")}*/}
+          {/*  label={t("settings.preferences.mode")}*/}
+          {/*  isEnabled={false}*/}
+          {/*  onToggle={(val) => {*/}
+          {/*    // Handle theme toggle*/}
+          {/*  }}*/}
+          {/*/>*/}
         </View>
       </View>
       <Modal

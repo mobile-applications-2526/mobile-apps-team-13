@@ -29,7 +29,7 @@ public class MessageDto
             .Select(r => new MessageReactionDto(r))
             .ToList();
         Title = message.Title;
-        TotalLikes = (uint)message.LikedBy.Count;
+        TotalLikes = (uint)message.LikedBy.Count(l => l.IsLiked);
         Id = message.Id;
     }
 }

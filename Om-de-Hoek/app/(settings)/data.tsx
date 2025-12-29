@@ -1,28 +1,15 @@
-import {
-  View,
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  ScrollView,
-  Alert,
-  Platform,
-} from "react-native";
-import SettingsHeader from "@/components/settings/SettingsHeader";
-import Back from "@/components/Back";
-import { ArrowLeft, Save } from "lucide-react-native";
-import { useRouter } from "expo-router";
+import {ActivityIndicator, Alert, KeyboardAvoidingView, Platform, ScrollView, View,} from "react-native";
+import {Lock, Save} from "lucide-react-native";
 import LabeledInput from "@/components/settings/LabeledInput";
-import { useEffect, useMemo, useState } from "react";
-import { useAuth } from "@/components/auth/context/AuthContext";
+import {useEffect, useMemo, useState} from "react";
+import {useAuth} from "@/components/auth/context/AuthContext";
 import UserService from "@/services/userService";
-import { useTranslation } from "react-i18next";
-import { Lock } from "lucide-react-native";
-import { User } from "@/types/user";
+import {useTranslation} from "react-i18next";
+import {User} from "@/types/user";
 import FloatingActionButton from "@/components/FloatingActionButton";
-
-const PROFILE_PATH = "/(tabs)/profile";
+import SettingsHeader from "@/components/settings/SettingsHeader";
 
 export default function MyDataPage() {
-  const router = useRouter();
   const { token } = useAuth();
   const { t } = useTranslation();
 
@@ -153,16 +140,10 @@ export default function MyDataPage() {
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
         >
-          <View className="flex-row items-center mt-2 mb-4">
-            <Back
-              icon={<ArrowLeft color="#100D08" size={20} />}
-              onBack={() => router.push(PROFILE_PATH)}
-            />
             <SettingsHeader
               title={t("settings.data.title")}
               subtitle={t("settings.data.subtitle")}
             />
-          </View>
 
           {isLoading ? (
             <View className="mt-10">

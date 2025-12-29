@@ -6,7 +6,7 @@ import Header from "@/components/Header";
 import NotificationCard from "@/components/card/NotificationCard";
 import messageService from "@/services/messageService";
 import { Message } from "@/types/message";
-import { TriangleAlert, Siren, Info, MessageCircle } from "lucide-react-native";
+import { Info, MessageCircle, Siren, TriangleAlert } from "lucide-react-native";
 import { useAuth } from "@/components/auth/context/AuthContext";
 import { useTranslation } from "react-i18next";
 import FloatingActionButton from "@/components/FloatingActionButton";

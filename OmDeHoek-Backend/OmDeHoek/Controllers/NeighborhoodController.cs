@@ -164,4 +164,28 @@ public class NeighborhoodController(BuurtService buurtService) : ControllerBase
             return ExceptionHandler.HandleException(e);
         }
     }
+    
+    /// <summary>
+    ///     Get a list of recommended neighborhoods for the authenticated user
+    /// </summary>
+    /// <param name="language">The language in which neighborhoods should be returned (default: English)</param>
+    /// <returns>A list of recommended neighborhoods for the user</returns>
+    /// <remarks>
+    ///     Requires authentication. The Authorization header bearer token is forwarded to the service.
+    /// </remarks>
+    [HttpGet("recommended")]
+    [Authorize]
+    public async Task<ActionResult<List<NeighborhoodDto>>> GetRecommendedNeighborhoods([FromQuery] Languages? language)
+    {
+        try
+        {
+            var token = Request.Headers.Authorization.ToString().Replace("Bearer ", "");
+            var result = await buurtService.GetRecommendedForUser(token, language ?? Languages.En);
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return ExceptionHandler.HandleException(e);
+        }
+    }
 }

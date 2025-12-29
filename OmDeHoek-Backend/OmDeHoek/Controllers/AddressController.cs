@@ -81,7 +81,7 @@ public class AddressController(AdresService adresService) : ControllerBase
     /// <remarks>
     ///  Requires authentication. The Authorization header bearer token is forwarded to the service.
     /// </remarks>
-    [HttpPut]
+    [HttpPut("bulk")]
     [Authorize]
     public async Task<ActionResult<AddressDto>> UpdateAdres([FromBody] List<UpdateAdress> addresses)
     {
@@ -118,6 +118,21 @@ public class AddressController(AdresService adresService) : ControllerBase
             var token = Request.Headers.Authorization.ToString().Replace("Bearer ", "");
             await adresService.DeleteAdress(addressId, token);
             return Ok(new MessageResponseDto("Address successfully deleted"));
+        }
+        catch (Exception e)
+        {
+            return ExceptionHandler.HandleException(e);
+        }
+    }
+    
+    [HttpPut]
+    [Authorize]
+    public async Task<ActionResult<AddressDto>> UpdateAdres([FromBody] UpdateAdress address){
+        try
+        {
+            var token = Request.Headers.Authorization.ToString().Replace("Bearer ", "");
+            var result = await adresService.UpdateAdres(address, token);
+            return Ok(result);
         }
         catch (Exception e)
         {

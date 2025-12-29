@@ -1,18 +1,15 @@
-import { ActivityIndicator, View, ScrollView } from "react-native";
-import SettingsHeader from "@/components/settings/SettingsHeader";
-import Back from "@/components/Back";
-import { ArrowLeft, Plus } from "lucide-react-native";
-import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import {ActivityIndicator, ScrollView, View} from "react-native";
+import {Plus} from "lucide-react-native";
+import {useRouter} from "expo-router";
+import {useEffect, useState} from "react";
 import userService from "@/services/userService";
-import { useAuth } from "@/components/auth/context/AuthContext";
+import {useAuth} from "@/components/auth/context/AuthContext";
 import neighborhoodService from "@/services/neighborhoodService";
-import { Neighborhoods } from "@/types/neighborhood";
-import { useTranslation } from "react-i18next";
+import {Neighborhoods} from "@/types/neighborhood";
+import {useTranslation} from "react-i18next";
 import FloatingActionButton from "@/components/FloatingActionButton";
+import SettingsHeader from "@/components/settings/SettingsHeader";
 import ListNeighborhoods from "@/components/neighborhood/ListNeighborhoods";
-
-const PROFILE_PATH = "/(tabs)/profile";
 
 export default function MyNeighborhoodsPage() {
   const [neighborhoods, setNeighborhoods] = useState<Neighborhoods[]>([]);
@@ -68,16 +65,10 @@ export default function MyNeighborhoodsPage() {
           contentContainerStyle={{ paddingBottom: 100 }}
         >
           <View className="px-6">
-            <View className="flex-row items-center mt-2">
-              <Back
-                icon={<ArrowLeft color="#100D08" size={20} />}
-                onBack={() => router.push(PROFILE_PATH)}
-              />
               <SettingsHeader
                 title={t("settings.neighborhoods.title")}
                 subtitle={t("settings.neighborhoods.subtitle")}
               />
-            </View>
             {isLoading ? (
               <ActivityIndicator
                 size="large"

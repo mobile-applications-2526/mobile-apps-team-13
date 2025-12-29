@@ -1,25 +1,20 @@
 import '@/i18n';
 import "react-native-reanimated";
-import {
-  configureReanimatedLogger,
-  ReanimatedLogLevel,
-} from "react-native-reanimated";
+import {configureReanimatedLogger, ReanimatedLogLevel,} from "react-native-reanimated";
+import "../global.css";
+
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import {useFonts} from "expo-font";
+import {Slot, useRootNavigationState, useRouter, useSegments} from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import {useEffect} from "react";
+import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
+import {AuthProvider, useAuth} from "@/components/auth/context/AuthContext";
 
 configureReanimatedLogger({
   level: ReanimatedLogLevel.warn,
   strict: false,
 });
-
-import "../global.css";
-
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useFonts } from "expo-font";
-import { Slot, useRouter, useSegments, useRootNavigationState } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
-import "react-native-reanimated";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { AuthProvider, useAuth } from "@/components/auth/context/AuthContext";
 
 const LOGIN_PATH = "/(auth)/login";
 const APP_PATH = "/(tabs)";

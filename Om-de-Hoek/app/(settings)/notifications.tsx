@@ -1,8 +1,8 @@
-import {View } from "react-native";
-import SettingsHeader from "@/components/settings/SettingsHeader";
+import {View} from "react-native";
+import SettingsTitles from "@/components/settings/SettingsTitles";
 import Back from "@/components/Back";
-import { ArrowLeft } from "lucide-react-native";
-import { useRouter } from "expo-router";
+import {ArrowLeft} from "lucide-react-native";
+import {useRouter} from "expo-router";
 
 
 const PROFILE_PATH = "/(tabs)/profile";
@@ -17,7 +17,7 @@ export default function MyNotificationsPage() {
             <View className="flex-1 px-6">
                 <View className="flex-row items-center mt-2 mb-4">
                 <Back icon={<ArrowLeft color="#100D08" size={20}/>} onBack={() => router.push(PROFILE_PATH)}/>
-                <SettingsHeader
+                <SettingsTitles
                     title="Mijn"
                     subtitle="Meldingen"
                 />

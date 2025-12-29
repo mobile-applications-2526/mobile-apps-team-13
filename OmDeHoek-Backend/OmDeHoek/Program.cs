@@ -147,20 +147,7 @@ namespace OmDeHoek
                         Scheme = "Bearer"
                     });
 
-                    option.AddSecurityRequirement(new OpenApiSecurityRequirement
-                    {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "Bearer"
-                                }
-                            },
-                            new string[]{}
-                        }
-                    });
+                    option.OperationFilter<AuthorizeCheckOperationFilter>();
 
                     var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
                     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);

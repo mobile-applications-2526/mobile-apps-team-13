@@ -84,6 +84,11 @@
     "mynotifications": "My notifications",
     "myneighborhoods": "My neighborhoods",
     "logout": "Logout",
+    "addresses": {
+      "menu": "My addresses",
+      "title": "My",
+      "subtitle": "Addresses"
+    },
     "data": {
       "title": "My",
       "subtitle": "Data",
@@ -151,5 +156,15 @@
       "error": "Error loading notification.",
       "me":"Me"
     }
+  },
+  "common": {
+    "next": "Next",
+    "back": "Back",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "loading": "Loading..."
   }
 }

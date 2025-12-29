@@ -166,4 +166,52 @@ public class AdresService(
             throw;
         }
     }
+
+    public async Task<AddressDto> UpdateAdres(UpdateAdress address, string token)
+    {
+        var userId = tokenService.GetUserIdFromToken(token.Trim());
+        if (userId == null) throw new UnauthorizedException("Invalid token", "token");
+
+        var adres = await uow.AdresRepository.GetById(address.AdresId);
+        if (adres == null) throw new ResourceNotFoundException($"No address found with id '{address.AdresId}'", "adresId");
+        if (adres.BewonerId != userId) throw new ForbiddenActionException("You are not allowed to update addresses of another user", "token");
+
+        await uow.StartTransaction();
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(address.Street))
+                adres.Straat = address.Street.Trim();
+
+            if (address.HouseNumber != null)
+                adres.Huisnummer = string.IsNullOrWhiteSpace(address.HouseNumber) ? null : address.HouseNumber.Trim();
+
+            if (!string.IsNullOrWhiteSpace(address.PostalCode))
+            {
+                var postcode = address.PostalCode.Trim();
+                if (postcode.Length != 4 || !postcode.All(char.IsDigit))
+                    throw new InvalidInputException("postcode must be a 4-digit number", "postalCode");
+
+                var storedPostcode = await uow.PostcodeRepository.GetByCodeAsync(postcode);
+                if (storedPostcode == null)
+                    throw new ResourceNotFoundException($"No postal code found with code '{postcode}'", "postalCode");
+
+                adres.Postcode = postcode;
+            }
+
+            if (!string.IsNullOrWhiteSpace(address.VillageName))
+            {
+                adres.Dorp = address.VillageName.Trim();
+            }
+
+            uow.AdresRepository.Update(adres);
+            await uow.Save();
+            await uow.CommitTransaction();
+            return new AddressDto(adres);
+        }
+        catch (Exception)
+        {
+            await uow.RollbackTransaction();
+            throw;
+        }
+    }
 }
