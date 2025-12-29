@@ -5,7 +5,7 @@ on:
     branches:
       - Development
     paths:
-      - 'OmDeHoek-Backend/**' # Only triggers if files in this folder change
+      - 'OmDeHoek-Backend/**'
 
 jobs:
   build-and-test:
@@ -17,7 +17,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x' # Replace with your version (6.0, 7.0, etc.)
+          dotnet-version: '9.0.x'
 
       - name: Restore dependencies
         run: dotnet restore ./OmDeHoek-Backend/OmDeHoek.sln
