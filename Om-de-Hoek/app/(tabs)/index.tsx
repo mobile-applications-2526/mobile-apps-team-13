@@ -104,7 +104,6 @@ export default function TabTwoScreen() {
   };
   return (
     <View className="flex-1 bg-white">
-    <View className="flex-1 bg-white">
       <View className="items-center">
         <Header title="Place" subtitle="holder" />
       </View>
@@ -149,7 +148,6 @@ export default function TabTwoScreen() {
         icon={<MessageCircle color="#FFFFFF" size={24} strokeWidth={2} />}
         isLoading={isLoading}
       />
-    </View>
     </View>
   );
 }
