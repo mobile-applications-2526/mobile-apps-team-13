@@ -109,7 +109,11 @@
     },
     "neighborhoods": {
       "title": "My",
-      "subtitle": "Neighborhoods"
+      "subtitle": "Neighborhoods",
+      "join": {
+        "title": "Join",
+        "subtitle": "a neighborhood"
+      }
     }
   },
   "notifications": {
@@ -121,7 +125,7 @@
       "title": "Speak",
       "subtitle": "Up",
       "type": "Type of notification",
-      "tags":{
+      "tags": {
         "info": "Informative",
         "warning": "Warning",
         "emergency": "Emergency"

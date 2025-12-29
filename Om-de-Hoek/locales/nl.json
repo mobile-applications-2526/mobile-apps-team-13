@@ -108,7 +108,11 @@
     },
     "neighborhoods": {
       "title": "Mijn",
-      "subtitle": "Buurten"
+      "subtitle": "Buurten",
+      "join": {
+        "title": "Deelnemen",
+        "subtitle": "aan een buurt"
+      }
     }
   },
   "notifications": {
@@ -120,7 +124,7 @@
       "title": "Laat van",
       "subtitle": "je horen",
       "type": "Type melding",
-      "tags":{
+      "tags": {
         "info": "Informatief",
         "warning": "Waarschuwing",
         "emergency": "Noodgeval"
