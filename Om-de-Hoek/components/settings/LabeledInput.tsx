@@ -49,7 +49,7 @@ export default function LabeledInput({
   return (
     <View className="mb-6">
       {label && (
-        <Text className="mb-2 font-comfortaa-regular text-[#828282] font-bold text-base ml-1">
+        <Text className="mb-2 font-comfortaa-bold text-[#828282] text-base ml-1">
           {label}
         </Text>
       )}

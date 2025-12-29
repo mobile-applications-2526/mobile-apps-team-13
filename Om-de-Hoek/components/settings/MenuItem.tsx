@@ -5,9 +5,10 @@ type Props = {
   icon: React.ReactNode;
   label: string;
   onPress: () => void;
+  rightLabel?: string;
 };
 
-const MenuItem = ({ icon, label, onPress }: Props) => {
+const MenuItem = ({ icon, label, onPress, rightLabel }: Props) => {
   return (
     <TouchableOpacity
       onPress={onPress}

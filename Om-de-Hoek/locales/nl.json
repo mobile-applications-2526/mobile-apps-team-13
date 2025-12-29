@@ -44,7 +44,11 @@
       "street": "Straatnaam",
       "housenumber": "Huisnummer (optioneel)",
       "municipality": "Gemeente",
-      "postalcode": "Postcode"
+      "postalcode": "Postcode",
+      "mandatoryStreet": "Straatnaam *",
+      "mandatoryMunicipality": "Gemeente *",
+      "mandatoryPostalcode": "Postcode *",
+      "edit": "Adres aanpassen"
     },
     "phone": {
       "title": "Wat is uw telefoonnummer?",
@@ -165,6 +169,9 @@
     "delete": "Verwijderen",
     "confirm": "Bevestigen",
     "cancel": "Annuleren",
-    "loading": "Laden..."
+    "loading": "Laden...",
+    "sure": "Weet je het zeker?",
+    "addressConfirmation": "Wil je dit adres definitief verwijderen?",
+    "addressEmpty": "Geen adressen beschikbaar. Voel je vrij om er een toe te voegen."
   }
 }
