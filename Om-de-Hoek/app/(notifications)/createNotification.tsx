@@ -152,7 +152,7 @@ export default function CreateNotification({
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white px-6">
+    <View className="flex-1 bg-white px-6">
       <View className="relative mt-2 mb-4">
         <View className="absolute left-0">
           <Back
@@ -263,6 +263,6 @@ export default function CreateNotification({
           />
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
