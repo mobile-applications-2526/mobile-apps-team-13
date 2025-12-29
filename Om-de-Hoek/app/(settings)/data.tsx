@@ -47,10 +47,7 @@ export default function MyDataPage() {
 
     const fetchUserData = async () => {
       try {
-        const response = await UserService.loggedInuser(token);
-        if (!response.ok) return;
-
-        const data = await response.json();
+        const data = await UserService.loggedInuser(token);
 
         const initialEmail = data.email || "";
         const initialUsername = data.userName || "";
@@ -128,10 +125,7 @@ export default function MyDataPage() {
         phoneNumber,
       };
 
-      const response = await UserService.updateUser(userPayload, token!);
-      if (!response.ok) {
-        throw new Error("Failed to update user data");
-      }
+      await UserService.updateUser(userPayload, token!);
 
       setInitialValues({
         email,

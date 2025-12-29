@@ -113,7 +113,11 @@
     },
     "neighborhoods": {
       "title": "Mijn",
-      "subtitle": "Buurten"
+      "subtitle": "Buurten",
+      "join": {
+        "title": "Deelnemen",
+        "subtitle": "aan een buurt"
+      }
     }
   },
   "notifications": {
@@ -125,7 +129,7 @@
       "title": "Laat van",
       "subtitle": "je horen",
       "type": "Type melding",
-      "tags":{
+      "tags": {
         "info": "Informatief",
         "warning": "Waarschuwing",
         "emergency": "Noodgeval"
@@ -135,7 +139,21 @@
       "titleplaceholder": "Bv. Wegenwerken aan de straat",
       "messageinput": "Bericht:",
       "messageplaceholder": "Typ hier...",
-      "submit": "Verzenden"
+      "submit": "Verzenden",
+      "selectneighborhood": "Selecteer buurt",
+      "close": "Sluiten"
+    },
+    "details": {
+      "likes": "Likes: ",
+      "comments": {
+        "comment": "Reacties",
+        "empty": "Nog geen reacties.",
+        "addcomment": "Voeg een reactie toe...",
+        "fail": "Kon reactie niet plaatsen."
+      },
+      "loading": "Laden van melding...",
+      "error": "Error bij laden melding.",
+      "me":"Ik"
     }
   },
   "common": {

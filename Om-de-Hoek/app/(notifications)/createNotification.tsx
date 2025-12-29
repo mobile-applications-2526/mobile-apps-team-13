@@ -3,24 +3,30 @@ import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
 import { useRouter } from "expo-router";
 import { ArrowLeft } from "lucide-react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, Switch, Pressable, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuth } from "@/components/auth/context/AuthContext";
+import userService from "@/services/userService";
+import { Neighborhoods } from "@/types/neighborhood";
 import { useTranslation } from "react-i18next";
 import Header from "@/components/Header";
 import LabeledInput from "@/components/settings/LabeledInput";
+import Dropdown from "@/components/Dropdown";
+import messageService from "@/services/messageService";
 
 type Props = {
   onChange?: (name: {
     title: string;
     content: string;
     onlyMyNeighborhood?: boolean;
-    type?: "informatief" | "waarschuwing" | "noodgeval";
+    type?: "Informational" | "Warning" | "Critical";
+    neighborhoodCode?: string | null;
   }) => void;
   title?: string;
   content?: string;
   onlyMyNeighborhood?: boolean;
-  type?: "informatief" | "waarschuwing" | "noodgeval";
+  type?: "Informational" | "Warning" | "Critical";
 };
 
 const HOME_PATH = "/";
@@ -34,14 +40,41 @@ export default function CreateNotification({
 }: Props) {
   const { t } = useTranslation();
   const router = useRouter();
+  const { token } = useAuth();
   const [title, setTitle] = useState(titleProp ?? "");
   const [content, setContent] = useState(contentProp ?? "");
   const [onlyMyNeighborhood, setOnlyMyNeighborhood] = useState<boolean>(
     onlyMyNeighborhoodProp ?? true
   );
   const [selectedType, setSelectedType] = useState<
-    "informatief" | "waarschuwing" | "noodgeval"
-  >(typeProp ?? "informatief");
+    "Informational" | "Warning" | "Critical"
+  >(typeProp ?? "Informational");
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhoods[]>([]);
+  const [selectedNeighborhoodCode, setSelectedNeighborhoodCode] = useState<
+    string | null
+  >(null);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      if (!token) return;
+      try {
+        const data = await userService.loggedInuser(token);
+        setNeighborhoods(data.neighborhoods ?? []);
+        if (
+          (data.neighborhoods ?? []).length > 0 &&
+          !selectedNeighborhoodCode
+        ) {
+          setSelectedNeighborhoodCode(
+            data.neighborhoods[0].statischeSectorCode
+          );
+        }
+      } catch (e) {
+        console.error("Failed to load logged in user:", e);
+      }
+    };
+
+    loadUser();
+  }, [token]);
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const isValid = title.length > 0 && content.length > 0;
@@ -53,6 +86,7 @@ export default function CreateNotification({
       content,
       onlyMyNeighborhood,
       type: selectedType,
+      neighborhoodCode: selectedNeighborhoodCode,
     });
   };
 
@@ -63,26 +97,58 @@ export default function CreateNotification({
       content: text,
       onlyMyNeighborhood,
       type: selectedType,
+      neighborhoodCode: selectedNeighborhoodCode,
     });
   };
 
   const toggleOnlyMyNeighborhood = (value: boolean) => {
     setOnlyMyNeighborhood(value);
+    if (value && !selectedNeighborhoodCode && neighborhoods.length > 0) {
+      //standaard eerste buurt kiezen
+      setSelectedNeighborhoodCode(neighborhoods[0].statischeSectorCode);
+      onChange?.({
+        title,
+        content,
+        onlyMyNeighborhood: value,
+        type: selectedType,
+        neighborhoodCode: neighborhoods[0].statischeSectorCode,
+      });
+      return;
+    }
+
     onChange?.({
       title,
       content,
       onlyMyNeighborhood: value,
       type: selectedType,
+      neighborhoodCode: selectedNeighborhoodCode,
     });
   };
 
-  const selectType = (type: "informatief" | "waarschuwing" | "noodgeval") => {
+  const selectType = (type: "Informational" | "Warning" | "Critical") => {
     setSelectedType(type);
-    onChange?.({ title, content, onlyMyNeighborhood, type });
+    onChange?.({
+      title,
+      content,
+      onlyMyNeighborhood,
+      type,
+      neighborhoodCode: selectedNeighborhoodCode,
+    });
   };
 
-  const handleSendNotification = () => {
-    console.log(title, content, onlyMyNeighborhood, selectedType);
+  const handleSendNotification = async () => {
+    try {
+      await messageService.sendMessage(token, {
+        title,
+        content,
+        severity: selectedType,
+        neighborhoodCode: selectedNeighborhoodCode,
+        neighborhoodOnly: onlyMyNeighborhood,
+      });
+    } catch (error) {
+      console.error("Failed to send message:", error);
+    }
+
     router.push(HOME_PATH);
   };
 
@@ -107,28 +173,50 @@ export default function CreateNotification({
           {t("notifications.creation.type")}:
         </Text>
         <View className="flex-row justify-between mt-2">
-          <Pressable onPress={() => selectType("informatief")}>
+          <Pressable onPress={() => selectType("Informational")}>
             <Text
-              className={`rounded-xl font-comfortaa-bold px-3 py-1 ${selectedType === "informatief" ? "text-white bg-[#2548BC] border border-[#2548BC]" : "text-black border border-[#2548BC]"}`}
+              className={`rounded-xl font-comfortaa-bold px-3 py-1 ${selectedType === "Informational" ? "text-white bg-[#2548BC] border border-[#2548BC]" : "text-black border border-[#2548BC]"}`}
             >
               {t("notifications.creation.tags.info")}
             </Text>
           </Pressable>
-          <Pressable onPress={() => selectType("waarschuwing")}>
+          <Pressable onPress={() => selectType("Warning")}>
             <Text
-              className={`rounded-xl font-comfortaa-bold px-3 py-1 ${selectedType === "waarschuwing" ? "text-white bg-[#2548BC] border border-[#2548BC]" : "text-black border border-[#2548BC]"}`}
+              className={`rounded-xl font-comfortaa-bold px-3 py-1 ${selectedType === "Warning" ? "text-white bg-[#2548BC] border border-[#2548BC]" : "text-black border border-[#2548BC]"}`}
             >
               {t("notifications.creation.tags.warning")}
             </Text>
           </Pressable>
-          <Pressable onPress={() => selectType("noodgeval")}>
+          <Pressable onPress={() => selectType("Critical")}>
             <Text
-              className={`rounded-xl font-comfortaa-bold px-3 py-1 ${selectedType === "noodgeval" ? "text-white bg-[#2548BC] border border-[#2548BC]" : "text-black border border-[#2548BC]"}`}
+              className={`rounded-xl font-comfortaa-bold px-3 py-1 ${selectedType === "Critical" ? "text-white bg-[#2548BC] border border-[#2548BC]" : "text-black border border-[#2548BC]"}`}
             >
               {t("notifications.creation.tags.emergency")}
             </Text>
           </Pressable>
         </View>
+      </View>
+      <View className="mt-4">
+        {neighborhoods.length > 0 && (
+          <Dropdown
+            label={t("notifications.creation.selectneighborhood")}
+            options={neighborhoods.map((n) => ({
+              label: n.name,
+              value: n.statischeSectorCode,
+            }))}
+            value={selectedNeighborhoodCode}
+            onChange={(val: string) => {
+              setSelectedNeighborhoodCode(val);
+              onChange?.({
+                title,
+                content,
+                onlyMyNeighborhood,
+                type: selectedType,
+                neighborhoodCode: val,
+              });
+            }}
+          />
+        )}
       </View>
       <View className="flex-row items-center mt-4">
         <Text className="text-black font-comfortaa-bold">

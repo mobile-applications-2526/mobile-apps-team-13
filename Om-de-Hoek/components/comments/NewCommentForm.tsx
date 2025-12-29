@@ -4,19 +4,44 @@ import { useAuth } from "@/components/auth/context/AuthContext";
 import { useRouter } from "expo-router";
 import { Send } from "lucide-react-native";
 import { Color } from "@/types/StyleOptions";
+import messageService from "@/services/messageService";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   notificationId: string;
+  currentUserTag?: string;
   onCommentPosted?: (comment: any) => void;
 };
 
-const NewCommentForm: React.FC<Props> = ({ notificationId, onCommentPosted }) => {
+const NewCommentForm: React.FC<Props> = ({ notificationId, currentUserTag = "", onCommentPosted }) => {
   const [text, setText] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const { token } = useAuth();
-  const router = useRouter();
+
+  const { t } = useTranslation();
 
   const submit = async () => {
+     if (!text.trim() || !token) return;
+
+    setSubmitting(true);
+    try {
+      await messageService.respondToMessage(token, {
+        messageId: notificationId,
+        content: text.trim(),
+      });
+
+      const newComment = { //dummy comment met zelfde input, voor display zonder opnieuw een request te maken.
+        author: currentUserTag, 
+        content: text.trim(),
+      };
+
+      setText("");
+      onCommentPosted?.(newComment);
+    } catch (error) {
+      console.error("Failed to post comment:", error);
+    } finally {
+      setSubmitting(false);
+    }
     
   };
 
@@ -24,7 +49,7 @@ const NewCommentForm: React.FC<Props> = ({ notificationId, onCommentPosted }) =>
     <View className="mt-4">
       <View className="flex-row items-center border border-gray-200 rounded-lg">
         <TextInput
-          placeholder="Plaats een comment ..."
+          placeholder={t("notifications.details.comments.addcomment")}
           value={text}
           onChangeText={setText}
           multiline

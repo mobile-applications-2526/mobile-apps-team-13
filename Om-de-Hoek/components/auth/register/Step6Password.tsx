@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Text,
-  View,
-  Pressable,
-  Platform,
-  KeyboardAvoidingView,
-} from "react-native";
+import { Text, View, Pressable } from "react-native";
 import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
 import { Eye, EyeClosed } from "lucide-react-native";
@@ -81,11 +75,7 @@ export const Step6Password = ({
   const strengthFeedback = getStrengthFeedback();
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 justify-center"
-      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
-    >
+    <View className="flex-1 justify-center">
       <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
         {t("register.password.title")}
@@ -155,6 +145,6 @@ export const Step6Password = ({
         title={t("register.continue")}
         background={isValid ? Color.BLUE : Color.GRAY}
       />
-    </KeyboardAvoidingView>
+    </View>
   );
 };

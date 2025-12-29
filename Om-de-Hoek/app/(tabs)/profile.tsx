@@ -29,12 +29,10 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchUserName = async () => {
       try {
-        const response = await UserService.loggedInuser(token);
-        if (response.ok) {
-          const data = await response.json();
-          setFirstName(data.firstName || "");
-          setLastName(data.lastName || "");
-        }
+        const data = await UserService.loggedInuser(token);
+
+        setFirstName(data.firstName || "");
+        setLastName(data.lastName || "");
       } catch (error) {
         console.error("Failed to fetch user data", error);
       } finally {

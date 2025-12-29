@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { KeyboardAvoidingView, Platform, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import PhoneInput from "react-native-phone-number-input";
 import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
@@ -31,11 +31,7 @@ export const Step5PhoneNumber = ({
   const isValid = digits.length >= 9;
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 justify-center"
-      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 30}
-    >
+    <View className="flex-1 justify-center">
       <AuthHeader title={"maak een account aan"} onBack={onBack} />
       <Text className="text-[16px] text-black font-comfortaa-semibold text-center mb-2">
         {t("register.phone.title")}
@@ -114,6 +110,6 @@ export const Step5PhoneNumber = ({
         title={t("register.continue")}
         background={Color.BLUE}
       />
-    </KeyboardAvoidingView>
+    </View>
   );
 };

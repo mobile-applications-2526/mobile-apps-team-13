@@ -10,10 +10,11 @@ import { TriangleAlert, Siren, Info, MessageCircle } from "lucide-react-native";
 import { useAuth } from "@/components/auth/context/AuthContext";
 import { useTranslation } from "react-i18next";
 import FloatingActionButton from "@/components/FloatingActionButton";
+import { UnauthorizedError } from "@/types/Errors/UnauthorizedError";
 
 export default function TabTwoScreen() {
   const router = useRouter();
-  const { token } = useAuth();
+  const { token, refreshTokens } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
@@ -28,7 +29,20 @@ export default function TabTwoScreen() {
       });
       setMessages(data);
     } catch (error) {
-      console.error("Failed to fetch messages:", error);
+      if (error instanceof UnauthorizedError) {
+        console.log(
+          "Error fetching messages: token expired, refreshing tokens"
+        );
+        await refreshTokens();
+        console.log("Tokens refreshed, retrying to fetch messages");
+        const data = await messageService.fetchMessageFeed(token, {
+          page: 0,
+          pageSize: 20,
+        });
+        setMessages(data);
+      } else {
+        console.error("Error fetching messages:", error);
+      }
     } finally {
       setLoading(false);
     }
@@ -87,7 +101,7 @@ export default function TabTwoScreen() {
               key={`${message.userTag}-${index}`}
               icon={icon}
               title={title}
-              subtitle={message.content}
+              subtitle={message.title ?? message.content}
               time={new Date(message.createdAt).toLocaleTimeString("nl-BE", {
                 hour: "2-digit",
                 minute: "2-digit",

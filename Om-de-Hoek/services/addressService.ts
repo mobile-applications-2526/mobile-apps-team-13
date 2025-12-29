@@ -1,17 +1,15 @@
 import {Address, UpdateAddressCommand} from "@/types/address";
 import {fetchData} from "@/services/requestService";
 
-const API_URL = process.env.EXPO_PUBLIC_API_PATH;
-
 const RegisterAddress = async (address: Address, token: string) => {
-    return await fetch(`${API_URL}/api/address`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(address),
-    })
+  return await fetchData(`/address`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(address),
+  });
 };
 
 const GetAllByAuthenticatedUser = async (token: string) : Promise<Address[]>   => {
