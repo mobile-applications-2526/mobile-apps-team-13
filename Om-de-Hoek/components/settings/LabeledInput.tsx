@@ -48,9 +48,11 @@ export default function LabeledInput({
 }: Props) {
   return (
     <View className="mb-6">
-      <Text className="mb-2 font-comfortaa-regular text-[#828282] font-bold text-base ml-1">
-        {label}
-      </Text>
+      {label && (
+        <Text className="mb-2 font-comfortaa-regular text-[#828282] font-bold text-base ml-1">
+          {label}
+        </Text>
+      )}
 
       <View
         className={`
