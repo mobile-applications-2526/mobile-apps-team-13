@@ -13,6 +13,6 @@ public class ApiStatusController : ControllerBase
     [HttpGet]
     public ActionResult<string> GetStatus()
     {
-        return Ok("API is running.");
+        return Ok("API is awake and running.");
     }
 }
