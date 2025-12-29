@@ -27,17 +27,15 @@ export default function MyNeighborhoodsPage() {
 
     const fetchNeighborhoodsFromUser = async () => {
       try {
-        const response = await userService.loggedInuser(token);
-        const data = await response.json();
+        const data = await userService.loggedInuser(token);
 
         const neighborhoodsWithDetails = await Promise.all(
           data.neighborhoods.map(async (n: Neighborhoods) => {
             try {
-              const detailRes =
+              const detailData =
                 await neighborhoodService.fetchNeighborhoodsByStatisticalSectorCode(
                   n.statischeSectorCode
                 );
-              const detailData = await detailRes.json();
               return { ...n, residents: detailData.residents || [] };
             } catch (e) {
               return n;
@@ -94,7 +92,7 @@ export default function MyNeighborhoodsPage() {
         </ScrollView>
         <FloatingActionButton
           icon={<Plus color="white" size={28} strokeWidth={2.5} />}
-          onPress={() => router.push("/")}
+          onPress={() => router.push("/(settings)/joinNeighborhood")}
           isLoading={isLoading}
         />
       </View>

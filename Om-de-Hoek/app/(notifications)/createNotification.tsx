@@ -37,43 +37,44 @@ export default function CreateNotification({
   content: contentProp,
   onlyMyNeighborhood: onlyMyNeighborhoodProp,
   type: typeProp,
-}: Props)  {
+}: Props) {
+  const { t } = useTranslation();
+  const router = useRouter();
+  const { token } = useAuth();
+  const [title, setTitle] = useState(titleProp ?? "");
+  const [content, setContent] = useState(contentProp ?? "");
+  const [onlyMyNeighborhood, setOnlyMyNeighborhood] = useState<boolean>(
+    onlyMyNeighborhoodProp ?? true
+  );
+  const [selectedType, setSelectedType] = useState<
+    "Informational" | "Warning" | "Critical"
+  >(typeProp ?? "Informational");
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhoods[]>([]);
+  const [selectedNeighborhoodCode, setSelectedNeighborhoodCode] = useState<
+    string | null
+  >(null);
 
-    const { t } = useTranslation();
-    const router = useRouter();
-    const { token } = useAuth();
-    const [title, setTitle] = useState(titleProp ?? "");
-    const [content, setContent] = useState(contentProp ?? "");
-    const [onlyMyNeighborhood, setOnlyMyNeighborhood] = useState<boolean>(onlyMyNeighborhoodProp ?? true);
-    const [selectedType, setSelectedType] = useState<'Informational' | 'Warning' | 'Critical'>(typeProp ?? 'Informational');
-    const [neighborhoods, setNeighborhoods] = useState<Neighborhoods[]>([]);
-    const [selectedNeighborhoodCode, setSelectedNeighborhoodCode] = useState<string | null>(null);
+  useEffect(() => {
+    const loadUser = async () => {
+      if (!token) return;
+      try {
+        const data = await userService.loggedInuser(token);
+        setNeighborhoods(data.neighborhoods ?? []);
+        if (
+          (data.neighborhoods ?? []).length > 0 &&
+          !selectedNeighborhoodCode
+        ) {
+          setSelectedNeighborhoodCode(
+            data.neighborhoods[0].statischeSectorCode
+          );
+        }
+      } catch (e) {
+        console.error("Failed to load logged in user:", e);
+      }
+    };
 
-    useEffect(() => {
-        const loadUser = async () => {
-            if (!token) return;
-            try {
-                const resp = await userService.loggedInuser(token);
-                if (!resp.ok) {
-                    if (resp.status === 401) {
-                        console.warn("Unauthorized logged in user");
-                        return;
-                    }
-                    throw new Error(`${resp.status}`);
-                }
-
-                const data = await resp.json();
-                setNeighborhoods(data.neighborhoods ?? []);
-                if ((data.neighborhoods ?? []).length > 0 && !selectedNeighborhoodCode) {
-                    setSelectedNeighborhoodCode(data.neighborhoods[0].statischeSectorCode);
-                }
-            } catch (e) {
-                console.error("Failed to load logged in user:", e);
-            }
-        };
-
-        loadUser();
-    }, [token]);
+    loadUser();
+  }, [token]);
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const isValid = title.length > 0 && content.length > 0;
@@ -102,9 +103,16 @@ export default function CreateNotification({
 
   const toggleOnlyMyNeighborhood = (value: boolean) => {
     setOnlyMyNeighborhood(value);
-    if (value && !selectedNeighborhoodCode && neighborhoods.length > 0) { //standaard eerste buurt kiezen
+    if (value && !selectedNeighborhoodCode && neighborhoods.length > 0) {
+      //standaard eerste buurt kiezen
       setSelectedNeighborhoodCode(neighborhoods[0].statischeSectorCode);
-      onChange?.({ title, content, onlyMyNeighborhood: value, type: selectedType, neighborhoodCode: neighborhoods[0].statischeSectorCode });
+      onChange?.({
+        title,
+        content,
+        onlyMyNeighborhood: value,
+        type: selectedType,
+        neighborhoodCode: neighborhoods[0].statischeSectorCode,
+      });
       return;
     }
 
@@ -117,119 +125,135 @@ export default function CreateNotification({
     });
   };
 
-    const selectType = (type: "Informational" | "Warning" | "Critical") => {
-        setSelectedType(type);
-        onChange?.({ title, content, onlyMyNeighborhood, type, neighborhoodCode: selectedNeighborhoodCode });
-    };
+  const selectType = (type: "Informational" | "Warning" | "Critical") => {
+    setSelectedType(type);
+    onChange?.({
+      title,
+      content,
+      onlyMyNeighborhood,
+      type,
+      neighborhoodCode: selectedNeighborhoodCode,
+    });
+  };
 
-    const handleSendNotification = async () => {
-        try {
-             await messageService.sendMessage(token, {
-                title,
-                content,
-                severity: selectedType,
-                neighborhoodCode: selectedNeighborhoodCode,
-                neighborhoodOnly: onlyMyNeighborhood
-            });
-        } catch (error) {
-            console.error("Failed to send message:", error);
-        }
-
-        router.push(HOME_PATH);
+  const handleSendNotification = async () => {
+    try {
+      await messageService.sendMessage(token, {
+        title,
+        content,
+        severity: selectedType,
+        neighborhoodCode: selectedNeighborhoodCode,
+        neighborhoodOnly: onlyMyNeighborhood,
+      });
+    } catch (error) {
+      console.error("Failed to send message:", error);
     }
 
+    router.push(HOME_PATH);
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white px-6">
-        <View className="relative mt-2 mb-4">
-            <View className="absolute left-0">
-                <Back
-                icon={<ArrowLeft color="#100D08" size={20} />}
-                onBack={() => router.push(HOME_PATH)}
-                />
-            </View>
-            <View className="items-center">
-                <Header
-                title={t("notifications.creation.title")}
-                subtitle={t("notifications.creation.subtitle")}
-                />
-            </View>
+      <View className="relative mt-2 mb-4">
+        <View className="absolute left-0">
+          <Back
+            icon={<ArrowLeft color="#100D08" size={20} />}
+            onBack={() => router.push(HOME_PATH)}
+          />
         </View>
-        <View>
-            <Text className="text-black font-comfortaa-bold">
-                {t("notifications.creation.type")}:
+        <View className="items-center">
+          <Header
+            title={t("notifications.creation.title")}
+            subtitle={t("notifications.creation.subtitle")}
+          />
+        </View>
+      </View>
+      <View>
+        <Text className="text-black font-comfortaa-bold">
+          {t("notifications.creation.type")}:
+        </Text>
+        <View className="flex-row justify-between mt-2">
+          <Pressable onPress={() => selectType("Informational")}>
+            <Text
+              className={`rounded-xl font-comfortaa-bold px-3 py-1 ${selectedType === "Informational" ? "text-white bg-[#2548BC] border border-[#2548BC]" : "text-black border border-[#2548BC]"}`}
+            >
+              {t("notifications.creation.tags.info")}
             </Text>
-            <View className="flex-row justify-between mt-2">
-                <Pressable onPress={() => selectType("Informational")}>
-                    <Text
-                    className={`rounded-xl font-comfortaa-bold px-3 py-1 ${selectedType === "Informational" ? "text-white bg-[#2548BC] border border-[#2548BC]" : "text-black border border-[#2548BC]"}`}
-                    >
-                    {t("notifications.creation.tags.info")}
-                    </Text>
-                </Pressable>
-                <Pressable onPress={() => selectType("Warning")}>
-                    <Text
-                    className={`rounded-xl font-comfortaa-bold px-3 py-1 ${selectedType === "Warning" ? "text-white bg-[#2548BC] border border-[#2548BC]" : "text-black border border-[#2548BC]"}`}
-                    >
-                    {t("notifications.creation.tags.warning")}
-                    </Text>
-                </Pressable>
-                <Pressable onPress={() => selectType("Critical")}>
-                    <Text
-                    className={`rounded-xl font-comfortaa-bold px-3 py-1 ${selectedType === "Critical" ? "text-white bg-[#2548BC] border border-[#2548BC]" : "text-black border border-[#2548BC]"}`}
-                    >
-                    {t("notifications.creation.tags.emergency")}
-                    </Text>
-                </Pressable>
-            </View>
+          </Pressable>
+          <Pressable onPress={() => selectType("Warning")}>
+            <Text
+              className={`rounded-xl font-comfortaa-bold px-3 py-1 ${selectedType === "Warning" ? "text-white bg-[#2548BC] border border-[#2548BC]" : "text-black border border-[#2548BC]"}`}
+            >
+              {t("notifications.creation.tags.warning")}
+            </Text>
+          </Pressable>
+          <Pressable onPress={() => selectType("Critical")}>
+            <Text
+              className={`rounded-xl font-comfortaa-bold px-3 py-1 ${selectedType === "Critical" ? "text-white bg-[#2548BC] border border-[#2548BC]" : "text-black border border-[#2548BC]"}`}
+            >
+              {t("notifications.creation.tags.emergency")}
+            </Text>
+          </Pressable>
         </View>
-        <View className="mt-4">
+      </View>
+      <View className="mt-4">
         {neighborhoods.length > 0 && (
-            <Dropdown
+          <Dropdown
             label={t("notifications.creation.selectneighborhood")}
-            options={neighborhoods.map((n) => ({ label: n.name, value: n.statischeSectorCode }))}
+            options={neighborhoods.map((n) => ({
+              label: n.name,
+              value: n.statischeSectorCode,
+            }))}
             value={selectedNeighborhoodCode}
             onChange={(val: string) => {
               setSelectedNeighborhoodCode(val);
-              onChange?.({ title, content, onlyMyNeighborhood, type: selectedType, neighborhoodCode: val });
+              onChange?.({
+                title,
+                content,
+                onlyMyNeighborhood,
+                type: selectedType,
+                neighborhoodCode: val,
+              });
             }}
           />
         )}
-        </View>
-        <View className="flex-row items-center mt-4">
-            <Text className="text-black font-comfortaa-bold">{t("notifications.creation.neighborhood")}</Text>
-            <Switch
-            value={onlyMyNeighborhood}
-            onValueChange={toggleOnlyMyNeighborhood}
-            trackColor={{ true: "#10B981", false: "#d1d5db" }}
-            thumbColor={onlyMyNeighborhood ? "#ffffff" : "#f4f3f4"}
-            />
-        </View>
-        <View className="flex-1 mt-4">
-            <LabeledInput
-            label={t("notifications.creation.titleinput")}
-            placeholder={t("notifications.creation.titleplaceholder")}
-            value={title}
-            onChange={handleTitleChange}
-              isFocused={focusedField === "title"}
+      </View>
+      <View className="flex-row items-center mt-4">
+        <Text className="text-black font-comfortaa-bold">
+          {t("notifications.creation.neighborhood")}
+        </Text>
+        <Switch
+          value={onlyMyNeighborhood}
+          onValueChange={toggleOnlyMyNeighborhood}
+          trackColor={{ true: "#10B981", false: "#d1d5db" }}
+          thumbColor={onlyMyNeighborhood ? "#ffffff" : "#f4f3f4"}
+        />
+      </View>
+      <View className="flex-1 mt-4">
+        <LabeledInput
+          label={t("notifications.creation.titleinput")}
+          placeholder={t("notifications.creation.titleplaceholder")}
+          value={title}
+          onChange={handleTitleChange}
+          isFocused={focusedField === "title"}
           onFocus={() => setFocusedField("title")}
           onBlur={() => setFocusedField(null)}
           keyboardType="default"
         />
 
-            <LabeledInput
-            label={t("notifications.creation.messageinput")}
-            placeholder={t("notifications.creation.messageplaceholder")}
-            value={content}
-            onChange={handleContentChange}
-            isFocused={focusedField === "content"}
+        <LabeledInput
+          label={t("notifications.creation.messageinput")}
+          placeholder={t("notifications.creation.messageplaceholder")}
+          value={content}
+          onChange={handleContentChange}
+          isFocused={focusedField === "content"}
           onFocus={() => setFocusedField("content")}
           onBlur={() => setFocusedField(null)}
           keyboardType="default"
           multiline={true}
-            numberOfLines={10}
-            containerStyle="h-80"
-            />
+          numberOfLines={10}
+          containerStyle="h-80"
+        />
 
         <View className="mt-auto">
           <PressableButton

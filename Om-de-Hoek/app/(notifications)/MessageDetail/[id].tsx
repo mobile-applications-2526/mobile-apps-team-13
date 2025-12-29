@@ -12,8 +12,9 @@ import userService from "@/services/userService";
 import { useAuth } from "@/components/auth/context/AuthContext";
 
 export default function MessageDetailScreen() {
-  
-  const {message: messageParam } = useLocalSearchParams<{ message?: string }>();
+  const { message: messageParam } = useLocalSearchParams<{
+    message?: string;
+  }>();
   const [message, setMessage] = useState<Message | null>(null);
   const [userTag, setUserTag] = useState<string>("");
 
@@ -25,14 +26,18 @@ export default function MessageDetailScreen() {
     const loadMessageFromParams = () => {
       if (messageParam) {
         try {
-          const parsed = JSON.parse(decodeURIComponent(String(messageParam))) as Message; //hellyeah
+          const parsed = JSON.parse(
+            decodeURIComponent(String(messageParam))
+          ) as Message; //hellyeah
           setMessage(parsed);
         } catch (e) {
           console.error("Failed to parse message param:", e);
           setMessage(null);
         }
       } else {
-        console.warn("No message param provided; MessageDetail expects a 'message' route param.");
+        console.warn(
+          "No message param provided; MessageDetail expects a 'message' route param."
+        );
         setMessage(null);
       }
     };
@@ -43,11 +48,9 @@ export default function MessageDetailScreen() {
   useEffect(() => {
     const fetchUserName = async () => {
       try {
-        const response = await userService.loggedInuser(token);
-        if (response.ok) {
-          const userData = await response.json();
-          setUserTag(userData.userName);
-        }
+        const userData = await userService.loggedInuser(token);
+
+        setUserTag(userData.userName);
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       }
@@ -56,45 +59,59 @@ export default function MessageDetailScreen() {
     fetchUserName();
   }, []);
 
-
   const getSeverityConfig = (severity: Message["severity"]) => {
     switch (severity) {
       case "Critical":
         return {
-          title: t("notifications.creation.tags.emergency")
+          title: t("notifications.creation.tags.emergency"),
         };
       case "Warning":
         return {
-          title: t("notifications.creation.tags.warning")
+          title: t("notifications.creation.tags.warning"),
         };
       case "Informational":
       default:
         return {
-          title: t("notifications.creation.tags.info")
+          title: t("notifications.creation.tags.info"),
         };
     }
   };
 
   const getDisplayName = () => {
     if (!message) return "";
-    return message.userTag === userTag ? t("notifications.details.me") : message.userTag;
+    return message.userTag === userTag
+      ? t("notifications.details.me")
+      : message.userTag;
   };
 
-  if (!message) return <Text className="p-4">{t("notifications.details.error")}</Text>;
+  if (!message)
+    return <Text className="p-4">{t("notifications.details.error")}</Text>;
 
   return (
     <ScrollView className="p-4 bg-white pt-12">
-       <View className="absolute left-0">
-                <Back icon={<ArrowLeft color="#100D08" size={20}/>} onBack={() => router.push(HOME_PATH)}/>
-        </View>
-        <View className="items-center mt-2 mb-4">
-                <Header title={getSeverityConfig(message.severity).title} subtitle={message.title} />
-        </View>
-            <Text className="text-sm text-gray-500 mb-4">
+      <View className="absolute left-0">
+        <Back
+          icon={<ArrowLeft color="#100D08" size={20} />}
+          onBack={() => router.push(HOME_PATH)}
+        />
+      </View>
+      <View className="items-center mt-2 mb-4">
+        <Header
+          title={getSeverityConfig(message.severity).title}
+          subtitle={message.title}
+        />
+      </View>
+      <Text className="text-sm text-gray-500 mb-4">
         {new Date(message.createdAt).toLocaleString("nl-BE")}
       </Text>
-            <NotificationMessage name={getDisplayName()} content={message.content} />
-            <CommentSection notificationId={message.id} initialComments={message.reactions} initialLikes={message.totalLikes} currentUserTag={userTag} initialLiked={message.likedByUser} />
+      <NotificationMessage name={getDisplayName()} content={message.content} />
+      <CommentSection
+        notificationId={message.id}
+        initialComments={message.reactions}
+        initialLikes={message.totalLikes}
+        currentUserTag={userTag}
+        initialLiked={message.likedByUser}
+      />
     </ScrollView>
   );
 }

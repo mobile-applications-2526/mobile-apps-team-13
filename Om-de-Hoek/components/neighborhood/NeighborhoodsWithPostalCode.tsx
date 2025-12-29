@@ -7,7 +7,7 @@ import PinnedBottomButton from "../PinnedBottomButton";
 
 type Props = {
   postalCode: string;
-  token?: string;
+  token?: string | null;
   onNext?: () => void;
 };
 
@@ -19,9 +19,8 @@ const NeighborhoodsWithPostalCode = ({ postalCode, token, onNext }: Props) => {
   useEffect(() => {
     const fetchNeighborhoodsByPostalCode = async () => {
       try {
-        const response =
+        const data =
           await neighborhoodService.fetchNeighborhoodsByPostalCode(postalCode);
-        const data: Neighborhoods[] = await response.json();
         setNeighborhoods(data);
       } catch (error) {
         console.error("Error fetching neighborhoods:", error);
