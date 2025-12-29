@@ -35,8 +35,19 @@ const UpdateSingleAddress = async (address: UpdateAddressCommand, token: string)
     })
 }
 
+const DeleteAddress = async (addressId: string, token: string) => {
+    return await fetchData(`/address/${addressId}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        }
+    })
+}
+
 export default {
     RegisterAddress,
     GetAllByAuthenticatedUser,
-    UpdateSingleAddress
+    UpdateSingleAddress,
+    DeleteAddress
 }

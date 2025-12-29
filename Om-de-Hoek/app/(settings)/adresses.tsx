@@ -83,7 +83,28 @@ const AddressSettings = () => {
     }
 
     const handleDeleteAddress = async (addressId: string) => {
-        // Implement delete functionality if needed
+        try {
+            await addressService.DeleteAddress(addressId, token!);
+            setAddresses((prevAddresses) =>
+                prevAddresses.filter((addr) => addr.adresId !== addressId)
+            );
+        }
+        catch (e) {
+            if (e instanceof UnauthorizedError) {
+                console.warn("Error deleting address: token expired, refreshing tokens");
+                await refreshTokens()
+                const waiter = new Promise(resolve => setTimeout(resolve, 1000));
+                await waiter;
+                await addressService.DeleteAddress(addressId, token!);
+                setAddresses((prevAddresses) =>
+                    prevAddresses.filter((addr) => addr.adresId !== addressId)
+                );
+                console.log("Tokens refreshed, address deleted");
+            }
+            else {
+                console.error("Error deleting address:", e);
+            }
+        }
     }
 
     const handleChangeNew = (updatedAddress: Address) => {
