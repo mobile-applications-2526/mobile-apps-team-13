@@ -11,6 +11,7 @@ namespace OmDeHoek.Controllers;
 // api path: api/user
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class UserController(UserService userService) : ControllerBase
 {
     /// <summary>
