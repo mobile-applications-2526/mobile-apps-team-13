@@ -1,15 +1,14 @@
 import Back from "@/components/Back";
-import { PressableButton } from "@/components/PressableButton";
-import { Color } from "@/types/StyleOptions";
-import { useRouter } from "expo-router";
-import { ArrowLeft } from "lucide-react-native";
-import { useEffect, useState } from "react";
-import { Pressable, Switch, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useAuth } from "@/components/auth/context/AuthContext";
+import {PressableButton} from "@/components/PressableButton";
+import {Color} from "@/types/StyleOptions";
+import {useRouter} from "expo-router";
+import {ArrowLeft} from "lucide-react-native";
+import {useEffect, useState} from "react";
+import {Pressable, ScrollView, Switch, Text, View} from "react-native";
+import {useAuth} from "@/components/auth/context/AuthContext";
 import userService from "@/services/userService";
-import { Neighborhoods } from "@/types/neighborhood";
-import { useTranslation } from "react-i18next";
+import {Neighborhoods} from "@/types/neighborhood";
+import {useTranslation} from "react-i18next";
 import Header from "@/components/Header";
 import LabeledInput from "@/components/settings/LabeledInput";
 import Dropdown from "@/components/Dropdown";
@@ -152,7 +151,10 @@ export default function CreateNotification({
   };
 
   return (
-    <View className="flex-1 bg-white px-6">
+    <ScrollView
+        className="flex-1 bg-white px-6"
+        contentContainerStyle={{ paddingBottom: 100 }}
+    >
       <View className="relative mt-2 mb-4">
         <View className="absolute left-0">
           <Back
@@ -261,6 +263,6 @@ export default function CreateNotification({
           background={isValid ? Color.BLUE : Color.GRAY}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 }
