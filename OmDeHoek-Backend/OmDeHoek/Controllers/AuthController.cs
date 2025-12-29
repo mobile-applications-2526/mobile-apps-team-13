@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OmDeHoek.Model.Commands.auth;
 using OmDeHoek.Model.Commands.User;
+using OmDeHoek.Model.Commands.User.ExternalAuth;
 using OmDeHoek.Model.DTO;
+using OmDeHoek.Model.DTO.User;
+using OmDeHoek.Model.Entities;
 using OmDeHoek.Services;
 using OmDeHoek.Utils;
 
@@ -12,7 +16,14 @@ namespace OmDeHoek.Controllers;
 [Route("api/[controller]")]
 public class AuthController(AuthService authService) : ControllerBase
 {
-    // route: api/auth/register
+    /// <summary>
+    /// Registers a new user with the provided registration details.
+    /// </summary>
+    /// <param name="command">The registration command containing user details.</param>
+    /// <returns>
+    /// An <see cref="ActionResult{UserDto}"/> containing the created <see cref="UserDto"/> on success
+    /// or an appropriate error response handled by <see cref="ExceptionHandler"/>.
+    /// </returns>
     [HttpPost("register")]
     [AllowAnonymous]
     public async Task<ActionResult<UserDto>> Register([FromBody] RegisterUser command)
@@ -27,8 +38,15 @@ public class AuthController(AuthService authService) : ControllerBase
             return ExceptionHandler.HandleException(ex);
         }
     }
-    
-    // route: api/auth/login
+
+    /// <summary>
+    /// Authenticates a user and returns an access token.
+    /// </summary>
+    /// <param name="command">The login command containing credentials.</param>
+    /// <returns>
+    /// An <see cref="ActionResult{TokenDto}"/> containing the authentication token on success
+    /// or an appropriate error response handled by <see cref="ExceptionHandler"/>.
+    /// </returns>
     [HttpPost("login")]
     [AllowAnonymous]
     public async Task<ActionResult<TokenDto>> Login([FromBody] LoginUser command)
@@ -43,16 +61,21 @@ public class AuthController(AuthService authService) : ControllerBase
             return ExceptionHandler.HandleException(e);
         }
     }
-    
-    // route: api/auth/logout
+
+    /// <summary>
+    /// Logs out the currently authenticated user by invalidating the provided bearer token.
+    /// </summary>
+    /// <returns>
+    /// An <see cref="ActionResult{MessageResponseDto}"/> indicating success or an error response
+    /// handled by <see cref="ExceptionHandler"/>.
+    /// </returns>
     [HttpPost("logout")]
-    [Authorize]
-    public async Task<ActionResult<MessageResponseDto>> Logout()
+    [AllowAnonymous]
+    public async Task<ActionResult<MessageResponseDto>> Logout([FromBody] LogoutCommand command)
     {
         try
         {
-            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            await authService.LogoutAsync(token);
+            await authService.LogoutAsync(command);
             return Ok(new MessageResponseDto("Successfully logged out"));
         }
         catch (Exception e)
@@ -60,16 +83,36 @@ public class AuthController(AuthService authService) : ControllerBase
             return ExceptionHandler.HandleException(e);
         }
     }
-    
-    // route: api/auth/refresh
+
+    /// <summary>
+    /// Refreshes the access token using the current bearer token.
+    /// </summary>
+    /// <returns>
+    /// An <see cref="ActionResult{TokenDto}"/> containing a new token on success
+    /// or an appropriate error response handled by <see cref="ExceptionHandler"/>.
+    /// </returns>
     [HttpPost("refresh")]
-    [Authorize]
-    public async Task<ActionResult<TokenDto>> Refresh()
+    [AllowAnonymous]
+    public async Task<ActionResult<TokenDto>> Refresh([FromBody] RefreshTokenCommand token)
     {
         try
         {
-            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             var result = await authService.RefreshToken(token);
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return ExceptionHandler.HandleException(e);
+        }
+    }
+    
+    [HttpPost("external/google")]
+    [AllowAnonymous]
+    public async Task<ActionResult<TokenDto>> LoginWithGoogle([FromBody] GoogleSigninRequest command)
+    {
+        try
+        {
+            var result = await authService.SignInWithGoogle(command);
             return Ok(result);
         }
         catch (Exception e)

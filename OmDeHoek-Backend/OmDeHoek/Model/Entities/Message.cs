@@ -1,0 +1,63 @@
+﻿using System.ComponentModel.DataAnnotations;
+using OmDeHoek.Model.Enums;
+
+namespace OmDeHoek.Model.Entities;
+
+public class Message() : IDataBaseEntity<Message>
+{
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public string UserId { get; set; } = string.Empty; // Foreign key 
+    public User? User { get; set; }
+
+    [MaxLength(9)]
+    public string BuurtSectorCode { get; set; } = string.Empty; // Foreign key
+    public Buurt? Buurt { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public string Content { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public MessageSeverity Severity { get; set; }
+    
+    [MaxLength(6)]
+    public string? Nis6DeelGemeente { get; set; } // For shared messages in 1 deelgemeente
+    public DeelGemeente? DeelGemeente { get; set; }
+    
+    public List<MessageReaction> Comments { get; init; } = [];
+    public List<UserLikedPost> LikedBy { get; init; } = [];
+
+
+    public bool Equals(Message? other)
+    {
+        return !CheckNullOrWrongType(other)
+               && Id == other!.Id;
+    }
+
+    public void Update(Message? entity)
+    {
+        if (!Equals(entity)) throw new ArgumentException("Entities are not the same", nameof(entity));
+        Content = entity?.Content ?? Content;
+    }
+
+    public bool HardEquals(Message? other)
+    {
+        return Equals(other)
+               && Content == other?.Content
+               && UserId == other?.UserId
+               && BuurtSectorCode == other?.BuurtSectorCode
+               && Title == other?.Title;
+    }
+
+    public bool CheckNullOrWrongType(object? other)
+    {
+        return other is null || GetType() != other.GetType();
+    }
+
+    public bool Equals(Message? x, Message? y)
+    {
+        return x is not null && x.Equals(y);
+    }
+
+    public int GetHashCode(Message obj)
+    {
+        return HashCode.Combine(Id);
+    }
+}

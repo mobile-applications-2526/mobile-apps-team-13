@@ -18,6 +18,12 @@ De database migraties zijn te vinden in de `Migrations` folder. Deze migraties w
 dotnet ef database update --project 'OmDeHoek/OmDeHoek.csproj'
 ```
 
+Als dit command een error geeft dat de `dotnet-ef` tool niet gevonden kan worden, installeer deze dan met de volgende command:
+
+```bash
+dotnet tool install --global dotnet-ef
+```
+
 In de `program.cs` file is de migratie ook automatisch ingesteld bij het opstarten van de applicatie. Dit betekent dat wanneer de applicatie gestart wordt, de nieuwste migraties automatisch toegepast worden op de bestaande databank indien nodig.
 
 **LET OP!** Dit gebeurt enkel als de databank al bestaat. Indien de databank nog niet bestaat, zal deze niet automatisch aangemaakt worden, en moeten de migraties manueel toegepast worden met bovenstaande command.
@@ -35,7 +41,7 @@ Dit moet enkel wanneer er wijzigingen zijn in de database structuur, zoals het t
 
 De back-end kan gerund worden met de volgende command:
 ```bash
-dotnet run --project 'OmDeHoek/OmDeHoek.csproj'
+dotnet run --project 'OmDeHoek/OmDeHoek.csproj'  --launch-profile 'http'
 ```
 
 De back-end zal dan starten op `https://localhost:5001` en `http://localhost:5000`. De Swagger UI is te vinden op `https://localhost:5001/swagger` of `http://localhost:5000/swagger`.
@@ -61,6 +67,12 @@ dotnet publish -c Release --project 'OmDeHoek/OmDeHoek.csproj'
 Dit zal een release build maken van de back-end in de `bin/Release/net9.0/publish` folder. Deze folder kan dan geüpload worden naar een server of cloud provider naar keuze.
 
 Hiervoor moet de `appsettings.json` file aangepast worden met de juiste database connection string voor productie. Dit kan bijvoorbeeld een connection string zijn voor een cloud database zoals AWS RDS, Azure Database for PostgreSQL of Google Cloud SQL.
+
+### published backend URL
+
+De backend is gepubliceerd op azure met URLs voor testing en voor production.
+- Testing: `omdehoek-staging-bwcgcwdyg2bqhpcq.westeurope-01.azurewebsites.net` (heeft [swagger]("https://omdehoek-staging-bwcgcwdyg2bqhpcq.westeurope-01.azurewebsites.net/swagger) op endpoint `/swagger`)
+- Production: `omdehoek-fmctdnhcekangkce.westeurope-01.azurewebsites.net`
 
 ## Extra informatie
 

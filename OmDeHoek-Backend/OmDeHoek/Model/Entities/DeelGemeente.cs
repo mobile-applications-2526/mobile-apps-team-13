@@ -7,7 +7,7 @@ public class DeelGemeente : IDataBaseEntity<DeelGemeente>
     public Gemeente? Gemeente { get; set; }
     [MaxLength(5)]
     public string NisCodeGemeente { get; set; } = string.Empty; // Foreign key 
-    
+
     [MaxLength(6)]
     public string Nis6Code { get; set; } = string.Empty; // Primary key
     [MaxLength(255)]
@@ -15,9 +15,10 @@ public class DeelGemeente : IDataBaseEntity<DeelGemeente>
     [MaxLength(255)]
     public string NaamFr { get; set; } = string.Empty;
     public List<Buurt> Buurten { get; init; } = [];
-    
-    public DeelGemeente() {}
-    
+    public List<Message> ExternalMessages { get; init; } = [];
+
+    public DeelGemeente() { }
+
     public bool Equals(DeelGemeente? other)
     {
         return !CheckNullOrWrongType(other) && Nis6Code == other.Nis6Code;
@@ -43,5 +44,15 @@ public class DeelGemeente : IDataBaseEntity<DeelGemeente>
     public bool CheckNullOrWrongType(object? other)
     {
         return other is null || GetType() != other.GetType();
+    }
+
+    public bool Equals(DeelGemeente? x, DeelGemeente? y)
+    {
+        return x is not null && x.Equals(y);
+    }
+
+    public int GetHashCode(DeelGemeente obj)
+    {
+        return HashCode.Combine(obj.Nis6Code);
     }
 }

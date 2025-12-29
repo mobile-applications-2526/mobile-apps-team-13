@@ -211,6 +211,84 @@ namespace OmDeHoek.Migrations
                     b.ToTable("Gemeentes");
                 });
 
+            modelBuilder.Entity("OmDeHoek.Model.Entities.Message", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("BuurtSectorCode")
+                        .IsRequired()
+                        .HasMaxLength(9)
+                        .HasColumnType("character varying(9)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeelGemeenteNis6Code")
+                        .HasColumnType("character varying(6)");
+
+                    b.Property<string>("Nis6DeelGemeente")
+                        .HasMaxLength(6)
+                        .HasColumnType("character varying(6)");
+
+                    b.Property<int>("Severity")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BuurtSectorCode");
+
+                    b.HasIndex("DeelGemeenteNis6Code");
+
+                    b.HasIndex("Nis6DeelGemeente");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("OmDeHoek.Model.Entities.MessageReaction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("MessageId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Reaction")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MessageReactions");
+                });
+
             modelBuilder.Entity("OmDeHoek.Model.Entities.Postcode", b =>
                 {
                     b.Property<string>("Code")
@@ -228,6 +306,36 @@ namespace OmDeHoek.Migrations
                     b.ToTable("Postcodes");
                 });
 
+            modelBuilder.Entity("OmDeHoek.Model.Entities.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("OmDeHoek.Model.Entities.User", b =>
                 {
                     b.Property<string>("Id")
@@ -235,6 +343,10 @@ namespace OmDeHoek.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Achternaam")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateOnly>("BirthDate")
                         .HasColumnType("date");
@@ -255,6 +367,9 @@ namespace OmDeHoek.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Middennamen")
+                        .HasColumnType("text");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -286,6 +401,10 @@ namespace OmDeHoek.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
+                    b.Property<string>("Voornaam")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -297,6 +416,40 @@ namespace OmDeHoek.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("OmDeHoek.Model.Entities.UserBuurt", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SectorCodeBuurt")
+                        .HasMaxLength(9)
+                        .HasColumnType("character varying(9)");
+
+                    b.HasKey("UserId", "SectorCodeBuurt");
+
+                    b.HasIndex("SectorCodeBuurt");
+
+                    b.ToTable("UserBuurten");
+                });
+
+            modelBuilder.Entity("OmDeHoek.Model.Entities.UserLikedPost", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsLiked")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("UserId", "PostId");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("UserLikedPosts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -359,6 +512,55 @@ namespace OmDeHoek.Migrations
                     b.Navigation("Gemeente");
                 });
 
+            modelBuilder.Entity("OmDeHoek.Model.Entities.Message", b =>
+                {
+                    b.HasOne("OmDeHoek.Model.Entities.Buurt", "Buurt")
+                        .WithMany("Messages")
+                        .HasForeignKey("BuurtSectorCode")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OmDeHoek.Model.Entities.DeelGemeente", "DeelGemeente")
+                        .WithMany()
+                        .HasForeignKey("DeelGemeenteNis6Code");
+
+                    b.HasOne("OmDeHoek.Model.Entities.DeelGemeente", null)
+                        .WithMany("ExternalMessages")
+                        .HasForeignKey("Nis6DeelGemeente")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("OmDeHoek.Model.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Buurt");
+
+                    b.Navigation("DeelGemeente");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OmDeHoek.Model.Entities.MessageReaction", b =>
+                {
+                    b.HasOne("OmDeHoek.Model.Entities.Message", "Message")
+                        .WithMany("Comments")
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OmDeHoek.Model.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Message");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("OmDeHoek.Model.Entities.Postcode", b =>
                 {
                     b.HasOne("OmDeHoek.Model.Entities.Gemeente", "Gemeente")
@@ -370,9 +572,67 @@ namespace OmDeHoek.Migrations
                     b.Navigation("Gemeente");
                 });
 
+            modelBuilder.Entity("OmDeHoek.Model.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("OmDeHoek.Model.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OmDeHoek.Model.Entities.UserBuurt", b =>
+                {
+                    b.HasOne("OmDeHoek.Model.Entities.Buurt", "Buurt")
+                        .WithMany("Bewoners")
+                        .HasForeignKey("SectorCodeBuurt")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OmDeHoek.Model.Entities.User", "User")
+                        .WithMany("Buurten")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Buurt");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OmDeHoek.Model.Entities.UserLikedPost", b =>
+                {
+                    b.HasOne("OmDeHoek.Model.Entities.Message", "Post")
+                        .WithMany("LikedBy")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OmDeHoek.Model.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OmDeHoek.Model.Entities.Buurt", b =>
+                {
+                    b.Navigation("Bewoners");
+
+                    b.Navigation("Messages");
+                });
+
             modelBuilder.Entity("OmDeHoek.Model.Entities.DeelGemeente", b =>
                 {
                     b.Navigation("Buurten");
+
+                    b.Navigation("ExternalMessages");
                 });
 
             modelBuilder.Entity("OmDeHoek.Model.Entities.Gemeente", b =>
@@ -382,9 +642,18 @@ namespace OmDeHoek.Migrations
                     b.Navigation("Postcodes");
                 });
 
+            modelBuilder.Entity("OmDeHoek.Model.Entities.Message", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("LikedBy");
+                });
+
             modelBuilder.Entity("OmDeHoek.Model.Entities.User", b =>
                 {
                     b.Navigation("Adressen");
+
+                    b.Navigation("Buurten");
                 });
 #pragma warning restore 612, 618
         }

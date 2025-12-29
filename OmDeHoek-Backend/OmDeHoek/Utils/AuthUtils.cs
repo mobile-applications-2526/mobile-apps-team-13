@@ -30,7 +30,7 @@ public class AuthUtils
 
         return role;
     }
-    
+
     public static bool IsValidEmail(string email)
     {
         try
@@ -43,13 +43,13 @@ public class AuthUtils
             return false;
         }
     }
-    
+
     private static long GetTokenExpirationTime(string token)
     {
         var jsonPayload = GetTokenPayload(token);
-        
+
         var tokenExp = jsonPayload["exp"]!.ToString();
-        var ticks= long.Parse(tokenExp);
+        var ticks = long.Parse(tokenExp);
         return ticks;
     }
 
@@ -64,14 +64,14 @@ public class AuthUtils
 
         return valid;
     }
-    
+
     public static string GetTokenEmail(string token)
     {
         var jsonPayload = GetTokenPayload(token);
-        
+
         return jsonPayload[ClaimTypes.Email]!.ToString();
     }
-    
+
     private static JObject GetTokenPayload(string token)
     {
         var tokenString = token.Replace("Bearer ", "");
@@ -81,7 +81,7 @@ public class AuthUtils
         var data = WebEncoders.Base64UrlDecode(base64Payload);
         var payload = Encoding.UTF8.GetString(data);
         var jsonPayload = JObject.Parse(payload);
-        
+
         return jsonPayload;
     }
 }

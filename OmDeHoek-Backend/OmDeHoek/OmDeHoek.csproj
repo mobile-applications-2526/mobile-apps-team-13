@@ -9,10 +9,12 @@
 
 	<ItemGroup>
 		<PackageReference Include="ClosedXML" Version="0.105.0" />
+		<PackageReference Include="Google.Apis.Auth" Version="1.73.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.3.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.9" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.9" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Azure.NotificationHubs" Version="4.2.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
 		  <PrivateAssets>all</PrivateAssets>
@@ -29,5 +31,31 @@
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Model\Data\SeedData\Buurten.xlsx" />
+	  <Content Include="Model\Data\SeedData\Buurten.xlsx">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <None Remove="Model\Data\SeedData\Deelgemeenten.xlsx" />
+	  <Content Include="Model\Data\SeedData\Deelgemeenten.xlsx">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <None Remove="Model\Data\SeedData\Gemeenten.xlsx" />
+	  <Content Include="Model\Data\SeedData\Gemeenten.xlsx">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <None Remove="Model\Data\SeedData\PostcodeMapping.xlsx" />
+	  <Content Include="Model\Data\SeedData\PostcodeMapping.xlsx">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+		<NoWarn>$(NoWarn);1591</NoWarn>
+
+	</PropertyGroup>
 
 </Project>

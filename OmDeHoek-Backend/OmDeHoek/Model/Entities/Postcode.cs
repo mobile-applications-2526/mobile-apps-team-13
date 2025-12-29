@@ -9,18 +9,19 @@ public class Postcode : IDataBaseEntity<Postcode>
     public Gemeente? Gemeente { get; init; }
     [MaxLength(5)]
     public string NisCodeGemeente { get; set; } = string.Empty; // Foreign key, part of primary key
-    
-    public Postcode() {}
-    
+
+    public Postcode() { }
+
     public bool Equals(Postcode? other)
     {
-        return !CheckNullOrWrongType(other) 
-               && Code == other?.Code;
+        return !CheckNullOrWrongType(other)
+               && Code == other?.Code
+               && NisCodeGemeente == other?.NisCodeGemeente;
     }
 
     public void Update(Postcode? entity)
     {
-        if(!Equals(entity)) throw new ArgumentException("Entities are not the same", nameof(entity));
+        if (!Equals(entity)) throw new ArgumentException("Entities are not the same", nameof(entity));
         NisCodeGemeente = entity!.NisCodeGemeente;
     }
 
@@ -33,5 +34,15 @@ public class Postcode : IDataBaseEntity<Postcode>
     public bool CheckNullOrWrongType(object? other)
     {
         return other is null || GetType() != other.GetType();
+    }
+
+    public bool Equals(Postcode? x, Postcode? y)
+    {
+        return x is not null && x.Equals(y);
+    }
+
+    public int GetHashCode(Postcode obj)
+    {
+        return HashCode.Combine(Code);
     }
 }

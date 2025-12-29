@@ -1,0 +1,177 @@
+{
+  "logo": {
+    "title": "\"Your neighborhood, your people, your place.\""
+  },
+  "login": {
+    "title": "Welcome back!",
+    "subtitle": "Log in and notify your neighbors.",
+    "email": "Email",
+    "password": "Password",
+    "error": {
+      "empty": "Fill in all fields.",
+      "invalidcredentials": "Email or password is incorrect.",
+      "invalidemail": "This is not a valid email address."
+    },
+    "login": "Log in",
+    "noaccount": "No account yet? ",
+    "register": "Register here"
+  },
+  "register": {
+    "email": {
+      "title": "Create an account",
+      "subtitle": "And discover your neighborhood.",
+      "email": "Email"
+    },
+    "name": {
+      "title": "What is your name?",
+      "subtitle": "Tell us how we may address you.",
+      "firstname": "First name",
+      "lastname": "Last name"
+    },
+    "birthdate": {
+      "title": "What is your birthdate?",
+      "subtitle": "When can you treat us to cake?",
+      "birthdate": "Choose your birthdate",
+      "datepicker": {
+        "title": "Select birthdate",
+        "confirm": "Confirm",
+        "cancel": "Cancel"
+      }
+    },
+    "address": {
+      "title": "What is your address?",
+      "subtitle": "Where can we come to eat?",
+      "street": "Street name",
+      "housenumber": "House number",
+      "municipality": "Municipality",
+      "postalcode": "Postal code",
+      "mandatoryStreet": "Street name *",
+      "mandatoryMunicipality": "Municipality *",
+      "mandatoryPostalcode": "Postal code *",
+      "edit": "Edit address"
+    },
+    "phone": {
+      "title": "What is your phone number?",
+      "subtitle": "Where can you be reached in case of emergency?",
+      "label": "Phone number (optional)",
+      "placeholder": "111 222 333",
+      "country": "Enter the name of your country"
+    },
+    "password": {
+      "title": "Choose a secure password",
+      "subtitle": "That even you will try to remember tomorrow.",
+      "passwordstrong": "Password strength: ",
+      "weak": "Weak",
+      "good": "Good",
+      "strong": "Strong",
+      "characters": "Minimal 8 characters",
+      "number": "Minimal one number",
+      "uppercase": "Minimal one uppercase letter",
+      "special": "Minimal one special character",
+      "password": "Password"
+    },
+    "neighborhood": {
+      "title": "Neighborhoods in",
+      "subtitle": "the neighborhood",
+      "participants": "members",
+      "join": "Join",
+      "leave": "Leave",
+      "searchplaceholder": "Search for a neighborhood...",
+      "notfound": "No neighborhood found with "
+    },
+    "continue": "Continue"
+  },
+  "settings": {
+    "mydata": "My data",
+    "settings": "Settings",
+    "mypreferences": "My preferences",
+    "mynotifications": "My notifications",
+    "myneighborhoods": "My neighborhoods",
+    "logout": "Logout",
+    "addresses": {
+      "menu": "My addresses",
+      "title": "My",
+      "subtitle": "Addresses"
+    },
+    "data": {
+      "title": "My",
+      "subtitle": "Data",
+      "username": "Username",
+      "firstname": "First name",
+      "lastname": "Last name",
+      "email": "Email",
+      "birthdate": "Birth date",
+      "phone": "Phone number",
+      "address": "Address"
+    },
+    "preferences": {
+      "title": "My",
+      "subtitle": "Preferences",
+      "label": "Change language",
+      "language": {
+        "en": "English",
+        "nl": "Dutch"
+      },
+      "Theme": "Theme",
+      "mode": "Dark mode",
+      "close": "close"
+    },
+    "neighborhoods": {
+      "title": "My",
+      "subtitle": "Neighborhoods",
+      "join": {
+        "title": "Join",
+        "subtitle": "a neighborhood"
+      }
+    }
+  },
+  "notifications": {
+    "subtitle": "Latest notifications",
+    "empty": "No notifications available",
+    "create": "Create notification",
+    "loadmessage": "Loading messages...",
+    "creation": {
+      "title": "Speak",
+      "subtitle": "Up",
+      "type": "Type of notification",
+      "tags": {
+        "info": "Informative",
+        "warning": "Warning",
+        "emergency": "Emergency"
+      },
+      "neighborhood": "Only my neighborhood",
+      "titleinput": "Title:",
+      "titleplaceholder": "E.g. Roadworks on the street",
+      "messageinput": "Message:",
+      "messageplaceholder": "Type here...",
+      "submit": "Send notification",
+      "selectneighborhood": "Select neighborhood",
+      "close": "Close"
+    },
+    "details": {
+      "likes": "Likes: ",
+      "comments": {
+        "comment": "Comments",
+        "empty": "No comments yet.",
+        "addcomment": "Add a comment...",
+        "fail": "Failed to post comment."
+      },
+      "loading": "Loading notification...",
+      "error": "Error loading notification.",
+      "me": "Me"
+    }
+  },
+  "common": {
+    "next": "Next",
+    "back": "Back",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "sure": "Are you sure?",
+    "addressConfirmation": "Do you want to permanently delete this address?",
+    "addressEmpty": "No addresses available. Feel free to add one."
+  }
+}

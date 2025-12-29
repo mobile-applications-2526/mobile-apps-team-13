@@ -22,12 +22,13 @@ namespace OmDeHoek
             var builder = WebApplication.CreateBuilder(args);
 
             var env = builder.Environment;
-            
+
             Env.SetEnvironment(
-                dbConnection: builder.Configuration.GetConnectionString("devConnection"),
+                dbConnection: builder.Configuration.GetConnectionString("devConnection") ?? "",
                 environment: env.EnvironmentName,
-                isDevelopment: env.IsDevelopment(),
-                isProduction: env.IsProduction()
+                isDevelopment: env.IsDevelopment() || env.IsStaging() || env.EnvironmentName == "Staging",
+                isProduction: env.IsProduction(),
+                googleClientId: builder.Configuration["Authentication:Google:ClientId"] ?? ""
                 );
 
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
@@ -46,8 +47,34 @@ namespace OmDeHoek
                     opts.UseNpgsql(Env.DbConnection);
                 });
             }
-            
+
             builder.Services.AddCustomServices();
+
+            var corsName = "OmDeHoekCorsPolicy";
+            builder.Services.AddCors(options =>
+            {
+                if (Env.IsDevelopment)
+                {
+                    options.AddPolicy(name: corsName,
+                        policy =>
+                        {
+                            policy.AllowAnyOrigin()
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                        });
+                }
+                else
+                {
+                    options.AddPolicy(
+                        name: corsName,
+                        policy =>
+                        {
+                            policy.WithOrigins("https://omdehoek.be")
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                        });
+                }
+            });
 
             builder.Services.AddControllers(options =>
             {
@@ -58,7 +85,7 @@ namespace OmDeHoek
                 opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
-            
+
             builder.Services.AddIdentity<User, IdentityRole>(
                     options =>
                     {
@@ -69,13 +96,12 @@ namespace OmDeHoek
                         options.Password.RequiredLength = 8;
                         options.Password.RequiredUniqueChars = 1;
                         options.User.RequireUniqueEmail = true;
-
                     }
                 )
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
-            
+
             var validIssuer = builder.Configuration.GetValue<string>("JwtTokenSettings:ValidIssuer");
             var validAudience = builder.Configuration.GetValue<string>("JwtTokenSettings:ValidAudience");
             var symmetricSecurityKey = builder.Configuration.GetValue<string>("JwtTokenSettings:SymmetricSecurityKey");
@@ -106,11 +132,11 @@ namespace OmDeHoek
 
             builder.Services.AddProblemDetails();
 
-            if (env.IsDevelopment())
+            if (Env.IsDevelopment)
             {
                 builder.Services.AddSwaggerGen(option =>
                 {
-                    option.SwaggerDoc("v1", new() {Title = "OmDeHoek", Version = "v1"});
+                    option.SwaggerDoc("v1", new() { Title = "OmDeHoek", Version = "v1" });
                     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                     {
                         In = ParameterLocation.Header,
@@ -120,54 +146,47 @@ namespace OmDeHoek
                         BearerFormat = "JWT",
                         Scheme = "Bearer"
                     });
-                    
-                    option.AddSecurityRequirement(new OpenApiSecurityRequirement
-                    {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "Bearer"
-                                }
-                            },
-                            new string[]{}
-                        }
-                    });
+
+                    option.OperationFilter<AuthorizeCheckOperationFilter>();
+
+                    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+                    option.IncludeXmlComments(xmlPath);
                 });
             }
-            
+
             var app = builder.Build();
 
             if (!Env.IsTesting)
             {
                 using var scope = app.Services.CreateScope();
                 using var context = scope.ServiceProvider.GetRequiredService<DataContext>();
-                    
+
                 var pendingMigrations = context.Database.GetPendingMigrations();
-                    
-                if(pendingMigrations.Any())
+
+                if (pendingMigrations.Any())
                 {
                     context.Database.Migrate();
                     DataContextFactory.SeedDatabase(context, builder.Configuration);
                 }
             }
 
-            if (env.IsDevelopment())
+            if (Env.IsDevelopment)
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            
+
             app.UseHttpsRedirection();
+
+            app.UseCors(corsName);
 
             app.UseAuthorization();
             app.UseAuthorization();
             app.UseTokenManagerMiddleware();
-            
+
             app.MapControllers();
-            
+
             app.Run();
         }
     }

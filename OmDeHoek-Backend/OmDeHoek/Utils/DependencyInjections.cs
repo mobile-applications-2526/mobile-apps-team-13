@@ -16,16 +16,28 @@ public static class DependencyInjections
         services.AddScoped<UserRepository>();
         services.AddScoped<BuurtRepository>();
         services.AddScoped<GemeenteRepository>();
-        
+        services.AddScoped<PostcodeRepository>();
+        services.AddScoped<AdresRepository>();
+        services.AddScoped<UserBuurtRepository>();
+        services.AddScoped<MessageRepository>();
+        services.AddScoped<DeelgemeenteRepository>();
+        services.AddScoped<UserLikedPostRepository>();
+        services.AddScoped<RefreshTokenRepository>();
+        services.AddScoped<MessageReactionRepository>();
+
         // Services
         services.AddScoped<TokenService>();
         services.AddScoped<AuthService>();
         services.AddScoped<BuurtService>();
         services.AddScoped<GemeenteService>();
+        services.AddScoped<AdresService>();
+        services.AddScoped<UserService>();
+        services.AddScoped<MessageService>();
+        services.AddScoped<PostcodeService>();
 
         // Unit of Work
         services.AddScoped<UnitOfWork>();
-        
+
         return services;
     }
 }

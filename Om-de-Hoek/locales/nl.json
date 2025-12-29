@@ -1,0 +1,177 @@
+{
+  "logo": {
+    "title": "\"Jouw buurt, jouw mensen, jouw plek.\""
+  },
+  "login": {
+    "title": "Welkom terug!",
+    "subtitle": "Log in en verwittig je buren.",
+    "email": "E-mail",
+    "password": "Wachtwoord",
+    "error": {
+      "empty": "Vul alle velden in.",
+      "invalidcredentials": "E-mail of wachtwoord is onjuist.",
+      "invalidemail": "Dit is geen geldig e-mailadres."
+    },
+    "login": "Inloggen",
+    "noaccount": "Nog geen account? ",
+    "register": "Registreer hier"
+  },
+  "register": {
+    "email": {
+      "title": "Maak een account",
+      "subtitle": "En ontdek je buurt.",
+      "email": "E-mail"
+    },
+    "name": {
+      "title": "Wat is uw naam?",
+      "subtitle": "Vertel ons hoe we u mogen aanspreken.",
+      "firstname": "Voornaam",
+      "lastname": "Achternaam"
+    },
+    "birthdate": {
+      "title": "Wat is uw geboortedatum?",
+      "subtitle": "Wanneer mag u ons trakteren op taart?",
+      "birthdate": "Kies uw geboortedatum",
+      "datepicker": {
+        "title": "Selecteer geboortedatum",
+        "confirm": "Bevestigen",
+        "cancel": "Annuleren"
+      }
+    },
+    "address": {
+      "title": "Wat is uw adres?",
+      "subtitle": "Waar mogen we komen eten?",
+      "street": "Straatnaam",
+      "housenumber": "Huisnummer (optioneel)",
+      "municipality": "Gemeente",
+      "postalcode": "Postcode",
+      "mandatoryStreet": "Straatnaam *",
+      "mandatoryMunicipality": "Gemeente *",
+      "mandatoryPostalcode": "Postcode *",
+      "edit": "Adres aanpassen"
+    },
+    "phone": {
+      "title": "Wat is uw telefoonnummer?",
+      "subtitle": "Waar kan men u in geval van nood bereiken?",
+      "label": "Telefoonnummer (optioneel)",
+      "placeholder": "111 222 333",
+      "country": "Vul de naam van uw land in"
+    },
+    "password": {
+      "title": "Kies een veilig wachtwoord",
+      "subtitle": "Dat zelfs u morgen nog probeert te onthouden.",
+      "passwordstrong": "Wachtwoordsterkte: ",
+      "weak": "Zwak",
+      "good": "Goed",
+      "strong": "Sterk",
+      "characters": "Minimaal 8 karakters",
+      "number": "Minimaal één cijfer",
+      "uppercase": "Minimaal één hoofdletter",
+      "special": "Minimaal één speciaal karakter",
+      "password": "Wachtwoord"
+    },
+    "neighborhood": {
+      "title": "Buurten in",
+      "subtitle": "de buurt",
+      "participants": "Leden",
+      "join": "Deelnemen",
+      "leave": "Verlaten",
+      "searchplaceholder": "Zoek een buurt...",
+      "notfound": "Geen buurt gevonden met "
+    },
+    "continue": "Verdergaan"
+  },
+  "settings": {
+    "mydata": "Mijn gegevens",
+    "settings": "Instellingen",
+    "mypreferences": "Mijn voorkeuren",
+    "mynotifications": "Mijn meldingen",
+    "myneighborhoods": "Mijn buurten",
+    "logout": "Uitloggen",
+    "addresses": {
+      "menu": "Mijn adressen",
+      "title": "Mijn",
+      "subtitle": "Adressen"
+    },
+    "data": {
+      "title": "Mijn",
+      "subtitle": "Gegevens",
+      "username": "Gebruikersnaam",
+      "firstname": "Voornaam",
+      "lastname": "Achternaam",
+      "email": "E-mail",
+      "birthdate": "Geboortedatum",
+      "phone": "Telefoonnummer",
+      "address": "Adres"
+    },
+    "preferences": {
+      "title": "Mijn",
+      "subtitle": "Voorkeuren",
+      "label": "Wijzig taal",
+      "language": {
+        "en": "Engels",
+        "nl": "Nederlands"
+      },
+      "Theme": "Thema",
+      "mode": "Donkere modus",
+      "close": "sluiten"
+    },
+    "neighborhoods": {
+      "title": "Mijn",
+      "subtitle": "Buurten",
+      "join": {
+        "title": "Deelnemen",
+        "subtitle": "aan een buurt"
+      }
+    }
+  },
+  "notifications": {
+    "subtitle": "Laatste meldingen",
+    "empty": "Geen meldingen beschikbaar",
+    "create": "Maak een melding",
+    "loadmessage": "Berichten laden...",
+    "creation": {
+      "title": "Laat van",
+      "subtitle": "je horen",
+      "type": "Type melding",
+      "tags": {
+        "info": "Informatief",
+        "warning": "Waarschuwing",
+        "emergency": "Noodgeval"
+      },
+      "neighborhood": "Alleen mijn buurt",
+      "titleinput": "Titel:",
+      "titleplaceholder": "Bv. Wegenwerken aan de straat",
+      "messageinput": "Bericht:",
+      "messageplaceholder": "Typ hier...",
+      "submit": "Verzenden",
+      "selectneighborhood": "Selecteer buurt",
+      "close": "Sluiten"
+    },
+    "details": {
+      "likes": "Likes: ",
+      "comments": {
+        "comment": "Reacties",
+        "empty": "Nog geen reacties.",
+        "addcomment": "Voeg een reactie toe...",
+        "fail": "Kon reactie niet plaatsen."
+      },
+      "loading": "Laden van melding...",
+      "error": "Error bij laden melding.",
+      "me": "Ik"
+    }
+  },
+  "common": {
+    "next": "Volgende",
+    "back": "Terug",
+    "save": "Opslaan",
+    "edit": "Aanpassen",
+    "delete": "Verwijderen",
+    "confirm": "Bevestigen",
+    "cancel": "Annuleren",
+    "loading": "Laden...",
+    "sure": "Weet je het zeker?",
+    "addressConfirmation": "Wil je dit adres definitief verwijderen?",
+    "addressEmpty": "Geen adressen beschikbaar. Voel je vrij om er een toe te voegen."
+  }
+}

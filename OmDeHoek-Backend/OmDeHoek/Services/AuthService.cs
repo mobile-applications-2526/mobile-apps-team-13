@@ -1,66 +1,73 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Globalization;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
+using Google.Apis.Auth;
+using Microsoft.AspNetCore.Identity;
 using OmDeHoek.Model;
+using OmDeHoek.Model.Commands.auth;
 using OmDeHoek.Model.Commands.User;
+using OmDeHoek.Model.Commands.User.ExternalAuth;
 using OmDeHoek.Model.DTO;
+using OmDeHoek.Model.DTO.User;
 using OmDeHoek.Model.Entities;
 using OmDeHoek.Model.Enums;
 using OmDeHoek.Model.Exceptions;
+using OmDeHoek.Utils;
 
 namespace OmDeHoek.Services;
 
-public class AuthService(
+public partial class AuthService(
     UnitOfWork uow,
     TokenManager tokenManager,
     TokenService tokenService,
     UserManager<User> userManager
-    )
+)
 {
+    private readonly int _minimumOnlineLeeftijd = 13;
+
     public async Task<UserDto> RegisterAsync(RegisterUser newUser)
     {
         try
         {
             await uow.StartTransaction();
-            
-            if (String.IsNullOrWhiteSpace(newUser.Username))
-            {
-                throw new MissingDataException("username is missing or only spaces", "username");
-            }
 
-            if (String.IsNullOrWhiteSpace(newUser.Password))
-            {
+            if (string.IsNullOrWhiteSpace(newUser.FirstName))
+                throw new MissingDataException("First name is missing or only spaces", "FirstName");
+
+            if (string.IsNullOrWhiteSpace(newUser.LastName))
+                throw new MissingDataException("Last name is missing or only spaces", "LastName");
+
+            if (string.IsNullOrWhiteSpace(newUser.Password))
                 throw new MissingDataException("invalid password", "password");
-            }
 
-            if (!Utils.AuthUtils.IsValidEmail(newUser.Email))
-            {
+            if (!AuthUtils.IsValidEmail(newUser.Email))
                 throw new InvalidInputException("email is not in email format", "email");
-            }
 
             if (await uow.UserRepository.GetByEmailAsync(newUser.Email) != null)
-            {
-                throw new DuplicateFieldException("emil already in use", "email");
-            }
-
-            if (newUser.Username.Trim().Length < 3 || newUser.Username.Trim().Length > 31)
-            {
-                throw new InvalidInputException("username must be between 3 and 31 characters", "username");
-            }
+                throw new DuplicateFieldException("email already in use", "email");
 
             if (newUser.Password.Trim().Length < 3 || newUser.Password.Trim().Length > 31)
-            {
                 throw new InvalidInputException("password must be between 3 and 31 characters", "password");
-            }
+
+            if (newUser.BirthDate > DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-_minimumOnlineLeeftijd)))
+                throw new InvalidInputException($"you must be at least {_minimumOnlineLeeftijd} years old to register",
+                    "birthDate");
+
+            var username = await GenerateUniqueUsername(newUser.FirstName, newUser.LastName);
 
             User user = new()
             {
-                UserName = newUser.Username,
+                UserName = username,
                 Email = newUser.Email,
                 Role = Roles.User,
                 NormalizedEmail = newUser.Email.ToUpper(),
-                NormalizedUserName = newUser.Username.ToUpper(),
+                NormalizedUserName = username.ToUpper(),
                 PhoneNumber = newUser.PhoneNumber,
                 PhoneNumberConfirmed = newUser.PhoneNumber != null,
-                BirthDate = newUser.BirthDate
+                BirthDate = newUser.BirthDate,
+                Voornaam = newUser.FirstName,
+                Achternaam = newUser.LastName
             };
 
             var result = await userManager.CreateAsync(user,
@@ -72,40 +79,227 @@ public class AuthService(
                 var errors = result.Errors.Select(e => e.Description);
                 throw new CantCreateException("Could not create user: " + string.Join(", ", errors), "User");
             }
-            
+
             await uow.CommitTransaction();
 
             return new UserDto(user);
-        } catch (Exception)
+        }
+        catch (Exception)
         {
             await uow.RollbackTransaction();
             throw;
         }
     }
-    
+
     public async Task<TokenDto> LoginAsync(LoginUser login)
     {
-        try {
+        try
+        {
             await uow.StartTransaction();
-            
-            if (!Utils.AuthUtils.IsValidEmail(login.Email))
-            {
+
+            if (!AuthUtils.IsValidEmail(login.Email))
                 throw new InvalidInputException("email is not in email format", "email");
-            }
 
             var user = await uow.UserRepository.GetByEmailAsync(login.Email);
-            if (user == null)
-            {
-                throw new UnauthorizedException("invalid credentials", "login");
-            }
+            if (user == null) throw new UnauthorizedException("invalid credentials", "login");
 
             var result = await userManager.CheckPasswordAsync(user, login.Password);
-            if (!result)
-            {
-                throw new UnauthorizedException("invalid credentials", "login");
-            }
+            if (!result) throw new UnauthorizedException("invalid credentials", "login");
 
             var token = tokenService.CreateToken(user);
+
+            var (refreshTokenPlain, encryptedRefreshToken) = tokenService.CreateRefreshToken();
+
+            var refreshToken = new RefreshToken
+            {
+                TokenHash = encryptedRefreshToken,
+                ExpiresAt = DateTime.UtcNow.AddMonths(1),
+                UserId = user.Id,
+                CreatedAt = DateTime.UtcNow,
+                Id = Guid.NewGuid(),
+                IsRevoked = false
+            };
+
+            await uow.RefreshTokenRepository.Insert(refreshToken);
+
+            await uow.Save();
+
+            await uow.CommitTransaction();
+
+            return new TokenDto
+            {
+                Token = token,
+                Email = user.Email!,
+                Id = user.Id,
+                RefreshToken = refreshTokenPlain
+            };
+        }
+        catch (Exception)
+        {
+            await uow.RollbackTransaction();
+            throw;
+        }
+    }
+
+    public async Task<bool> LogoutAsync(LogoutCommand token)
+    {
+        try
+        {
+            await uow.StartTransaction();
+
+            var refreshToken = token.RefreshToken;
+            if (string.IsNullOrWhiteSpace(refreshToken)) return true;
+
+            var hashedToken = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(refreshToken)));
+            var refreshTokenInDb = await uow.RefreshTokenRepository.GetByTokenAsync(hashedToken);
+
+            if (refreshTokenInDb == null || refreshTokenInDb.IsRevoked) return true;
+
+            refreshTokenInDb.IsRevoked = true;
+            uow.RefreshTokenRepository.Update(refreshTokenInDb);
+            await uow.Save();
+            await uow.CommitTransaction();
+
+            return true;
+        }
+        catch (Exception)
+        {
+            await uow.RollbackTransaction();
+            throw;
+        }
+    }
+
+    public async Task<TokenDto> RefreshToken(RefreshTokenCommand command)
+    {
+        await uow.StartTransaction();
+        try
+        {
+            var token = command.RefreshToken;
+
+            if (string.IsNullOrWhiteSpace(token))
+                throw new MissingDataException("token is missing or only spaces", "token");
+
+            var bytes = Encoding.UTF8.GetBytes(token);
+            var hash = SHA256.HashData(bytes);
+            var hashedToken = Convert.ToBase64String(hash);
+
+            var refreshTokenInDb = await uow.RefreshTokenRepository.GetByTokenAsync(hashedToken);
+
+            if (refreshTokenInDb == null || refreshTokenInDb.IsRevoked ||
+                refreshTokenInDb.ExpiresAt < DateTime.UtcNow ||
+                refreshTokenInDb.User == null) throw new UnauthorizedException("invalid refresh token", "token");
+
+            var userInDb = refreshTokenInDb.User;
+
+            var newToken = tokenService.CreateToken(userInDb);
+
+            var (newRefreshTokenPlain, newEncryptedRefreshToken) = tokenService.CreateRefreshToken();
+            var newRefreshToken = new RefreshToken
+            {
+                TokenHash = newEncryptedRefreshToken,
+                ExpiresAt = DateTime.UtcNow.AddMonths(1),
+                UserId = userInDb.Id,
+                CreatedAt = DateTime.UtcNow,
+                Id = Guid.NewGuid(),
+                IsRevoked = false
+            };
+
+            await uow.RefreshTokenRepository.Insert(newRefreshToken);
+
+            refreshTokenInDb.IsRevoked = true;
+            uow.RefreshTokenRepository.Update(refreshTokenInDb);
+
+            await uow.Save();
+            await uow.CommitTransaction();
+
+            return new TokenDto
+            {
+                Token = newToken,
+                Email = userInDb.Email!,
+                Id = userInDb.Id,
+                RefreshToken = newRefreshTokenPlain
+            };
+        }
+        catch (Exception e)
+        {
+            await uow.RollbackTransaction();
+            throw;
+        }
+    }
+
+    public async Task<TokenDto> SignInWithGoogle(GoogleSigninRequest request)
+    {
+        GoogleJsonWebSignature.Payload payload;
+        try
+        {
+            var settings = new GoogleJsonWebSignature.ValidationSettings()
+            {
+                Audience = [Env.GoogleClientId]
+            };
+            payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken, settings);
+        }
+        catch (Exception)
+        {
+            throw new UnauthorizedException("Invalid Google ID token", "idToken");
+        }
+
+        try
+        {
+            var accountCreated = false;
+            
+            var user = await uow.UserRepository.GetByEmailAsync(payload.Email);
+            if (user == null)
+            {
+                await uow.StartTransaction();
+                var username = await GenerateUniqueUsername(payload.GivenName ?? "Google", payload.FamilyName ?? "User");
+                
+                user = new User
+                {
+                    UserName = username,
+                    Email = payload.Email,
+                    Role = Roles.User,
+                    NormalizedEmail = payload.Email.ToUpper(),
+                    NormalizedUserName = username.ToUpper(),
+                    Voornaam = payload.GivenName ?? "Google",
+                    Achternaam = payload.FamilyName ?? "User",
+                    EmailConfirmed = true,
+                    BirthDate = DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-_minimumOnlineLeeftijd - 1))
+                };
+                
+                var result = await userManager.CreateAsync(user);
+                if (!result.Succeeded)
+                {
+                    var errors = result.Errors.Select(e => e.Description);
+                    throw new CantCreateException("Could not create user: " + string.Join(", ", errors), "User");
+                }
+                
+                await userManager.AddLoginAsync(user, new UserLoginInfo("Google", payload.Subject, "Google"));
+
+                await uow.Save();
+                await uow.CommitTransaction();
+                
+                accountCreated = true;
+            }
+            
+            await uow.StartTransaction();
+            
+            var token = tokenService.CreateToken(user);
+            
+            var (refreshTokenPlain, encryptedRefreshToken) = tokenService.CreateRefreshToken();
+            
+            var refreshToken = new RefreshToken
+            {
+                TokenHash = encryptedRefreshToken,
+                ExpiresAt = DateTime.UtcNow.AddMonths(1),
+                UserId = user.Id,
+                CreatedAt = DateTime.UtcNow,
+                Id = Guid.NewGuid(),
+                IsRevoked = false
+            };
+            
+            await uow.RefreshTokenRepository.Insert(refreshToken);
+            
+            await uow.Save();
             
             await uow.CommitTransaction();
             
@@ -113,58 +307,61 @@ public class AuthService(
             {
                 Token = token,
                 Email = user.Email!,
-                Id = user.Id
+                Id = user.Id,
+                RefreshToken = refreshTokenPlain,
+                IsNewAccount = accountCreated
             };
-        } catch (Exception)
+        }
+        catch (Exception)
         {
             await uow.RollbackTransaction();
             throw;
         }
     }
-    
-    public async Task<bool> LogoutAsync(string? token)
+
+    #region Helper functions
+
+    private async Task<string> GenerateUniqueUsername(string voornaam, string achternaam)
     {
-        try
+        var cleanVoornaam = CleanString(voornaam);
+        var cleanAchternaam = CleanString(achternaam);
+
+        var baseUsername = $"{cleanVoornaam}{cleanAchternaam}";
+
+        var uniqueUsername = baseUsername;
+        var counter = 1;
+
+        while (await userManager.FindByNameAsync(uniqueUsername) != null)
         {
-            tokenManager.AddToRevokedTokens(token);
-            
-            return true;
-        } catch (Exception)
-        {
-            await uow.RollbackTransaction();
-            throw;
+            uniqueUsername = $"{baseUsername}{counter}";
+            counter++;
         }
+
+        return uniqueUsername;
     }
-    
-    public async Task<TokenDto> RefreshToken(string? token)
+
+    private string CleanString(string input)
     {
-        if (string.IsNullOrWhiteSpace(token))
-        {
-            throw new MissingDataException("token is missing or only spaces", "token");
-        }
-        if (tokenManager.IsTokenRevoked(token!))
-        {
-            throw new UnauthorizedException("token has been revoked", "token");
-        }
+        if (string.IsNullOrWhiteSpace(input)) return string.Empty;
 
-        var email = Utils.AuthUtils.GetTokenEmail(token);
+        var textInfo = new CultureInfo("nl-NL", false).TextInfo;
+        input = textInfo.ToTitleCase(input.ToLower());
 
-        var userInDb = await uow.UserRepository.GetByEmailAsync(email);
+        var normalizedString = input.Normalize(NormalizationForm.FormD);
+        var stringBuilder = new StringBuilder();
 
-        if (userInDb == null)
-        {
-            throw new UnauthorizedException("user not found", "User");
-        }
+        foreach (var c in from c in normalizedString
+                          let unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c)
+                          where unicodeCategory != UnicodeCategory.NonSpacingMark
+                          select c) stringBuilder.Append(c);
 
-        var newToken = tokenService.CreateToken(userInDb, true);
-        tokenManager.AddToRevokedTokens(token);
+        var cleanText = stringBuilder.ToString().Normalize(NormalizationForm.FormC);
 
-        await uow.Save();
-        return new TokenDto
-        {
-            Token = newToken,
-            Email = userInDb.Email!,
-            Id = userInDb.Id
-        };
+        return MyRegex().Replace(cleanText, "");
     }
+
+    [GeneratedRegex("[^a-zA-Z0-9]")]
+    private static partial Regex MyRegex();
+
+    #endregion
 }
