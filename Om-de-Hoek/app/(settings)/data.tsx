@@ -1,22 +1,12 @@
-import {
-  View,
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  ScrollView,
-  Alert,
-  Platform,
-} from "react-native";
-import SettingsTitles from "@/components/settings/SettingsTitles";
-import Back from "@/components/Back";
-import { ArrowLeft, Save } from "lucide-react-native";
-import { useRouter } from "expo-router";
+import {ActivityIndicator, Alert, KeyboardAvoidingView, Platform, ScrollView, View,} from "react-native";
+import {Lock, Save} from "lucide-react-native";
+import {useRouter} from "expo-router";
 import LabeledInput from "@/components/settings/LabeledInput";
-import { useEffect, useMemo, useState } from "react";
-import { useAuth } from "@/components/auth/context/AuthContext";
+import {useEffect, useMemo, useState} from "react";
+import {useAuth} from "@/components/auth/context/AuthContext";
 import UserService from "@/services/userService";
-import { useTranslation } from "react-i18next";
-import { Lock } from "lucide-react-native";
-import { User } from "@/types/user";
+import {useTranslation} from "react-i18next";
+import {User} from "@/types/user";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import SettingsHeader from "@/components/settings/SettingsHeader";
 

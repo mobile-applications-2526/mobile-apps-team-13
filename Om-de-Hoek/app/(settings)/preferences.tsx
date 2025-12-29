@@ -1,12 +1,9 @@
-import { Modal, Pressable, View, Text, TouchableOpacity } from "react-native";
-import SettingsTitles from "@/components/settings/SettingsTitles";
-import Back from "@/components/Back";
-import { ArrowLeft, Check } from "lucide-react-native";
-import { useRouter } from "expo-router";
-import { useState } from "react";
+import {Modal, Pressable, Text, TouchableOpacity, View} from "react-native";
+import {Check} from "lucide-react-native";
+import {useRouter} from "expo-router";
+import {useState} from "react";
 import SelectInput from "@/components/settings/SelectInput";
-import ThemeToggle from "@/components/settings/ThemeToggle";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import SettingsHeader from "@/components/settings/SettingsHeader";
 
 const PROFILE_PATH = "/(tabs)/profile";

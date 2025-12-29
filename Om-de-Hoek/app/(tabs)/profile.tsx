@@ -1,20 +1,14 @@
-import { useAuth } from "@/components/auth/context/AuthContext";
-import { View, Text, ActivityIndicator } from "react-native";
-import { PressableButton } from "@/components/PressableButton";
+import {useAuth} from "@/components/auth/context/AuthContext";
+import {ActivityIndicator, Text, View} from "react-native";
+import {PressableButton} from "@/components/PressableButton";
 import MenuItem from "@/components/settings/MenuItem";
 import SettingsTitles from "@/components/settings/SettingsTitles";
-import { Color } from "@/types/StyleOptions";
-import {
-  UserRoundPen,
-  Wrench,
-  BellRing,
-  UsersRound,
-    MapPinHouse
-} from "lucide-react-native";
-import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import {Color} from "@/types/StyleOptions";
+import {BellRing, MapPinHouse, UserRoundPen, UsersRound, Wrench} from "lucide-react-native";
+import {useRouter} from "expo-router";
+import {useEffect, useState} from "react";
 import UserService from "@/services/userService";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 
 export default function ProfilePage() {
   const [firstName, setFirstName] = useState<string>("");

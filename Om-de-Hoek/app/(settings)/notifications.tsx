@@ -1,8 +1,8 @@
-import {View } from "react-native";
+import {View} from "react-native";
 import SettingsTitles from "@/components/settings/SettingsTitles";
 import Back from "@/components/Back";
-import { ArrowLeft } from "lucide-react-native";
-import { useRouter } from "expo-router";
+import {ArrowLeft} from "lucide-react-native";
+import {useRouter} from "expo-router";
 
 
 const PROFILE_PATH = "/(tabs)/profile";

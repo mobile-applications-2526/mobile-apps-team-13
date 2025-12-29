@@ -1,15 +1,15 @@
-import { router, useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
-import { Message } from "@/types/message";
+import {router, useLocalSearchParams} from "expo-router";
+import {useEffect, useState} from "react";
+import {ScrollView, Text, View} from "react-native";
+import {Message} from "@/types/message";
 import Back from "@/components/Back";
-import { ArrowLeft } from "lucide-react-native";
+import {ArrowLeft} from "lucide-react-native";
 import Header from "@/components/Header";
-import { NotificationMessage } from "@/components/NotificationMessage";
+import {NotificationMessage} from "@/components/NotificationMessage";
 import CommentSection from "@/components/comments/CommentSection";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import userService from "@/services/userService";
-import { useAuth } from "@/components/auth/context/AuthContext";
+import {useAuth} from "@/components/auth/context/AuthContext";
 
 export default function MessageDetailScreen() {
   const { message: messageParam } = useLocalSearchParams<{

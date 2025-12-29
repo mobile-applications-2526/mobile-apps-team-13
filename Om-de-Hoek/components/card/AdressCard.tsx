@@ -1,11 +1,6 @@
 import {GestureResponderEvent, KeyboardAvoidingView, Platform, Pressable, Text, View} from "react-native"
 import {Address} from "@/types/address";
-import {
-    SquarePen,
-    Trash,
-    Undo,
-    Save
-} from "lucide-react-native";
+import {Save, SquarePen, Trash, Undo} from "lucide-react-native";
 import {useState} from "react";
 import LabeledInput from "@/components/settings/LabeledInput";
 import {useTranslation} from "react-i18next";
