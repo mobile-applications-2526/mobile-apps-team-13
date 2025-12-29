@@ -11,8 +11,6 @@ const fetchMessageFeed = async (
     buurtSectorCode?: string;
   }
 ): Promise<Message[]> => {
-  if (!token) throw new Error("No token provided");
-
   const params = new URLSearchParams();
 
   const page = Math.max(0, Number(options?.page ?? 0));
@@ -48,8 +46,6 @@ const sendMessage = async (
     neighborhoodOnly: boolean;
   }
 ): Promise<Message> => {
-  if (!token) throw new Error("No token provide");
-
   const data = await fetchData(`/message/send`, {
     method: "POST",
     headers: {

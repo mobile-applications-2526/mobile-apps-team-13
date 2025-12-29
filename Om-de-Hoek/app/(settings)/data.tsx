@@ -1,11 +1,18 @@
-import {ActivityIndicator, Alert, KeyboardAvoidingView, Platform, ScrollView, View,} from "react-native";
-import {Lock, Save} from "lucide-react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  View,
+} from "react-native";
+import { Lock, Save } from "lucide-react-native";
 import LabeledInput from "@/components/settings/LabeledInput";
-import {useEffect, useMemo, useState} from "react";
-import {useAuth} from "@/components/auth/context/AuthContext";
+import { useEffect, useMemo, useState } from "react";
+import { useAuth } from "@/components/auth/context/AuthContext";
 import UserService from "@/services/userService";
-import {useTranslation} from "react-i18next";
-import {User} from "@/types/user";
+import { useTranslation } from "react-i18next";
+import { User } from "@/types/user";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import SettingsHeader from "@/components/settings/SettingsHeader";
 
@@ -29,8 +36,6 @@ export default function MyDataPage() {
   );
 
   useEffect(() => {
-    if (!token) return;
-
     const fetchUserData = async () => {
       try {
         const data = await UserService.loggedInuser(token);
@@ -140,10 +145,10 @@ export default function MyDataPage() {
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
         >
-            <SettingsHeader
-              title={t("settings.data.title")}
-              subtitle={t("settings.data.subtitle")}
-            />
+          <SettingsHeader
+            title={t("settings.data.title")}
+            subtitle={t("settings.data.subtitle")}
+          />
 
           {isLoading ? (
             <View className="mt-10">
