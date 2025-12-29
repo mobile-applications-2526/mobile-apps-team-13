@@ -9,6 +9,8 @@ type Props = {
   subtitle: string;
   time?: string;
   message: Message;
+  containerClass?: string;
+  iconContainerClass?: string;
 };
 
 const NotificationCard: React.FC<Props> = ({
@@ -17,6 +19,8 @@ const NotificationCard: React.FC<Props> = ({
   subtitle,
   time,
   message,
+  containerClass = "",
+  iconContainerClass = "",
 }) => {
   const router = useRouter();
 
@@ -32,7 +36,7 @@ const NotificationCard: React.FC<Props> = ({
 
   return (
     <TouchableOpacity
-      className="mx-0 my-2 rounded-3xl bg-white p-4 shadow-sm"
+      className={`mx-0 my-2 rounded-3xl p-4 shadow-sm ${containerClass}`}
       style={{
         shadowColor: "#000",
         shadowOpacity: 0.05,
@@ -44,7 +48,9 @@ const NotificationCard: React.FC<Props> = ({
     >
       <View className="flex-row items-center">
         <View className="mr-4">
-          <View className="bg-[#F5F5F5] h-12 w-12 items-center justify-center rounded-xl">
+          <View
+            className={`h-12 w-12 items-center justify-center rounded-xl ${iconContainerClass}`}
+          >
             {icon}
           </View>
         </View>
@@ -70,7 +76,7 @@ const NotificationCard: React.FC<Props> = ({
         </View>
 
         <View className="pl-2">
-          <ChevronRight color="#C7C7CC" size={20} />
+          <ChevronRight color="#828282" size={20} />
         </View>
       </View>
     </TouchableOpacity>
