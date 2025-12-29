@@ -106,6 +106,14 @@ public class AuthController(AuthService authService) : ControllerBase
         }
     }
     
+    /// <summary>
+    /// Logs in a user using Google Sign-In and returns an access token.
+    /// </summary>
+    /// <param name="command">The Google Sign-In request containing the ID token.</param>
+    /// <returns>
+    /// An <see cref="ActionResult{TokenDto}"/> containing the authentication token on success
+    /// or an appropriate error response handled by <see cref="ExceptionHandler"/>.
+    /// </returns>
     [HttpPost("external/google")]
     [AllowAnonymous]
     public async Task<ActionResult<TokenDto>> LoginWithGoogle([FromBody] GoogleSigninRequest command)
