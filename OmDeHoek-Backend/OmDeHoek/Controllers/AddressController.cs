@@ -125,6 +125,15 @@ public class AddressController(AdresService adresService) : ControllerBase
         }
     }
     
+    /// <summary>
+    ///   Updates a single address for the authenticated user.
+    /// </summary>
+    /// <param name="address">
+    ///  The address to update with its new details.
+    /// </param>
+    /// <returns>
+    ///    An <see cref="ActionResult{AddressDto}"/> containing the updated address on success,
+    /// </returns>
     [HttpPut]
     [Authorize]
     public async Task<ActionResult<AddressDto>> UpdateAdres([FromBody] UpdateAdress address){
