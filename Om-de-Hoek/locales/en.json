@@ -135,7 +135,21 @@
       "titleplaceholder": "E.g. Roadworks on the street",
       "messageinput": "Message:",
       "messageplaceholder": "Type here...",
-      "submit": "Send notification"
+      "submit": "Send notification",
+      "selectneighborhood": "Select neighborhood",
+      "close": "Close"
+    },
+    "details": {
+      "likes": "Likes: ",
+      "comments": {
+        "comment": "Comments",
+        "empty": "No comments yet.",
+        "addcomment": "Add a comment...",
+        "fail": "Failed to post comment."
+      },
+      "loading": "Loading notification...",
+      "error": "Error loading notification.",
+      "me":"Me"
     }
   }
 }

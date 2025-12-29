@@ -134,7 +134,21 @@
       "titleplaceholder": "Bv. Wegenwerken aan de straat",
       "messageinput": "Bericht:",
       "messageplaceholder": "Typ hier...",
-      "submit": "Verzenden"
+      "submit": "Verzenden",
+      "selectneighborhood": "Selecteer buurt",
+      "close": "Sluiten"
+    },
+    "details": {
+      "likes": "Likes: ",
+      "comments": {
+        "comment": "Reacties",
+        "empty": "Nog geen reacties.",
+        "addcomment": "Voeg een reactie toe...",
+        "fail": "Kon reactie niet plaatsen."
+      },
+      "loading": "Laden van melding...",
+      "error": "Error bij laden melding.",
+      "me":"Ik"
     }
   }
 }
