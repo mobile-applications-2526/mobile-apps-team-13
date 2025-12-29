@@ -51,6 +51,11 @@ export default function ProfilePage() {
     );
   }
 
+  const handleSignOut = async () => {
+    router.push("/login");
+    await signOut();
+  }
+
   return (
     <View className="flex-1 bg-white px-6">
       <SettingsTitles title={firstName} subtitle={lastName} />
@@ -91,7 +96,7 @@ export default function ProfilePage() {
       />
 
       <PressableButton
-        onPress={signOut}
+        onPress={handleSignOut}
         title={t("settings.logout")}
         background={Color.RED}
       />

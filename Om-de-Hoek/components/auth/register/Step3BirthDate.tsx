@@ -154,6 +154,7 @@ export const Step3BirthDate = ({
             mode="date"
             display="spinner"
             onChange={onDateChange}
+            minimumDate={new Date(1900, 0, 1)}
             maximumDate={new Date()}
             textColor="#100D08"
             style={{ width: 320, height: 180 }}
