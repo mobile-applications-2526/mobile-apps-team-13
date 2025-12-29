@@ -1,4 +1,4 @@
-import { Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { Address } from "@/types/address";
 import { ChevronRight, Trash } from "lucide-react-native";
 import { useState } from "react";
@@ -30,7 +30,6 @@ const AdressCard = ({
 
   const { t } = useTranslation();
 
-  // Helper om state te updaten
   const updateField = (field: keyof Address, value: string) => {
     const newAddress = { ...updatedAddress, [field]: value };
     setUpdatedAddress(newAddress);
@@ -44,6 +43,24 @@ const AdressCard = ({
   const onCancelEditing = () => {
     setUpdatedAddress({ ...address });
     if (onCancel) onCancel();
+  };
+
+  const handleDeleteWithConfirmation = () => {
+    if (!onDelete) return;
+
+    Alert.alert(t("common.sure"), t("common.addressConfirmation"), [
+      {
+        text: t("common.cancel"),
+        style: "cancel",
+      },
+      {
+        text: t("common.delete"),
+        style: "destructive",
+        onPress: () => {
+          onDelete();
+        },
+      },
+    ]);
   };
 
   return (
@@ -64,12 +81,14 @@ const AdressCard = ({
               {t("register.address.edit")}
             </Text>
             {onDelete && (
-              <TouchableOpacity onPress={onDelete} className="p-2">
+              <TouchableOpacity
+                onPress={handleDeleteWithConfirmation}
+                className="p-2"
+              >
                 <Trash size={20} color={Color.RED} />
               </TouchableOpacity>
             )}
           </View>
-
           <View className="flex-col gap-3">
             <View className="flex-row gap-3">
               <View className="flex-1">
