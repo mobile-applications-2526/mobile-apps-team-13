@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, Pressable } from "react-native";
+import { ScrollView, Text, View, ActivityIndicator } from "react-native";
 import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
@@ -16,12 +16,10 @@ export default function TabTwoScreen() {
   const router = useRouter();
   const { token, refreshTokens } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { t } = useTranslation();
 
   const loadMessages = async () => {
-    if (!token) return;
-    setLoading(true);
     try {
       const data = await messageService.fetchMessageFeed(token, {
         page: 0,
@@ -44,7 +42,7 @@ export default function TabTwoScreen() {
         console.error("Error fetching messages:", error);
       }
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -79,43 +77,47 @@ export default function TabTwoScreen() {
         <Header title="Placeholder" subtitle="Placeholder" />
       </View>
 
-      <ScrollView className="mt-10 px-6">
-        <Text className="text-gray font-comfortaa-regular mb-2">
-          {t("notifications.subtitle")}
-        </Text>
-
-        {loading && messages.length === 0 && (
-          <Text className="text-gray-500 mt-4">
-            {t("notifications.loadmessage")}
+      {isLoading ? (
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" color="#2548BC" />
+        </View>
+      ) : (
+        <ScrollView className="mt-10 px-6">
+          <Text className="text-gray font-comfortaa-regular mb-2">
+            {t("notifications.subtitle")}
           </Text>
-        )}
 
-        {!loading && messages.length === 0 && (
-          <Text className="text-gray-500 mt-4">{t("notifications.empty")}</Text>
-        )}
+          {messages.length === 0 && (
+            <Text className="text-gray-500 mt-4">
+              {t("notifications.empty")}
+            </Text>
+          )}
 
-        {messages.map((message, index) => {
-          const { icon, title } = getSeverityConfig(message.severity);
-          return (
-            <NotificationCard
-              key={`${message.userTag}-${index}`}
-              icon={icon}
-              title={title}
-              subtitle={message.title ?? message.content}
-              time={new Date(message.createdAt).toLocaleTimeString("nl-BE", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-              message={message}
-            />
-          );
-        })}
-      </ScrollView>
+          {messages.map((message, index) => {
+            const { icon, title } = getSeverityConfig(message.severity);
+            return (
+              <NotificationCard
+                key={`${message.userTag}-${index}`}
+                icon={icon}
+                title={title}
+                subtitle={message.title ?? message.content}
+                time={new Date(message.createdAt).toLocaleTimeString("nl-BE", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+                message={message}
+              />
+            );
+          })}
+        </ScrollView>
+      )}
 
-      <FloatingActionButton
-        onPress={() => router.push("/createNotification")}
-        icon={<MessageCircle color="#FFFFFF" size={24} strokeWidth={2} />}
-      />
+      {!isLoading && (
+        <FloatingActionButton
+          onPress={() => router.push("/createNotification")}
+          icon={<MessageCircle color="#FFFFFF" size={24} strokeWidth={2} />}
+        />
+      )}
     </SafeAreaView>
   );
 }

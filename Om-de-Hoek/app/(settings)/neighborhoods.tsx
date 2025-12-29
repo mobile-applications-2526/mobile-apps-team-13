@@ -79,7 +79,11 @@ export default function MyNeighborhoodsPage() {
               />
             </View>
             {isLoading ? (
-              <ActivityIndicator size="large" color="#100D08" />
+              <ActivityIndicator
+                size="large"
+                color="#2548BC"
+                animating={true}
+              />
             ) : (
               <ListNeighborhoods
                 neighborhoods={neighborhoods}

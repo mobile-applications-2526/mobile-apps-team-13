@@ -45,7 +45,7 @@ export default function ProfilePage() {
   if (isLoading) {
     return (
       <View className="flex-1 justify-center items-center bg-white">
-        <ActivityIndicator size="large" color="#2548BC" />
+        <ActivityIndicator size="large" color="#2548BC" animating={true} />
       </View>
     );
   }

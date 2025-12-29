@@ -22,7 +22,7 @@ const FloatingActionButton: React.FC<Props> = ({
         ${isLoading ? "opacity-80" : ""}`}
       style={{ elevation: 6, zIndex: 50 }}
     >
-      {isLoading ? <ActivityIndicator color="white" /> : icon}
+      {isLoading ? <ActivityIndicator color="white" animating={true} /> : icon}
     </TouchableOpacity>
   );
 };
