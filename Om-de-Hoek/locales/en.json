@@ -42,7 +42,7 @@
       "title": "What is your address?",
       "subtitle": "Where can we come to eat?",
       "street": "Street name",
-      "housenumber": "House number",
+      "housenumber": "House Nr.",
       "municipality": "Municipality",
       "postalcode": "Postal code",
       "mandatoryStreet": "Street name *",
@@ -123,9 +123,19 @@
         "title": "Join",
         "subtitle": "a neighborhood"
       }
+    },
+    "notifications": {
+      "title": "My",
+      "subtitle": "Notifications",
+      "manage": "Manage notifications"
+    },
+    "manageNotifications": {
+      "title": "Manage",
+      "subtitle": "My notifications"
     }
   },
   "notifications": {
+    "edit": "Edit notification",
     "subtitle": "Latest notifications",
     "empty": "No notifications available",
     "create": "Create notification",
@@ -140,9 +150,10 @@
         "emergency": "Emergency"
       },
       "neighborhood": "Only my neighborhood",
-      "titleinput": "Title:",
+      "titleinput": "Title *",
+      "severityinput": "Severity *",
       "titleplaceholder": "E.g. Roadworks on the street",
-      "messageinput": "Message:",
+      "messageinput": "Message *",
       "messageplaceholder": "Type here...",
       "submit": "Send notification",
       "selectneighborhood": "Select neighborhood",
@@ -172,6 +183,13 @@
     "loading": "Loading...",
     "sure": "Are you sure?",
     "addressConfirmation": "Do you want to permanently delete this address?",
-    "addressEmpty": "No addresses available. Feel free to add one."
+    "addressEmpty": "No addresses available. Feel free to add one.",
+    "notificationConfirmation": "Do you want to permanently delete this notification?",
+    "notificationEmpty": "No notifications available. Feel free to create one."
+  },
+  "severity": {
+    "informational": "Informational",
+    "warning": "Warning",
+    "critical": "Emergency"
   }
 }
