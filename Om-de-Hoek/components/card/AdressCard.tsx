@@ -172,7 +172,7 @@ const AdressCard = ({
               {address.postalCode} {address.villageName}
             </Text>
           </View>
-          <ChevronRight size={20} color="#CBD5E1" />
+          <ChevronRight size={20} color="#828282" />
         </TouchableOpacity>
       )}
     </View>
