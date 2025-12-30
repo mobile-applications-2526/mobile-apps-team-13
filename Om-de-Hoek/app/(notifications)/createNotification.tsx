@@ -278,19 +278,12 @@ export default function CreateNotification({
           </View>
         </TouchableWithoutFeedback>
       </Modal>
-      <View className="relative mt-2 mb-4">
-        <View className="absolute left-0">
-          <Back
-            icon={<ArrowLeft color="#100D08" size={20} />}
-            onBack={() => router.push(HOME_PATH)}
-          />
-        </View>
-        <View className="items-center">
-          <Header
-            title={t("notifications.creation.title")}
-            subtitle={t("notifications.creation.subtitle")}
-          />
-        </View>
+      <View className="relative mt-2 mb-4 items-center">
+        <Header
+          title={t("notifications.creation.title")}
+          subtitle={t("notifications.creation.subtitle")}
+          onBack={() => router.push(HOME_PATH)}
+        />
       </View>
       <View>
         <Pressable onPress={() => setShowSeverityPicker(true)}>
