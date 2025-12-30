@@ -32,11 +32,6 @@ export default function ProfilePage() {
           if (error instanceof UnauthorizedError){
                 console.warn("Error fetching user data: token expired");
                 await refreshTokens();
-                console.log("Tokens refreshed, retrying to fetch user data");
-                const data = await UserService.loggedInuser(token);
-
-                setFirstName(data.firstName || "");
-                setLastName(data.lastName || "");
                 return;
           }
         console.error("Failed to fetch user data", error);

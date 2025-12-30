@@ -94,12 +94,6 @@ export default function TabTwoScreen() {
         );
         await refreshTokens();
         console.log("Tokens refreshed, retrying to fetch messages");
-        const data = await messageService.fetchMessageFeed(token, {
-          page: nextPage,
-          pageSize: 20,
-            ...filters
-        });
-        setMessages((prevMessages) => [...prevMessages, ...data]);
       }
     }
   };
