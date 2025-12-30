@@ -59,9 +59,7 @@ export default function MessageDetailScreen() {
       try {
           if (id) {
               const messageId = Array.isArray(id) ? id[0] : id;
-              console.log("Fetching message with ID:", messageId);
               const fetchedMessage = await messageService.getMessageById(token, messageId);
-              console.log("Fetched message:", fetchedMessage);
               setMessage({...fetchedMessage});
           }
       }
@@ -79,7 +77,6 @@ export default function MessageDetailScreen() {
   const handleReload = async () => {
       setIsRefreshing(true);
       setIsLoading(true);
-      console.log("Refreshing message...");
       await fetchMessage();
       setIsRefreshing(false);
   }
