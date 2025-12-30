@@ -1,19 +1,8 @@
 import { User } from "@/types/user";
 import { fetchData } from "./requestService";
-import { Address } from "@/types/address";
 
 const loggedInuser = async (token: string | null) : Promise<User> => {
     return await fetchData(`/user/loggedin`, {
-        method: "GET",
-        headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-        },
-    });
-};
-
-const addressByLoggedInUser = async (token: string | null) : Promise<Address[]> => {
-    return await fetchData(`/address/byloggedinuser`, {
         method: "GET",
         headers: {
             Authorization: `Bearer ${token}`,
@@ -35,6 +24,5 @@ const updateUser = async (user: User, token: string | null) : Promise<User> => {
 
 export default {
     loggedInuser,
-    addressByLoggedInUser,
     updateUser,
 };
