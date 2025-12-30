@@ -137,7 +137,7 @@ const AdressCard = ({
             </View>
           </View>
 
-          <View className="flex-row justify-end items-center gap-4 mt-6 pt-2 border-t border-gray-100">
+          <View className="flex-row justify-end items-center gap-4 mt-6">
             {onCancel && (
               <Pressable onPress={onCancelEditing} className="px-4 py-2">
                 <Text className="font-comfortaa-semibold text-gray-500">
