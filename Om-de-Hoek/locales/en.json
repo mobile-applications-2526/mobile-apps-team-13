@@ -203,5 +203,11 @@
     "hoursagoplural": "{{count}} hours ago",
     "daysago": "{{count}} day ago",
     "daysagoplural": "{{count}} days ago"
+  },
+  "greetings": {
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "lateafternoon": "Good late afternoon",
+    "evening": "Good evening"
   }
 }

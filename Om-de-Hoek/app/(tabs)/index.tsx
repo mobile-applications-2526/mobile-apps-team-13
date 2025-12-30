@@ -108,10 +108,29 @@ export default function TabTwoScreen() {
         };
     }
   };
+
+  const getGreeting = () => {
+        const currentHour = new Date().getHours();
+        const currentMinute = new Date().getMinutes();
+
+        if (currentHour >= 5 && currentHour < 12) {
+            return t("greetings.morning");
+        }
+        else if (currentHour >= 12 && (currentHour < 14 || (currentHour === 14 && currentMinute < 30))) {
+            return t("greetings.afternoon");
+        }
+        else if ((currentHour === 14 && currentMinute >= 30) || (currentHour >= 15 && currentHour < 17) || (currentHour === 17 && currentMinute < 30)) {
+            return t("greetings.lateafternoon");
+        }
+        else {
+            return t("greetings.evening");
+        }
+  }
+
   return (
     <View className="flex-1 bg-white">
       <View className="items-center">
-        <Header title="Place" subtitle="holder" />
+        <Header title={getGreeting()} subtitle="holder" />
       </View>
 
       {isLoading ? (
