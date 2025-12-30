@@ -1,16 +1,17 @@
-import {ActivityIndicator, FlatList, Text, View} from "react-native";
-import {useEffect, useState} from "react";
-import {useRouter} from "expo-router";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { useRouter } from "expo-router";
 import Header from "@/components/Header";
 import NotificationCard from "@/components/card/NotificationCard";
 import messageService from "@/services/messageService";
-import {Message, MessageSeverity} from "@/types/message";
-import {Info, MessageCircle, Siren, TriangleAlert} from "lucide-react-native";
-import {useAuth} from "@/components/auth/context/AuthContext";
-import {useTranslation} from "react-i18next";
+import { Message, MessageSeverity } from "@/types/message";
+import { Info, MessageCircle, Siren, TriangleAlert } from "lucide-react-native";
+import { useAuth } from "@/components/auth/context/AuthContext";
+import { useTranslation } from "react-i18next";
 import FloatingActionButton from "@/components/FloatingActionButton";
-import {UnauthorizedError} from "@/types/Errors/UnauthorizedError";
-import {getFromStorage} from "@/utils/StorageHandler";
+import { UnauthorizedError } from "@/types/Errors/UnauthorizedError";
+import HomeHeader from "@/components/HomeHeader";
+import { getFromStorage } from "@/utils/StorageHandler";
 
 export default function TabTwoScreen() {
   const router = useRouter();
@@ -18,13 +19,13 @@ export default function TabTwoScreen() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState<{
-      includeInformational: boolean;
-      includeWarning: boolean;
-      includeCritical: boolean;
+    includeInformational: boolean;
+    includeWarning: boolean;
+    includeCritical: boolean;
   }>({
-      includeInformational: true,
-      includeWarning: true,
-      includeCritical: true,
+    includeInformational: true,
+    includeWarning: true,
+    includeCritical: true,
   });
 
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ export default function TabTwoScreen() {
       const data = await messageService.fetchMessageFeed(token, {
         page: 0,
         pageSize: 20,
-          ...filters
+        ...filters,
       });
       setMessages(data);
     } catch (error) {
@@ -47,7 +48,7 @@ export default function TabTwoScreen() {
         const data = await messageService.fetchMessageFeed(token, {
           page: 0,
           pageSize: 20,
-            ...filters
+          ...filters,
         });
         setMessages(data);
       } else {
@@ -59,20 +60,21 @@ export default function TabTwoScreen() {
   };
 
   const loadFilters = async () => {
-      const viewInfo = (await getFromStorage("viewInfo", "true")) === "true";
-      const viewWarnings = (await getFromStorage("viewWarnings", "true")) === "true";
-      const viewCritical = (await getFromStorage("viewCritical", "true")) === "true";
+    const viewInfo = (await getFromStorage("viewInfo", "true")) === "true";
+    const viewWarnings =
+      (await getFromStorage("viewWarnings", "true")) === "true";
+    const viewCritical =
+      (await getFromStorage("viewCritical", "true")) === "true";
 
-      setFilters({
-          includeInformational: viewInfo,
-          includeWarning: viewWarnings,
-          includeCritical: viewCritical,
-      });
-  }
+    setFilters({
+      includeInformational: viewInfo,
+      includeWarning: viewWarnings,
+      includeCritical: viewCritical,
+    });
+  };
 
   useEffect(() => {
-      loadFilters()
-          .then(() =>  loadMessages());
+    loadFilters().then(() => loadMessages());
   }, [token]);
 
   const loadNextMessages = async () => {
@@ -84,7 +86,7 @@ export default function TabTwoScreen() {
       const data = await messageService.fetchMessageFeed(token, {
         page: nextPage,
         pageSize: 20,
-            ...filters
+        ...filters,
       });
       setMessages((prevMessages) => [...prevMessages, ...data]);
     } catch (error) {
@@ -98,7 +100,9 @@ export default function TabTwoScreen() {
     }
   };
 
-  const getSeverityConfig = (severity: MessageSeverity) : {
+  const getSeverityConfig = (
+    severity: MessageSeverity
+  ): {
     title: string;
     icon: React.ReactNode;
     cardBackground: string;
@@ -131,27 +135,31 @@ export default function TabTwoScreen() {
   };
 
   const getGreeting = () => {
-        const currentHour = new Date().getHours();
-        const currentMinute = new Date().getMinutes();
+    const currentHour = new Date().getHours();
+    const currentMinute = new Date().getMinutes();
 
-        if (currentHour >= 5 && currentHour < 12) {
-            return t("greetings.morning");
-        }
-        else if (currentHour >= 12 && (currentHour < 14 || (currentHour === 14 && currentMinute < 30))) {
-            return t("greetings.afternoon");
-        }
-        else if ((currentHour === 14 && currentMinute >= 30) || (currentHour >= 15 && currentHour < 17) || (currentHour === 17 && currentMinute < 30)) {
-            return t("greetings.lateafternoon");
-        }
-        else {
-            return t("greetings.evening");
-        }
-  }
+    if (currentHour >= 5 && currentHour < 12) {
+      return t("greetings.morning");
+    } else if (
+      currentHour >= 12 &&
+      (currentHour < 14 || (currentHour === 14 && currentMinute < 30))
+    ) {
+      return t("greetings.afternoon");
+    } else if (
+      (currentHour === 14 && currentMinute >= 30) ||
+      (currentHour >= 15 && currentHour < 17) ||
+      (currentHour === 17 && currentMinute < 30)
+    ) {
+      return t("greetings.lateafternoon");
+    } else {
+      return t("greetings.evening");
+    }
+  };
 
   return (
     <View className="flex-1 bg-white">
       <View className="items-center">
-        <Header title={getGreeting()} subtitle={t('greetings.subtitle')} />
+        <HomeHeader title={getGreeting()} />
       </View>
 
       {isLoading ? (
@@ -160,7 +168,7 @@ export default function TabTwoScreen() {
         </View>
       ) : (
         <View className="mt-10 px-6 flex-1">
-          <Text className="text-gray font-comfortaa-regular mb-2">
+          <Text className="text-gray font-comfortaa-regular text-base mb-2">
             {t("notifications.subtitle")}
           </Text>
 
@@ -176,8 +184,12 @@ export default function TabTwoScreen() {
                   key={item.id}
                   icon={getSeverityConfig(item.severity).icon}
                   message={item}
-                  containerClass={getSeverityConfig(item.severity).cardBackground}
-                  iconContainerClass={getSeverityConfig(item.severity).iconBackground}
+                  containerClass={
+                    getSeverityConfig(item.severity).cardBackground
+                  }
+                  iconContainerClass={
+                    getSeverityConfig(item.severity).iconBackground
+                  }
                 />
               )}
               onRefresh={async () => await loadMessages()}
@@ -185,9 +197,7 @@ export default function TabTwoScreen() {
               onEndReached={async () => await loadNextMessages()}
               onEndReachedThreshold={0.5}
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={
-                { paddingBottom: 100 }
-              }
+              contentContainerStyle={{ paddingBottom: 100 }}
             ></FlatList>
           )}
         </View>

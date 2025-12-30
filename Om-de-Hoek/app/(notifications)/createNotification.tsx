@@ -1,18 +1,31 @@
 import Back from "@/components/Back";
-import {PressableButton} from "@/components/PressableButton";
-import {Color} from "@/types/StyleOptions";
-import {useRouter} from "expo-router";
-import {ArrowLeft, Check, ChevronDown, ChevronRight,} from "lucide-react-native";
-import {useEffect, useState} from "react";
-import {Modal, Pressable, ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View,} from "react-native";
-import {useAuth} from "@/components/auth/context/AuthContext";
+import { PressableButton } from "@/components/PressableButton";
+import { Color } from "@/types/StyleOptions";
+import { useRouter } from "expo-router";
+import {
+  ArrowLeft,
+  Check,
+  ChevronDown,
+  ChevronRight,
+} from "lucide-react-native";
+import { useEffect, useState } from "react";
+import {
+  Modal,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import { useAuth } from "@/components/auth/context/AuthContext";
 import userService from "@/services/userService";
-import {Neighborhood} from "@/types/neighborhood";
-import {useTranslation} from "react-i18next";
+import { Neighborhood } from "@/types/neighborhood";
+import { useTranslation } from "react-i18next";
 import Header from "@/components/Header";
 import LabeledInput from "@/components/settings/LabeledInput";
 import messageService from "@/services/messageService";
-import {MessageSeverity} from "@/types/message";
+import { MessageSeverity } from "@/types/message";
 import SwitchButton from "@/components/settings/SwitchButton";
 import InputPageView from "@/components/InputPageView";
 
@@ -265,19 +278,12 @@ export default function CreateNotification({
           </View>
         </TouchableWithoutFeedback>
       </Modal>
-      <View className="relative mt-2 mb-4">
-        <View className="absolute left-6 top-8">
-          <Back
-            icon={<ArrowLeft color="#100D08" size={20} />}
-            onBack={() => router.push(HOME_PATH)}
-          />
-        </View>
-        <View className="items-center">
-          <Header
-            title={t("notifications.creation.title")}
-            subtitle={t("notifications.creation.subtitle")}
-          />
-        </View>
+      <View className="relative mt-2 mb-4 items-center">
+        <Header
+          title={t("notifications.creation.title")}
+          subtitle={t("notifications.creation.subtitle")}
+          onBack={() => router.push(HOME_PATH)}
+        />
       </View>
       <View>
         <Pressable onPress={() => setShowSeverityPicker(true)}>

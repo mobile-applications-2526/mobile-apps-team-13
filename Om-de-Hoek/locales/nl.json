@@ -196,21 +196,17 @@
     "critical": "Noodgeval"
   },
   "time": {
-
     "justnow": "zojuist",
-    "minutesago": "{{count}} minuut geleden",
-    "minutesagoplural": "{{count}} minuten geleden",
-    "hoursago": "{{count}} uur geleden",
-    "hoursagoplural": "{{count}} uur geleden",
-    "daysago": "{{count}} dag geleden",
-    "daysagoplural": "{{count}} dagen geleden"
+    "minutesago": "{{count}}min",
+    "hoursago": "{{count}}uur",
+    "daysago": "{{count}}dag"
   },
-    "greetings": {
-      "morning": "Goedemorgen",
-        "afternoon": "Goedemiddag",
-        "evening": "Goedenavond",
-        "lateafternoon": "Goede namiddag",
-      "subtitle": "Bekijk wat er in jouw buurt is gebeurd"
-    },
+  "greetings": {
+    "morning": "Goedemorgen",
+    "afternoon": "Goedemiddag",
+    "evening": "Goedenavond",
+    "lateafternoon": "Goede namiddag",
+    "subtitle": "Bekijk wat er in jouw buurt is gebeurd"
+  },
   "feedback": "Feedback? Laat het ons weten!"
 }

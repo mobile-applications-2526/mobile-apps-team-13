@@ -39,21 +39,15 @@ const NotificationCard: React.FC<Props> = ({
     }
     const diffInMins = Math.floor(diffInSecs / 60);
     if (diffInMins < 60) {
-      return diffInMins === 1
-        ? t("time.minutesago", { count: diffInMins })
-        : t("time.minutesagoplural", { count: diffInMins });
+      return t("time.minutesago", { count: diffInMins });
     }
     const diffInHours = Math.floor(diffInMins / 60);
     if (diffInHours < 24) {
-      return diffInHours === 1
-        ? t("time.hoursago", { count: diffInHours })
-        : t("time.hoursagoplural", { count: diffInHours });
+      return t("time.hoursago", { count: diffInHours });
     }
     const diffInDays = Math.floor(diffInHours / 24);
     if (diffInDays < 7) {
-      return diffInDays === 1
-        ? t("time.daysago", { count: diffInDays })
-        : t("time.daysagoplural", { count: diffInDays });
+      return t("time.daysago", { count: diffInDays });
     }
     return date.toLocaleDateString("nl-BE");
   };
@@ -101,7 +95,7 @@ const NotificationCard: React.FC<Props> = ({
 
         <View className="flex-1 justify-center gap-0.5">
           <View className="flex-row items-baseline gap-2 justify-between">
-            <Text className="text-black font-comfortaa-bold text-m leading-tight">
+            <Text className="text-black font-comfortaa-bold text-sm leading-tight">
               {getShortenedUserTag()}
             </Text>
             {time && (
