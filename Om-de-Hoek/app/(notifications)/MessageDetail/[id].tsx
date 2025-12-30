@@ -93,7 +93,7 @@ export default function MessageDetailScreen() {
     if (!message) return "";
     return message.userTag === userTag
       ? t("notifications.details.me")
-      : message.userTag;
+      : `@${message.userTag}`;
   };
 
   if (!message)
