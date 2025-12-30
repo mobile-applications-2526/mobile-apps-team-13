@@ -1,5 +1,22 @@
-import {Message, MessageResponseCommand} from "@/types/message";
-import {fetchData} from "./requestService";
+import {
+  Message,
+  MessageResponseCommand,
+  UpdateMessageCommand,
+} from "@/types/message";
+import { fetchData } from "./requestService";
+
+const getAllMessagesByLoggedInUser = async (
+  token: string | null
+): Promise<Message[]> => {
+  const data = await fetchData(`/message/byloggedinuser`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+  return data as Message[];
+};
 
 const fetchMessageFeed = async (
   token: string | null,
@@ -57,7 +74,10 @@ const sendMessage = async (
   return data as Message;
 };
 
-const likeMessage = async (token: string, messageId: string) : Promise<Message> => {
+const likeMessage = async (
+  token: string,
+  messageId: string
+): Promise<Message> => {
   return await fetchData(`/message/like/${messageId}`, {
     method: "POST",
     headers: {
@@ -67,7 +87,10 @@ const likeMessage = async (token: string, messageId: string) : Promise<Message> 
   });
 };
 
-const respondToMessage = async (token: string, payload: MessageResponseCommand) : Promise<void> => {
+const respondToMessage = async (
+  token: string,
+  payload: MessageResponseCommand
+): Promise<void> => {
   await fetchData(`/message/respond`, {
     method: "POST",
     headers: {
@@ -78,4 +101,39 @@ const respondToMessage = async (token: string, payload: MessageResponseCommand) 
   });
 };
 
-export default { fetchMessageFeed, sendMessage, likeMessage, respondToMessage };
+const UpdateSingleMessage = async (
+  message: UpdateMessageCommand,
+  token: string
+): Promise<Message> => {
+  return await fetchData("/message", {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(message),
+  });
+};
+
+const DeleteMessage = async (
+  messageId: string,
+  token: string
+): Promise<void> => {
+  return await fetchData(`/message/${messageId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+export default {
+  getAllMessagesByLoggedInUser,
+  fetchMessageFeed,
+  sendMessage,
+  likeMessage,
+  respondToMessage,
+  UpdateSingleMessage,
+  DeleteMessage,
+};
