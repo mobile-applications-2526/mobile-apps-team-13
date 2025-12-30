@@ -27,6 +27,7 @@ import LabeledInput from "@/components/settings/LabeledInput";
 import messageService from "@/services/messageService";
 import { MessageSeverity } from "@/types/message";
 import SwitchButton from "@/components/settings/SwitchButton";
+import InputPageView from "@/components/InputPageView";
 
 type Props = {
   onChange?: (name: {
@@ -193,10 +194,7 @@ export default function CreateNotification({
   };
 
   return (
-    <ScrollView
-      className="flex-1 bg-white px-6"
-      contentContainerStyle={{ paddingBottom: 100 }}
-    >
+    <InputPageView>
       <Modal
         visible={showSeverityPicker}
         transparent={true}
@@ -375,6 +373,6 @@ export default function CreateNotification({
           background={isValid ? Color.BLUE : Color.GRAY}
         />
       </View>
-    </ScrollView>
+    </InputPageView>
   );
 }
