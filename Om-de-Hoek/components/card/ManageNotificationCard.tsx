@@ -11,7 +11,7 @@ import {
   Modal,
 } from "react-native";
 import LabeledInput from "../settings/LabeledInput";
-import { Check, ChevronRight, Trash } from "lucide-react-native";
+import { Check, ChevronDown, ChevronRight, Trash } from "lucide-react-native";
 import { Color } from "@/types/StyleOptions";
 type Props = {
   notification: Message;
@@ -147,15 +147,23 @@ const ManageNotificationCard = ({
           <View className="flex-col gap-3">
             <View>
               <Pressable onPress={() => setShowSeverityPicker(true)}>
-                <LabeledInput
-                  value={t(
-                    `severity.${updatedNotification.severity.toLowerCase()}`
-                  )}
-                  dropdown={true}
-                  onChange={() => {}}
-                  label={t("notifications.creation.severityinput")}
-                  rightIcon={<ChevronRight color={"#828282"} />}
-                />
+                <View pointerEvents="none">
+                  <LabeledInput
+                    value={t(
+                      `severity.${updatedNotification.severity.toLowerCase()}`
+                    )}
+                    onChange={() => {}}
+                    label={t("notifications.creation.severityinput")}
+                    dropdown={true}
+                    rightIcon={
+                      showSeverityPicker ? (
+                        <ChevronDown color="#828282" />
+                      ) : (
+                        <ChevronRight color="#828282" />
+                      )
+                    }
+                  />
+                </View>
               </Pressable>
             </View>
             <View className="flex-1">
