@@ -1,15 +1,15 @@
-import {ActivityIndicator, FlatList, Text, View} from "react-native";
-import {useEffect, useState} from "react";
-import {useRouter} from "expo-router";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { useRouter } from "expo-router";
 import Header from "@/components/Header";
 import NotificationCard from "@/components/card/NotificationCard";
 import messageService from "@/services/messageService";
-import {Message} from "@/types/message";
-import {Info, MessageCircle, Siren, TriangleAlert} from "lucide-react-native";
-import {useAuth} from "@/components/auth/context/AuthContext";
-import {useTranslation} from "react-i18next";
+import { Message } from "@/types/message";
+import { Info, MessageCircle, Siren, TriangleAlert } from "lucide-react-native";
+import { useAuth } from "@/components/auth/context/AuthContext";
+import { useTranslation } from "react-i18next";
 import FloatingActionButton from "@/components/FloatingActionButton";
-import {UnauthorizedError} from "@/types/Errors/UnauthorizedError";
+import { UnauthorizedError } from "@/types/Errors/UnauthorizedError";
 
 export default function TabTwoScreen() {
   const router = useRouter();
@@ -50,31 +50,31 @@ export default function TabTwoScreen() {
   }, [token]);
 
   const loadNextMessages = async () => {
-      if(messages.length % 20 !== 0) {
-          return;
-      }
-      const nextPage = Math.ceil(messages.length / 20);
+    if (messages.length % 20 !== 0) {
+      return;
+    }
+    const nextPage = Math.ceil(messages.length / 20);
     try {
+      const data = await messageService.fetchMessageFeed(token, {
+        page: nextPage,
+        pageSize: 20,
+      });
+      setMessages((prevMessages) => [...prevMessages, ...data]);
+    } catch (error) {
+      if (error instanceof UnauthorizedError) {
+        console.log(
+          "Error fetching messages: token expired, refreshing tokens"
+        );
+        await refreshTokens();
+        console.log("Tokens refreshed, retrying to fetch messages");
         const data = await messageService.fetchMessageFeed(token, {
-            page: nextPage,
-            pageSize: 20,
+          page: nextPage,
+          pageSize: 20,
         });
         setMessages((prevMessages) => [...prevMessages, ...data]);
-    } catch (error) {
-        if (error instanceof UnauthorizedError) {
-            console.log(
-                "Error fetching messages: token expired, refreshing tokens"
-            );
-            await refreshTokens();
-            console.log("Tokens refreshed, retrying to fetch messages");
-            const data = await messageService.fetchMessageFeed(token, {
-                page: nextPage,
-                pageSize: 20,
-            });
-            setMessages((prevMessages) => [...prevMessages, ...data]);
-        }
+      }
     }
-  }
+  };
 
   const getSeverityConfig = (severity: Message["severity"]) => {
     switch (severity) {
@@ -122,24 +122,23 @@ export default function TabTwoScreen() {
             <Text className="text-gray-500 mt-4">
               {t("notifications.empty")}
             </Text>
-          ): (
-              <FlatList data={messages} renderItem={
-                ({ item }) => (
-                  <NotificationCard
-                    key={item.id}
-                    icon={getSeverityConfig(item.severity).icon}
-                    message={item}
-                  />
-                )
-              }
-                        onRefresh={async () => await loadMessages()}
-                        refreshing={isLoading}
-                        onEndReached={async () => await loadNextMessages()}
-                        onEndReachedThreshold={0.5}
-              ></FlatList>
+          ) : (
+            <FlatList
+              data={messages}
+              renderItem={({ item }) => (
+                <NotificationCard
+                  key={item.id}
+                  icon={getSeverityConfig(item.severity).icon}
+                  message={item}
+                />
+              )}
+              onRefresh={async () => await loadMessages()}
+              refreshing={isLoading}
+              onEndReached={async () => await loadNextMessages()}
+              onEndReachedThreshold={0.5}
+              showsVerticalScrollIndicator={false}
+            ></FlatList>
           )}
-
-
         </View>
       )}
 
