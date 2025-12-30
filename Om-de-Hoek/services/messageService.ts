@@ -1,6 +1,5 @@
-import { Message } from "@/types/message";
-import type { Comment } from "@/types/comment";
-import { fetchData } from "./requestService";
+import {Message, MessageResponseCommand} from "@/types/message";
+import {fetchData} from "./requestService";
 
 const fetchMessageFeed = async (
   token: string | null,
@@ -58,7 +57,7 @@ const sendMessage = async (
   return data as Message;
 };
 
-const likeMessage = async (token: string, messageId: string) => {
+const likeMessage = async (token: string, messageId: string) : Promise<Message> => {
   return await fetchData(`/message/like/${messageId}`, {
     method: "POST",
     headers: {
@@ -68,12 +67,7 @@ const likeMessage = async (token: string, messageId: string) => {
   });
 };
 
-type RespondPayload = {
-  messageId: string;
-  content: string;
-};
-
-const respondToMessage = async (token: string, payload: RespondPayload) => {
+const respondToMessage = async (token: string, payload: MessageResponseCommand) : Promise<void> => {
   await fetchData(`/message/respond`, {
     method: "POST",
     headers: {

@@ -1,7 +1,8 @@
 import { User } from "@/types/user";
 import { fetchData } from "./requestService";
+import { Address } from "@/types/address";
 
-const loggedInuser = async (token: string | null) => {
+const loggedInuser = async (token: string | null) : Promise<User> => {
     return await fetchData(`/user/loggedin`, {
         method: "GET",
         headers: {
@@ -11,7 +12,7 @@ const loggedInuser = async (token: string | null) => {
     });
 };
 
-const addressByLoggedInUser = async (token: string | null) => {
+const addressByLoggedInUser = async (token: string | null) : Promise<Address[]> => {
     return await fetchData(`/address/byloggedinuser`, {
         method: "GET",
         headers: {
@@ -21,7 +22,7 @@ const addressByLoggedInUser = async (token: string | null) => {
     });
 };
 
-const updateUser = async (user: User, token: string | null) => {
+const updateUser = async (user: User, token: string | null) : Promise<User> => {
     return await fetchData(`/user/update`, {
         method: "PUT",
         headers: {

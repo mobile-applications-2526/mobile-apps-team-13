@@ -42,7 +42,7 @@ const fetchData = async (endpoint: string, options : RequestInit = {}) : Promise
  * @description Check the status of the API (and wakes it up if it's sleeping)
  * @returns true if the API is reachable, false otherwise
  */
-const statusCheck = async () => {
+const statusCheck = async () : Promise<boolean> => {
   try {
     const response = await fetch(`${API_URL}/status`);
     if (!response.ok) {

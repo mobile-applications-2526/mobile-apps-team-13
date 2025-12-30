@@ -24,6 +24,13 @@ export type LoginBody = {
     password: string;
 }
 
+/**
+ * Response returned upon successful authentication.
+ * @property {string} token - The authentication token
+ * @property {string} email - The email of the authenticated user
+ * @property {string} id - The unique identifier of the authenticated user
+ * @property {string} refreshToken - The refresh token for obtaining new authentication tokens
+ */
 export type AuthResponse = {
     token: string;
     email: string;

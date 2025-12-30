@@ -1,7 +1,7 @@
 import {Address, CreateAddressCommand, UpdateAddressCommand} from "@/types/address";
 import {fetchData} from "@/services/requestService";
 
-const RegisterAddress = async (address: CreateAddressCommand, token: string) => {
+const RegisterAddress = async (address: CreateAddressCommand, token: string) : Promise<Address> => {
   return await fetchData(`/address`, {
     method: "POST",
     headers: {
@@ -12,7 +12,7 @@ const RegisterAddress = async (address: CreateAddressCommand, token: string) => 
   });
 };
 
-const GetAllByAuthenticatedUser = async (token: string) : Promise<Address[]>   => {
+const GetAllByAuthenticatedUser = async (token: string) : Promise<Address[]> => {
     const response = await fetchData("/address/byloggedinuser", {
         method: 'GET',
         headers: {
@@ -35,7 +35,7 @@ const UpdateSingleAddress = async (address: UpdateAddressCommand, token: string)
     })
 }
 
-const DeleteAddress = async (addressId: string, token: string) => {
+const DeleteAddress = async (addressId: string, token: string) : Promise<void> => {
     return await fetchData(`/address/${addressId}`, {
         method: 'DELETE',
         headers: {
