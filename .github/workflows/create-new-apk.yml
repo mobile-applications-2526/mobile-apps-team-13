@@ -40,4 +40,4 @@ jobs:
 
       - name: Publish OTA Update
         run: |
-          eas update --branch preview --message "Auto-update from GitHub Action: ${{ github.event.head_commit.message }}" --non-interactive
+          eas update --branch preview --platform android --message "Auto-update from GitHub Action: ${{ github.event.head_commit.message }}" --non-interactive
