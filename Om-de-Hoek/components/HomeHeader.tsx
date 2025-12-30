@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 
 type Props = {
@@ -5,7 +6,9 @@ type Props = {
 };
 
 export default function HomeHeader({ title }: Props) {
-  const today = new Date().toLocaleDateString("nl-BE", {
+  const { i18n } = useTranslation();
+
+  const today = new Date().toLocaleDateString(i18n.language, {
     weekday: "long",
     day: "numeric",
     month: "long",
