@@ -126,7 +126,7 @@ export default function MessageDetailScreen() {
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={handleReload} />
         }
-
+        keyboardShouldPersistTaps="handled"
       >
         <View className="absolute left-6 top-8">
           <Back
