@@ -16,7 +16,7 @@ const NotificationCard: React.FC<Props> = ({
   message,
   containerClass = "",
   iconContainerClass = "",
-}) => {
+}: Props) => {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const { t } = useTranslation();
