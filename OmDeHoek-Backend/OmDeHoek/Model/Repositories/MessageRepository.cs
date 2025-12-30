@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OmDeHoek.Model.Data;
 using OmDeHoek.Model.Entities;
+using OmDeHoek.Model.Enums;
 
 namespace OmDeHoek.Model.Repositories;
 
@@ -11,7 +12,8 @@ public class MessageRepository(DataContext ctx) : GenericRepository<Message>(ctx
         int pageSize, 
         string userId,
         string? postcode, 
-        string? buurtSectorCode)
+        string? buurtSectorCode,
+        List<MessageSeverity>? severities = null)
     {
         IQueryable<Message> query = DbSet.AsNoTracking();
 
@@ -23,6 +25,11 @@ public class MessageRepository(DataContext ctx) : GenericRepository<Message>(ctx
         if (!string.IsNullOrEmpty(buurtSectorCode))
         {
             query = query.Where(m => m.BuurtSectorCode == buurtSectorCode);
+        }
+        
+        if (severities != null)
+        {
+            query = query.Where(m => severities.Contains(m.Severity));
         }
         
         query = query.Where(m => m.Buurt!.Bewoners.Any(ub => ub.UserId == userId) || 
@@ -38,5 +45,35 @@ public class MessageRepository(DataContext ctx) : GenericRepository<Message>(ctx
             .Include(m => m.LikedBy);
 
         return await query.ToListAsync();
+    }
+    
+    public async Task<List<Message>> GetMessagesByUserIdAsync(string userId, int page = 0, int pageSize = 20)
+    {
+        return await DbSet
+            .Where(m => m.UserId == userId)
+            .OrderByDescending(m => m.CreatedAt)
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .Include(m => m.Comments)
+                .ThenInclude(c => c.User)
+            .Include(m => m.LikedBy)
+            .ToListAsync();
+    }
+    
+    public async Task<Message?> GetMessageByIdAsync(Guid messageId)
+    {
+        var message = await DbSet
+            .Include(m => m.User)
+            .Include(m => m.Comments)
+                .ThenInclude(c => c.User)
+            .Include(m => m.LikedBy)
+            .FirstOrDefaultAsync(m => m.Id == messageId);
+        
+        if (message?.Comments != null)
+        {
+            message.Comments = message.Comments.OrderByDescending(c => c.CreatedAt).ToList();
+        }
+
+        return message;
     }
 }

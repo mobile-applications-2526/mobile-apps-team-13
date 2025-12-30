@@ -1,5 +1,6 @@
 import { TouchableOpacity, View, Text } from "react-native";
 import { Check } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   count?: number;
@@ -7,6 +8,8 @@ type Props = {
 };
 
 export default function PinnedBottomButton({ count, onNext }: Props) {
+    const { t } = useTranslation();
+
   return (
     <View className="absolute bottom-4 left-4 right-4 z-50">
       <TouchableOpacity
@@ -15,7 +18,8 @@ export default function PinnedBottomButton({ count, onNext }: Props) {
       >
         <Check color={"#FFFF"} size={24} />
         <Text className="text-white font-comfortaa-bold ml-3 text-lg">
-          Klaar ({count} buurt(en) geselecteerd){" "}
+          {" "}
+            {t("register.neighborhood.next", { count: count })}
         </Text>
       </TouchableOpacity>
     </View>

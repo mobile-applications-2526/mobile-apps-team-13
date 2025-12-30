@@ -1,19 +1,33 @@
 import Back from "@/components/Back";
-import {PressableButton} from "@/components/PressableButton";
-import {Color} from "@/types/StyleOptions";
-import {useRouter} from "expo-router";
-import {ArrowLeft} from "lucide-react-native";
-import {useEffect, useState} from "react";
-import {Pressable, Switch, Text, View} from "react-native";
-import {SafeAreaView} from "react-native-safe-area-context";
-import {useAuth} from "@/components/auth/context/AuthContext";
+import { PressableButton } from "@/components/PressableButton";
+import { Color } from "@/types/StyleOptions";
+import { useRouter } from "expo-router";
+import {
+  ArrowLeft,
+  Check,
+  ChevronDown,
+  ChevronRight,
+} from "lucide-react-native";
+import { useEffect, useState } from "react";
+import {
+  Modal,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import { useAuth } from "@/components/auth/context/AuthContext";
 import userService from "@/services/userService";
-import {Neighborhoods} from "@/types/neighborhood";
-import {useTranslation} from "react-i18next";
+import { Neighborhood } from "@/types/neighborhood";
+import { useTranslation } from "react-i18next";
 import Header from "@/components/Header";
 import LabeledInput from "@/components/settings/LabeledInput";
-import Dropdown from "@/components/Dropdown";
 import messageService from "@/services/messageService";
+import { MessageSeverity } from "@/types/message";
+import SwitchButton from "@/components/settings/SwitchButton";
+import InputPageView from "@/components/InputPageView";
 
 type Props = {
   onChange?: (name: {
@@ -30,6 +44,12 @@ type Props = {
 };
 
 const HOME_PATH = "/";
+
+const SEVERITY_OPTIONS: MessageSeverity[] = [
+  "Informational",
+  "Warning",
+  "Critical",
+];
 
 export default function CreateNotification({
   onChange,
@@ -49,14 +69,18 @@ export default function CreateNotification({
   const [selectedType, setSelectedType] = useState<
     "Informational" | "Warning" | "Critical"
   >(typeProp ?? "Informational");
-  const [neighborhoods, setNeighborhoods] = useState<Neighborhoods[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
   const [selectedNeighborhoodCode, setSelectedNeighborhoodCode] = useState<
     string | null
   >(null);
 
+  const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [showSeverityPicker, setShowSeverityPicker] = useState<boolean>(false);
+  const [showNeighborhoodPicker, setShowNeighborhoodPicker] =
+    useState<boolean>(false);
+
   useEffect(() => {
     const loadUser = async () => {
-      if (!token) return;
       try {
         const data = await userService.loggedInuser(token);
         setNeighborhoods(data.neighborhoods ?? []);
@@ -75,7 +99,6 @@ export default function CreateNotification({
 
     loadUser();
   }, [token]);
-  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const isValid = title.length > 0 && content.length > 0;
 
@@ -136,6 +159,24 @@ export default function CreateNotification({
     });
   };
 
+  const getSelectedNeighborhoodName = () => {
+    const selected = neighborhoods.find(
+      (n) => n.statischeSectorCode === selectedNeighborhoodCode
+    );
+    return selected ? selected.name : "";
+  };
+
+  const handleSelectNeighborhood = (code: string) => {
+    setSelectedNeighborhoodCode(code);
+    onChange?.({
+      title,
+      content,
+      onlyMyNeighborhood,
+      type: selectedType,
+      neighborhoodCode: code,
+    });
+  };
+
   const handleSendNotification = async () => {
     try {
       await messageService.sendMessage(token, {
@@ -153,7 +194,90 @@ export default function CreateNotification({
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white px-6">
+    <InputPageView>
+      <Modal
+        visible={showSeverityPicker}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowSeverityPicker(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setShowSeverityPicker(false)}>
+          <View className="flex-1 justify-center items-center bg-black/50 px-6">
+            <TouchableWithoutFeedback>
+              <View className="bg-white w-full rounded-2xl p-4 shadow-lg">
+                <Text className="text-lg font-comfortaa-bold mb-4 text-center text-black">
+                  {t("notifications.creation.severityinput")}
+                </Text>
+                {SEVERITY_OPTIONS.map((option, index) => (
+                  <TouchableOpacity
+                    key={option}
+                    onPress={() => {
+                      selectType(option);
+                      setShowSeverityPicker(false);
+                    }}
+                    className={`py-4 flex-row justify-between items-center ${
+                      index !== SEVERITY_OPTIONS.length - 1
+                        ? "border-b border-gray-100"
+                        : ""
+                    }`}
+                  >
+                    <Text className="text-base font-comfortaa-regular text-black">
+                      {t(`severity.${option.toLowerCase()}`)}
+                    </Text>
+                    {selectedType === option && (
+                      <Check size={20} color={Color.BLUE} />
+                    )}
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+
+      <Modal
+        visible={showNeighborhoodPicker}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowNeighborhoodPicker(false)}
+      >
+        <TouchableWithoutFeedback
+          onPress={() => setShowNeighborhoodPicker(false)}
+        >
+          <View className="flex-1 justify-center items-center bg-black/50 px-6">
+            <TouchableWithoutFeedback>
+              <View className="bg-white w-full rounded-2xl p-4 shadow-lg max-h-[80%]">
+                <Text className="text-lg font-comfortaa-bold mb-4 text-center text-black">
+                  {t("notifications.creation.selectneighborhood")}
+                </Text>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                  {neighborhoods.map((n, index) => (
+                    <TouchableOpacity
+                      key={n.statischeSectorCode}
+                      onPress={() => {
+                        handleSelectNeighborhood(n.statischeSectorCode);
+                        setShowNeighborhoodPicker(false);
+                      }}
+                      className={`py-4 flex-row justify-between items-center ${
+                        index !== neighborhoods.length - 1
+                          ? "border-b border-gray-100"
+                          : ""
+                      }`}
+                    >
+                      <Text className="text-base font-comfortaa-regular text-black">
+                        {n.name}
+                      </Text>
+                      {selectedNeighborhoodCode === n.statischeSectorCode && (
+                        <Check size={20} color={Color.BLUE} />
+                      )}
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
       <View className="relative mt-2 mb-4">
         <View className="absolute left-0">
           <Back
@@ -169,66 +293,53 @@ export default function CreateNotification({
         </View>
       </View>
       <View>
-        <Text className="text-black font-comfortaa-bold">
-          {t("notifications.creation.type")}:
-        </Text>
-        <View className="flex-row justify-between mt-2">
-          <Pressable onPress={() => selectType("Informational")}>
-            <Text
-              className={`rounded-xl font-comfortaa-bold px-3 py-1 ${selectedType === "Informational" ? "text-white bg-[#2548BC] border border-[#2548BC]" : "text-black border border-[#2548BC]"}`}
-            >
-              {t("notifications.creation.tags.info")}
-            </Text>
-          </Pressable>
-          <Pressable onPress={() => selectType("Warning")}>
-            <Text
-              className={`rounded-xl font-comfortaa-bold px-3 py-1 ${selectedType === "Warning" ? "text-white bg-[#2548BC] border border-[#2548BC]" : "text-black border border-[#2548BC]"}`}
-            >
-              {t("notifications.creation.tags.warning")}
-            </Text>
-          </Pressable>
-          <Pressable onPress={() => selectType("Critical")}>
-            <Text
-              className={`rounded-xl font-comfortaa-bold px-3 py-1 ${selectedType === "Critical" ? "text-white bg-[#2548BC] border border-[#2548BC]" : "text-black border border-[#2548BC]"}`}
-            >
-              {t("notifications.creation.tags.emergency")}
-            </Text>
-          </Pressable>
-        </View>
+        <Pressable onPress={() => setShowSeverityPicker(true)}>
+          <View pointerEvents="none">
+            <LabeledInput
+              value={t(`severity.${selectedType.toLowerCase()}`)}
+              label={t("notifications.creation.severityinput")}
+              dropdown={true}
+              onChange={() => {}}
+              rightIcon={
+                showSeverityPicker ? (
+                  <ChevronDown color="#828282" />
+                ) : (
+                  <ChevronRight color="#828282" />
+                )
+              }
+            />
+          </View>
+        </Pressable>
       </View>
+
       <View className="mt-4">
         {neighborhoods.length > 0 && (
-          <Dropdown
-            label={t("notifications.creation.selectneighborhood")}
-            options={neighborhoods.map((n) => ({
-              label: n.name,
-              value: n.statischeSectorCode,
-            }))}
-            value={selectedNeighborhoodCode}
-            onChange={(val: string) => {
-              setSelectedNeighborhoodCode(val);
-              onChange?.({
-                title,
-                content,
-                onlyMyNeighborhood,
-                type: selectedType,
-                neighborhoodCode: val,
-              });
-            }}
-          />
+          <Pressable onPress={() => setShowNeighborhoodPicker(true)}>
+            <View pointerEvents="none">
+              <LabeledInput
+                value={getSelectedNeighborhoodName()}
+                label={t("notifications.creation.selectneighborhood")}
+                dropdown={true}
+                onChange={() => {}}
+                rightIcon={
+                  showNeighborhoodPicker ? (
+                    <ChevronDown color="#828282" />
+                  ) : (
+                    <ChevronRight color="#828282" />
+                  )
+                }
+              />
+            </View>
+          </Pressable>
         )}
       </View>
-      <View className="flex-row items-center mt-4">
-        <Text className="text-black font-comfortaa-bold">
-          {t("notifications.creation.neighborhood")}
-        </Text>
-        <Switch
-          value={onlyMyNeighborhood}
-          onValueChange={toggleOnlyMyNeighborhood}
-          trackColor={{ true: "#10B981", false: "#d1d5db" }}
-          thumbColor={onlyMyNeighborhood ? "#ffffff" : "#f4f3f4"}
-        />
-      </View>
+
+      <SwitchButton
+        label={t("notifications.creation.neighborhood")}
+        value={onlyMyNeighborhood}
+        onValueChange={toggleOnlyMyNeighborhood}
+      />
+
       <View className="flex-1 mt-4">
         <LabeledInput
           label={t("notifications.creation.titleinput")}
@@ -255,15 +366,13 @@ export default function CreateNotification({
           containerStyle="h-80"
         />
 
-        <View className="mt-auto">
-          <PressableButton
-            onPress={async () => handleSendNotification()}
-            disabled={!isValid}
-            title={t("notifications.creation.submit")}
-            background={isValid ? Color.BLUE : Color.GRAY}
-          />
-        </View>
+        <PressableButton
+          onPress={async () => handleSendNotification()}
+          disabled={!isValid}
+          title={t("notifications.creation.submit")}
+          background={isValid ? Color.BLUE : Color.GRAY}
+        />
       </View>
-    </SafeAreaView>
+    </InputPageView>
   );
 }

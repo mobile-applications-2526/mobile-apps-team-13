@@ -2,6 +2,7 @@
 using OmDeHoek.Model.Commands.Message;
 using OmDeHoek.Model.DTO.Message;
 using OmDeHoek.Model.Entities;
+using OmDeHoek.Model.Enums;
 using OmDeHoek.Model.Exceptions;
 
 namespace OmDeHoek.Services;
@@ -79,8 +80,16 @@ public class MessageService(
         }
     }
 
-    public async Task<List<MessageDto>> GetFeedMessages(string token, int page, int pageSize, string? postcode,
-        string? buurtSectorCode)
+    public async Task<List<MessageDto>> GetFeedMessages(
+        string token, 
+        int page, 
+        int pageSize, 
+        string? postcode,
+        string? buurtSectorCode,
+        bool includeInformational,
+        bool includeWarning,
+        bool includeCritical
+        )
     {
         var userId = tokenService.GetUserIdFromToken(token);
 
@@ -105,9 +114,14 @@ public class MessageService(
                 throw new ResourceNotFoundException($"No buurt found with sector code {buurtSectorCode}",
                     "BuurtSectorCode");
         }
+        
+        List<MessageSeverity> allowedSeverities = new();
+        if (includeInformational) allowedSeverities.Add(MessageSeverity.Informational);
+        if (includeWarning) allowedSeverities.Add(MessageSeverity.Warning);
+        if (includeCritical) allowedSeverities.Add(MessageSeverity.Critical);
 
         var messages =
-            await uow.MessageRepository.GetFeedMessagesAsync(page, pageSize, userId, postcode, buurtSectorCode);
+            await uow.MessageRepository.GetFeedMessagesAsync(page, pageSize, userId, postcode, buurtSectorCode, allowedSeverities);
 
         return messages.Select(m => new MessageDto(m, m.LikedBy.Any(lb => lb.UserId == userId && lb.IsLiked))).ToList();
     }
@@ -182,6 +196,89 @@ public class MessageService(
             return new MessageDto(message);
         }
         catch (Exception e)
+        {
+            await uow.RollbackTransaction();
+            throw;
+        }
+    }
+    
+    public async Task<List<MessageDto>> GetMessagesByUser(string token, int pageSize = 20, int page = 0)
+    {
+        var userId = tokenService.GetUserIdFromToken(token);
+
+        var user = await uow.UserRepository.GetByIdAsync(userId);
+
+        if (user is null) throw new UnauthorizedException("User not found", "User");
+
+        var messages = await uow.MessageRepository.GetMessagesByUserIdAsync(userId, page, pageSize);
+
+        return messages.Select(m => new MessageDto(m, m.LikedBy.Any(lb => lb.UserId == userId && lb.IsLiked))).ToList();
+    }
+    
+    public async Task<MessageDto> GetMessageById(Guid messageId, string token){
+        
+        var userId = tokenService.GetUserIdFromToken(token);
+
+        var message = await uow.MessageRepository.GetMessageByIdAsync(messageId);
+
+        if (message is null)
+            throw new ResourceNotFoundException($"Message with Id {messageId} does not exist.", "MessageId");
+
+        return new MessageDto(message, message.LikedBy.Any(lb => lb.UserId == userId && lb.IsLiked));
+    }
+
+    public async Task<MessageDto> UpdateMessage(string token, UpdateMessage updateMessage)
+    {
+        var userId = tokenService.GetUserIdFromToken(token);
+        var message = await uow.MessageRepository.GetById(updateMessage.Id);
+        
+        if (message is null)
+            throw new ResourceNotFoundException($"Message with Id {updateMessage.Id} does not exist.", "MessageId");
+        if (message.UserId != userId)
+            throw new ForbiddenActionException("User is not the owner of the message", "User");
+
+        try
+        {
+            await uow.StartTransaction();
+            
+            message.Content = string.IsNullOrWhiteSpace(updateMessage.Content) ? message.Content : updateMessage.Content;
+            message.Title = string.IsNullOrWhiteSpace(updateMessage.Title) ? message.Title : updateMessage.Title;
+            message.Severity = updateMessage.Severity ?? message.Severity;
+            
+            uow.MessageRepository.Update(message);
+            
+            await uow.Save();
+            await uow.CommitTransaction();
+            
+            return new MessageDto(message);
+        }
+        catch (Exception)
+        {
+            await uow.RollbackTransaction();
+            throw;
+        }
+    }
+
+    public async Task DeleteMessage(string token, Guid messageId)
+    {
+        var userId = tokenService.GetUserIdFromToken(token);
+        var message = await uow.MessageRepository.GetById(messageId);
+        
+        if (message is null)
+            throw new ResourceNotFoundException($"Message with Id {messageId} does not exist.", "MessageId");
+        if (message.UserId != userId)
+            throw new ForbiddenActionException("User is not the owner of the message", "User");
+
+        try
+        {
+            await uow.StartTransaction();
+            
+            uow.MessageRepository.Delete(message);
+            
+            await uow.Save();
+            await uow.CommitTransaction();
+        }
+        catch (Exception)
         {
             await uow.RollbackTransaction();
             throw;

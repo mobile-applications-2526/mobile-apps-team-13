@@ -1,17 +1,17 @@
 import { fetchData } from "./requestService";
-import { Gemeente } from "@/types/gemeente";
+import { Municipality } from "@/types/municipality";
 
-const fetchGemeenten = async (taal: string = "Nl"): Promise<Gemeente[]> => {
+const fetchGemeenten = async (taal: string = "Nl"): Promise<Municipality[]> => {
   const data = await fetchData(`gemeente?taal=${taal}`);
-  return data as Gemeente[];
+  return data as Municipality[];
 };
 
 const fetchGemeenteByPostcode = async (
   postcode: string,
   taal: string = "Nl"
-): Promise<Gemeente[]> => {
+): Promise<Municipality[]> => {
   const data = await fetchData(`gemeente/postcode/${postcode}?taal=${taal}`);
-  return data as Gemeente[];
+  return data as Municipality[];
 };
 
 export default {

@@ -1,4 +1,3 @@
-import { Neighborhoods } from "@/types/neighborhood";
 import NeighborhoodGlassCard from "../card/NeighborhoodGlassCard";
 import { useState } from "react";
 import neighborhoodService from "@/services/neighborhoodService";
@@ -7,9 +6,11 @@ import { View, Text } from "react-native";
 import { useTranslation } from "react-i18next";
 import LabeledInput from "../settings/LabeledInput";
 import { Search } from "lucide-react-native";
+import { Neighborhood } from "@/types/neighborhood";
+
 
 type Props = {
-  neighborhoods: Neighborhoods[];
+  neighborhoods: Neighborhood[];
   onJoined?: (neighboorhoodId: string) => void;
   onLeft?: (neighboorhoodId: string) => void;
   authToken?: string | null;
@@ -46,7 +47,7 @@ const ListNeighborhoods = ({
 
   const handleLeave = async (neighborhoodId: string) => {
     try {
-      await neighborhoodService.removeFromNeighborhood(neighborhoodId, token!);
+      await neighborhoodService.removeFromNeighborhood(neighborhoodId, token ?? authToken!);
       setJoinedSectors((prev) => prev.filter((id) => id !== neighborhoodId));
       if (onLeft) {
         onLeft(neighborhoodId);

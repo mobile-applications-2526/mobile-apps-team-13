@@ -1,11 +1,10 @@
-import { ScrollView, Text, View, ActivityIndicator } from "react-native";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import Header from "@/components/Header";
 import NotificationCard from "@/components/card/NotificationCard";
 import messageService from "@/services/messageService";
-import { Message } from "@/types/message";
+import {Message, MessageSeverity} from "@/types/message";
 import { Info, MessageCircle, Siren, TriangleAlert } from "lucide-react-native";
 import { useAuth } from "@/components/auth/context/AuthContext";
 import { useTranslation } from "react-i18next";
@@ -17,6 +16,7 @@ export default function TabTwoScreen() {
   const { token, refreshTokens } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
   const { t } = useTranslation();
 
   const loadMessages = async () => {
@@ -50,31 +50,68 @@ export default function TabTwoScreen() {
     loadMessages();
   }, [token]);
 
-  const getSeverityConfig = (severity: Message["severity"]) => {
+  const loadNextMessages = async () => {
+    if (messages.length % 20 !== 0) {
+      return;
+    }
+    const nextPage = Math.ceil(messages.length / 20);
+    try {
+      const data = await messageService.fetchMessageFeed(token, {
+        page: nextPage,
+        pageSize: 20,
+      });
+      setMessages((prevMessages) => [...prevMessages, ...data]);
+    } catch (error) {
+      if (error instanceof UnauthorizedError) {
+        console.log(
+          "Error fetching messages: token expired, refreshing tokens"
+        );
+        await refreshTokens();
+        console.log("Tokens refreshed, retrying to fetch messages");
+        const data = await messageService.fetchMessageFeed(token, {
+          page: nextPage,
+          pageSize: 20,
+        });
+        setMessages((prevMessages) => [...prevMessages, ...data]);
+      }
+    }
+  };
+
+  const getSeverityConfig = (severity: MessageSeverity) : {
+    title: string;
+    icon: React.ReactNode;
+    cardBackground: string;
+    iconBackground: string;
+  } => {
     switch (severity) {
       case "Critical":
         return {
           title: t("notifications.creation.tags.emergency"),
-          icon: <Siren size={24} strokeWidth={2} color="#100D08" />,
+          icon: <Siren size={24} strokeWidth={2} color="#CB0000" />,
+          cardBackground: "bg-[#FEF2F2]",
+          iconBackground: "bg-[#FEE2E2]",
         };
       case "Warning":
         return {
           title: t("notifications.creation.tags.warning"),
-          icon: <TriangleAlert size={24} strokeWidth={2} color="#100D08" />,
+          icon: <TriangleAlert size={24} strokeWidth={2} color="#D97706" />,
+          cardBackground: "bg-[#FFFBEB]",
+          iconBackground: "bg-[#FEF3C7]",
         };
       case "Informational":
       default:
         return {
           title: t("notifications.creation.tags.info"),
-          icon: <Info size={24} strokeWidth={2} color="#100D08" />,
+          icon: <Info size={24} strokeWidth={2} color="#2548BC" />,
+          cardBackground: "bg-[#EFF6FF]",
+          iconBackground: "bg-[#DBEAFE]",
         };
     }
   };
-
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <View className="flex-1 bg-white">
       <View className="items-center">
-        <Header title="Placeholder" subtitle="Placeholder" />
+        <Header title="Place" subtitle="holder" />
       </View>
 
       {isLoading ? (
@@ -82,42 +119,45 @@ export default function TabTwoScreen() {
           <ActivityIndicator size="large" color="#2548BC" />
         </View>
       ) : (
-        <ScrollView className="mt-10 px-6">
+        <View className="mt-10 px-6 flex-1">
           <Text className="text-gray font-comfortaa-regular mb-2">
             {t("notifications.subtitle")}
           </Text>
 
-          {messages.length === 0 && (
+          {messages.length === 0 ? (
             <Text className="text-gray-500 mt-4">
               {t("notifications.empty")}
             </Text>
+          ) : (
+            <FlatList
+              data={messages}
+              renderItem={({ item }) => (
+                <NotificationCard
+                  key={item.id}
+                  icon={getSeverityConfig(item.severity).icon}
+                  message={item}
+                  containerClass={getSeverityConfig(item.severity).cardBackground}
+                  iconContainerClass={getSeverityConfig(item.severity).iconBackground}
+                />
+              )}
+              onRefresh={async () => await loadMessages()}
+              refreshing={isLoading}
+              onEndReached={async () => await loadNextMessages()}
+              onEndReachedThreshold={0.5}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={
+                { paddingBottom: 100 }
+              }
+            ></FlatList>
           )}
-
-          {messages.map((message, index) => {
-            const { icon, title } = getSeverityConfig(message.severity);
-            return (
-              <NotificationCard
-                key={`${message.userTag}-${index}`}
-                icon={icon}
-                title={title}
-                subtitle={message.title ?? message.content}
-                time={new Date(message.createdAt).toLocaleTimeString("nl-BE", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-                message={message}
-              />
-            );
-          })}
-        </ScrollView>
+        </View>
       )}
 
-      {!isLoading && (
-        <FloatingActionButton
-          onPress={() => router.push("/createNotification")}
-          icon={<MessageCircle color="#FFFFFF" size={24} strokeWidth={2} />}
-        />
-      )}
-    </SafeAreaView>
+      <FloatingActionButton
+        onPress={() => router.push("/createNotification")}
+        icon={<MessageCircle color="#FFFFFF" size={24} strokeWidth={2} />}
+        isLoading={isLoading}
+      />
+    </View>
   );
 }

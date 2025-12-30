@@ -2,7 +2,7 @@
   "expo": {
     "name": "Om-De-Hoek",
     "slug": "Om-De-Hoek",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
     "scheme": "omdehoek",
@@ -40,6 +40,10 @@
         "CAMERA",
         "ACCESS_FINE_LOCATION",
         "ACCESS_COARSE_LOCATION",
+        "POST_NOTIFICATIONS",
+        "CAMERA",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
         "POST_NOTIFICATIONS"
       ]
     },
@@ -57,6 +61,14 @@
         "projectId": "c42275a0-d389-4d08-90c1-69b1548af0e7"
       }
     },
-    "owner": "om-de-hoek"
+    "owner": "om-de-hoek",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/c42275a0-d389-4d08-90c1-69b1548af0e7",
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0
+    }
   }
 }

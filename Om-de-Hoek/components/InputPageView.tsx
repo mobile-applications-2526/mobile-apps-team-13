@@ -1,30 +1,19 @@
-import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 
 export default function InputPageView({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <KeyboardAvoidingView
-      className="bg-white"
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
-    >
-      <SafeAreaView
-        style={{ flex: 1, backgroundColor: "#ffffff" }}
-        edges={["top", "bottom"]}
-      >
-        <ScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
-          keyboardShouldPersistTaps="handled"
-          className="p-4"
+    return(
+        <KeyboardAwareScrollView
+            style={{ flex: 1, backgroundColor: "white" }}
+            contentContainerStyle={{ flexGrow: 1, paddingBottom: 100, paddingHorizontal: 24 }}
+            enableOnAndroid={true}
+            extraScrollHeight={20}
         >
-          {children}
-        </ScrollView>
-      </SafeAreaView>
-    </KeyboardAvoidingView>
-  );
+            {children}
+        </KeyboardAwareScrollView>
+    );
 }

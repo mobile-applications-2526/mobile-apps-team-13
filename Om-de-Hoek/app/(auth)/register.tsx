@@ -23,6 +23,8 @@ import ProgressBar from "@/components/auth/register/ProgressBar";
 import { useAuth } from "@/components/auth/context/AuthContext";
 import authService from "@/services/authService";
 import addressService from "@/services/addressService";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import {Color} from "@/types/StyleOptions";
 
 const totalSteps = 7;
 
@@ -91,30 +93,42 @@ export default function RegisterPage() {
         street: data.streetName,
         houseNumber: data.houseNumber || "",
         postalCode: data.postalCode,
-        residentId: loginResponse.id,
       },
       loginResponse.token
     );
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1, backgroundColor: "white" }}
-    >
+      <View
+          style={{ flex: 1, backgroundColor: Color.WHITE }}
+      >
       {huidigeIndex === 0 && (
-        <View style={{ flexGrow: 1, paddingHorizontal: 24 }}>
+        <KeyboardAwareScrollView
+            style={{ flex: 1, backgroundColor: Color.WHITE }}
+            contentContainerStyle={{ paddingBottom: 100, paddingHorizontal: 24 }}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            enableOnAndroid={true}
+            extraScrollHeight={115}
+        >
           <Step1Email
             value={data.email}
             onChange={(email) => setData((prev) => ({ ...prev, email }))}
             onNext={goToNextStep}
             onBack={() => router.push("/(auth)/login")}
           />
-        </View>
+        </KeyboardAwareScrollView>
       )}
 
       {huidigeIndex === 1 && (
-        <View style={{ flexGrow: 1, paddingHorizontal: 24 }}>
+          <KeyboardAwareScrollView
+              style={{ flex: 1, backgroundColor: Color.WHITE }}
+              contentContainerStyle={{ paddingBottom: 100, paddingHorizontal: 24 }}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+              enableOnAndroid={true}
+              extraScrollHeight={115}
+          >
           <Step2Name
             firstName={data.firstName}
             lastName={data.lastName}
@@ -124,11 +138,18 @@ export default function RegisterPage() {
             onNext={goToNextStep}
             onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
           />
-        </View>
+            </KeyboardAwareScrollView>
       )}
 
       {huidigeIndex === 2 && (
-        <View style={{ flexGrow: 1, paddingHorizontal: 24 }}>
+          <KeyboardAwareScrollView
+              style={{ flex: 1, backgroundColor: Color.WHITE }}
+              contentContainerStyle={{ paddingBottom: 100, paddingHorizontal: 24 }}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+              enableOnAndroid={true}
+              extraScrollHeight={115}
+          >
           <Step3BirthDate
             birthDate={data.birthDate}
             onChange={(birthDate) =>
@@ -137,16 +158,18 @@ export default function RegisterPage() {
             onNext={goToNextStep}
             onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
           />
-        </View>
+            </KeyboardAwareScrollView>
       )}
 
       {huidigeIndex === 3 && (
-        <ScrollView
-          ref={scrollRef}
-          contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 24 }}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-        >
+          <KeyboardAwareScrollView
+              style={{ flex: 1, backgroundColor: Color.WHITE }}
+              contentContainerStyle={{ paddingBottom: 100, paddingHorizontal: 24 }}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+              enableOnAndroid={true}
+              extraScrollHeight={115}
+          >
           <Step4Address
             streetName={data.streetName}
             houseNumber={data.houseNumber}
@@ -164,11 +187,18 @@ export default function RegisterPage() {
             onNext={goToNextStep}
             onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
           />
-        </ScrollView>
+            </KeyboardAwareScrollView>
       )}
 
       {huidigeIndex === 4 && (
-        <View style={{ flexGrow: 1, paddingHorizontal: 24 }}>
+          <KeyboardAwareScrollView
+              style={{ flex: 1, backgroundColor: Color.WHITE }}
+              contentContainerStyle={{ paddingBottom: 100, paddingHorizontal: 24 }}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+              enableOnAndroid={true}
+              extraScrollHeight={115}
+          >
           <Step5PhoneNumber
             value={data.phoneNumber}
             onChange={(phoneNumber) =>
@@ -177,11 +207,18 @@ export default function RegisterPage() {
             onNext={goToNextStep}
             onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
           />
-        </View>
+            </KeyboardAwareScrollView>
       )}
 
       {huidigeIndex === 5 && (
-        <View style={{ flexGrow: 1, paddingHorizontal: 24 }}>
+          <KeyboardAwareScrollView
+              style={{ flex: 1, backgroundColor: Color.WHITE }}
+              contentContainerStyle={{ paddingBottom: 100, paddingHorizontal: 24 }}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+              enableOnAndroid={true}
+              extraScrollHeight={115}
+          >
           <Step6Password
             password={data.password}
             onChange={(password) => setData((prev) => ({ ...prev, password }))}
@@ -191,12 +228,12 @@ export default function RegisterPage() {
             }}
             onBack={() => setHuidigeIndex((prev) => Math.max(prev - 1, 0))}
           />
-        </View>
+            </KeyboardAwareScrollView>
       )}
 
       {huidigeIndex === 6 && loginTokens && (
         <View
-          style={{ flex: 1, paddingHorizontal: 24, justifyContent: "center" }}
+          style={{ flex: 1, paddingHorizontal: 12, justifyContent: "center" }}
         >
           <Step7Neighborhood
             postalCode={data.postalCode}
@@ -210,6 +247,6 @@ export default function RegisterPage() {
         </View>
       )}
       <ProgressBar currentStep={huidigeIndex} totalSteps={totalSteps} />
-    </KeyboardAvoidingView>
+      </View>
   );
 }

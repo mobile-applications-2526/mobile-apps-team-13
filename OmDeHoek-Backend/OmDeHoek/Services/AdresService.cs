@@ -20,13 +20,10 @@ public class AdresService(
             var idInToken = tokenService.GetUserIdFromToken(token.Trim());
             if (idInToken == null) throw new UnauthorizedException("Invalid token", "token");
 
-            if (idInToken != newAddress.ResidentId)
-                throw new ForbiddenActionException("You are not allowed to add an address for another user", "token");
-
-            var bewoner = await uow.UserRepository.GetById(newAddress.ResidentId);
+            var bewoner = await uow.UserRepository.GetById(idInToken);
 
             if (bewoner == null)
-                throw new ResourceNotFoundException($"No user found with id '{newAddress.ResidentId}'", "residentId");
+                throw new ResourceNotFoundException($"No user found with id '{idInToken}'", "residentId");
 
             if (string.IsNullOrWhiteSpace(newAddress.Street))
                 throw new MissingDataException("straat is missing or only spaces", "street");

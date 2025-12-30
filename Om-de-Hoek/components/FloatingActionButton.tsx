@@ -18,7 +18,7 @@ const FloatingActionButton: React.FC<Props> = ({
       disabled={isLoading || disabled}
       activeOpacity={0.8}
       className={`absolute bottom-8 right-6 h-14 w-14 items-center justify-center rounded-full shadow-lg shadow-black/30 
-        ${disabled ? "bg-gray" : "bg-[#2548BC]"} 
+        ${disabled ? "bg-[#F3F4F6]" : "bg-[#2548BC]"} 
         ${isLoading ? "opacity-80" : ""}`}
       style={{ elevation: 6, zIndex: 50 }}
     >

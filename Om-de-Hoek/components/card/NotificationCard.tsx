@@ -1,38 +1,91 @@
 import { useRouter } from "expo-router";
 import { ChevronRight } from "lucide-react-native";
-import { View, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+} from "react-native";
 import { Message } from "@/types/message";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   icon?: React.ReactNode;
-  title: string;
-  subtitle: string;
-  time?: string;
   message: Message;
+  containerClass?: string;
+  iconContainerClass?: string;
 };
 
 const NotificationCard: React.FC<Props> = ({
   icon,
-  title,
-  subtitle,
-  time,
   message,
-}) => {
+  containerClass = "",
+  iconContainerClass = "",
+}: Props) => {
   const router = useRouter();
+  const { width } = useWindowDimensions();
+  const { t } = useTranslation();
+
+  const title = message.title;
+  const userTag = message.userTag;
 
   const handlePress = () => {
-    router.push({
-      pathname: "/(notifications)/MessageDetail/[id]",
-      params: {
-        id: encodeURIComponent(message.id),
-        message: encodeURIComponent(JSON.stringify(message)),
-      },
-    });
+    router.push(`/(notifications)/MessageDetail/${message.id}`);
+  };
+
+  const formatTime = (timeString: Date): string => {
+    const date = new Date(timeString);
+    const now = new Date();
+
+    const diffInSecs = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (diffInSecs < 60) {
+      return t("time.justnow");
+    }
+    const diffInMins = Math.floor(diffInSecs / 60);
+    if (diffInMins < 60) {
+      return diffInMins === 1
+        ? t("time.minutesago", { count: diffInMins })
+        : t("time.minutesagoplural", { count: diffInMins });
+    }
+    const diffInHours = Math.floor(diffInMins / 60);
+    if (diffInHours < 24) {
+      return diffInHours === 1
+        ? t("time.hoursago", { count: diffInHours })
+        : t("time.hoursagoplural", { count: diffInHours });
+    }
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays < 7) {
+      return diffInDays === 1
+        ? t("time.daysago", { count: diffInDays })
+        : t("time.daysagoplural", { count: diffInDays });
+    }
+    return date.toLocaleDateString("nl-BE");
+  };
+
+  const time = message.createdAt ? formatTime(message.createdAt) : null;
+
+  const getShortenedUserTag = () => {
+    const name = `@${userTag}`;
+    if (!time) return name;
+
+    const maxLength = width < 400 ? 26 : 35;
+
+    const timeCharWeight = 0.7;
+    const effectiveTimeLength = Math.ceil(time.length * timeCharWeight);
+
+    const allowedNameLength = maxLength - effectiveTimeLength;
+
+    if (name.length <= allowedNameLength) {
+      return name;
+    }
+
+    return name.slice(0, allowedNameLength - 3) + "...";
   };
 
   return (
     <TouchableOpacity
-      className="mx-0 my-2 rounded-3xl bg-white p-4 shadow-sm"
+      className={`mx-0 my-2 rounded-3xl p-4 shadow-sm ${containerClass}`}
       style={{
         shadowColor: "#000",
         shadowOpacity: 0.05,
@@ -44,15 +97,17 @@ const NotificationCard: React.FC<Props> = ({
     >
       <View className="flex-row items-center">
         <View className="mr-4">
-          <View className="bg-[#F5F5F5] h-12 w-12 items-center justify-center rounded-xl">
+          <View
+            className={`h-12 w-12 items-center justify-center rounded-xl ${iconContainerClass}`}
+          >
             {icon}
           </View>
         </View>
 
         <View className="flex-1 justify-center gap-0.5">
-          <View className="flex-row items-baseline gap-2">
-            <Text className="text-black font-comfortaa-bold text-lg leading-tight">
-              {title}
+          <View className="flex-row items-baseline gap-2 justify-between">
+            <Text className="text-black font-comfortaa-bold text-m leading-tight">
+              {getShortenedUserTag()}
             </Text>
             {time && (
               <Text className="text-gray font-comfortaa-medium text-xs">
@@ -65,12 +120,12 @@ const NotificationCard: React.FC<Props> = ({
             className="text-black font-comfortaa-regular text-sm leading-tight"
             numberOfLines={1}
           >
-            {subtitle}
+            {title}
           </Text>
         </View>
 
         <View className="pl-2">
-          <ChevronRight color="#C7C7CC" size={20} />
+          <ChevronRight color="#828282" size={20} />
         </View>
       </View>
     </TouchableOpacity>

@@ -1,6 +1,17 @@
 import { fetchData } from "./requestService";
+import { Neighborhood } from "@/types/neighborhood";
 
-const fetchNeighborhoodsByPostalCode = async (postalcode: string) => {
+const fetchRecommendedNeighborhoods = async (token: string) : Promise<Neighborhood[]> => {
+  return await fetchData(`/neighborhood/recommended`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+const fetchNeighborhoodsByPostalCode = async (postalcode: string): Promise<Neighborhood[]> => {
   return await fetchData(`/neighborhood/postalcode/${postalcode}`, {
     method: "GET",
     headers: {
@@ -11,7 +22,7 @@ const fetchNeighborhoodsByPostalCode = async (postalcode: string) => {
 
 const fetchNeighborhoodsByStatisticalSectorCode = async (
   statisticalSectorCode: string
-) => {
+): Promise<Neighborhood> => {
   return await fetchData(`/neighborhood/sectorcode/${statisticalSectorCode}`, {
     method: "GET",
     headers: {
@@ -20,7 +31,7 @@ const fetchNeighborhoodsByStatisticalSectorCode = async (
   });
 };
 
-const addToNeighborhood = async (id: string, token: string | null) => {
+const addToNeighborhood = async (id: string, token: string | null) : Promise<{message: string}> => {
   return await fetchData(`/neighborhood/join/${id}`, {
     method: "POST",
     headers: {
@@ -30,7 +41,7 @@ const addToNeighborhood = async (id: string, token: string | null) => {
   });
 };
 
-const removeFromNeighborhood = async (id: string, token: string | null) => {
+const removeFromNeighborhood = async (id: string, token: string | null): Promise<{message: string}> => {
   return await fetchData(`/neighborhood/leave/${id}`, {
     method: "POST",
     headers: {
@@ -41,6 +52,7 @@ const removeFromNeighborhood = async (id: string, token: string | null) => {
 };
 
 export default {
+  fetchRecommendedNeighborhoods,
   fetchNeighborhoodsByPostalCode,
   fetchNeighborhoodsByStatisticalSectorCode,
   addToNeighborhood,

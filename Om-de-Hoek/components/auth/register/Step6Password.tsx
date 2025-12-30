@@ -30,6 +30,8 @@ export const Step6Password = ({
   const [isValid, setIsValid] = useState<boolean>(false);
   const [strength, setStrength] = useState<number>(0);
   const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [hasLowercase, setHasLowercase] = useState<boolean>(false);
+  const [maxScore, setMaxScore] = useState<number>(0);
 
   const { t } = useTranslation();
 
@@ -43,31 +45,38 @@ export const Step6Password = ({
     const minLengthValid = password.length >= 8;
     const numberValid = /\d/.test(password);
     const uppercaseValid = /[A-Z]/.test(password);
-    const specialCharValid = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/]/g.test(password);
+    const specialCharValid = /[\p{P}\p{S}]/u.test(password);
+    const lowerCaseValid = /[a-z]/.test(password);
 
     setHasMinLength(minLengthValid);
     setHasNumber(numberValid);
     setHasUppercase(uppercaseValid);
     setHasSpecialChar(specialCharValid);
+    setHasLowercase(lowerCaseValid);
 
     const overallValid =
       minLengthValid && numberValid && uppercaseValid && specialCharValid;
     setIsValid(overallValid);
 
-    const score = [
-      minLengthValid,
-      numberValid,
-      uppercaseValid,
-      specialCharValid,
-    ].filter(Boolean).length;
+    const requirements = [
+        minLengthValid,
+        numberValid,
+        uppercaseValid,
+        specialCharValid,
+        lowerCaseValid,
+    ];
+
+    const score = requirements.filter(Boolean).length;
     setStrength(score);
+
+    setMaxScore(requirements.length);
   }, [password]);
 
   const getStrengthFeedback = () => {
     if (!password) return { text: "", color: "text-gray" };
-    if (strength < 2)
+    if (strength < Math.ceil(maxScore / 2))
       return { text: t("register.password.weak"), color: "text-red" };
-    if (strength < 4)
+    if (strength < maxScore)
       return { text: t("register.password.good"), color: "text-yellow-500" };
     return { text: t("register.password.strong"), color: "text-green-500" };
   };
@@ -109,6 +118,10 @@ export const Step6Password = ({
         <ValidationRow
           isValid={hasSpecialChar}
           text={t("register.password.special")}
+        />
+        <ValidationRow
+            isValid={hasLowercase}
+            text={t("register.password.lowercase")}
         />
       </View>
 

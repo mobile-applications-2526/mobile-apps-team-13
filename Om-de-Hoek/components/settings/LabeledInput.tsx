@@ -11,6 +11,7 @@ type Props = {
   value: string;
   onChange: (newValue: string) => void;
   editable?: boolean;
+  dropdown?: boolean;
   isFocused?: boolean;
   onFocus?: () => void;
   onBlur?: () => void;
@@ -32,6 +33,7 @@ export default function LabeledInput({
   value,
   onChange,
   editable = true,
+  dropdown = false,
   isFocused = false,
   onFocus,
   onBlur,
@@ -48,9 +50,11 @@ export default function LabeledInput({
 }: Props) {
   return (
     <View className="mb-6">
-      <Text className="mb-2 font-comfortaa-regular text-[#828282] font-bold text-base ml-1">
-        {label}
-      </Text>
+      {label && (
+        <Text className="mb-2 font-comfortaa-bold text-[#828282] text-base ml-1">
+          {label}
+        </Text>
+      )}
 
       <View
         className={`
@@ -76,7 +80,7 @@ export default function LabeledInput({
           `}
           value={value}
           onChangeText={onChange}
-          editable={editable}
+          editable={editable && !dropdown}
           onFocus={onFocus}
           onBlur={onBlur}
           keyboardType={keyboardType}

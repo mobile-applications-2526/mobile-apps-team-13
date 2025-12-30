@@ -1,6 +1,22 @@
-import { Message } from "@/types/message";
-import type { Comment } from "@/types/comment";
+import {
+  Message,
+  MessageResponseCommand,
+  UpdateMessageCommand,
+} from "@/types/message";
 import { fetchData } from "./requestService";
+
+const getAllMessagesByLoggedInUser = async (
+  token: string | null
+): Promise<Message[]> => {
+  const data = await fetchData(`/message/byloggedinuser`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+  return data as Message[];
+};
 
 const fetchMessageFeed = async (
   token: string | null,
@@ -11,8 +27,6 @@ const fetchMessageFeed = async (
     buurtSectorCode?: string;
   }
 ): Promise<Message[]> => {
-  if (!token) throw new Error("No token provided");
-
   const params = new URLSearchParams();
 
   const page = Math.max(0, Number(options?.page ?? 0));
@@ -48,8 +62,6 @@ const sendMessage = async (
     neighborhoodOnly: boolean;
   }
 ): Promise<Message> => {
-  if (!token) throw new Error("No token provide");
-
   const data = await fetchData(`/message/send`, {
     method: "POST",
     headers: {
@@ -62,7 +74,10 @@ const sendMessage = async (
   return data as Message;
 };
 
-const likeMessage = async (token: string, messageId: string) => {
+const likeMessage = async (
+  token: string,
+  messageId: string
+): Promise<Message> => {
   return await fetchData(`/message/like/${messageId}`, {
     method: "POST",
     headers: {
@@ -72,12 +87,10 @@ const likeMessage = async (token: string, messageId: string) => {
   });
 };
 
-type RespondPayload = {
-  messageId: string;
-  content: string;
-};
-
-const respondToMessage = async (token: string, payload: RespondPayload) => {
+const respondToMessage = async (
+  token: string,
+  payload: MessageResponseCommand
+): Promise<void> => {
   await fetchData(`/message/respond`, {
     method: "POST",
     headers: {
@@ -88,4 +101,55 @@ const respondToMessage = async (token: string, payload: RespondPayload) => {
   });
 };
 
-export default { fetchMessageFeed, sendMessage, likeMessage, respondToMessage };
+const getMessageById = async (
+  token: string | null,
+  messageId: string
+): Promise<Message> => {
+  const data = await fetchData(`/message/${messageId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  return data as Message;
+};
+
+const UpdateSingleMessage = async (
+  message: UpdateMessageCommand,
+  token: string
+): Promise<Message> => {
+  return await fetchData("/message", {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(message),
+  });
+};
+
+const DeleteMessage = async (
+  messageId: string,
+  token: string
+): Promise<void> => {
+  return await fetchData(`/message/${messageId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+};
+
+export default {
+  getAllMessagesByLoggedInUser,
+  fetchMessageFeed,
+  sendMessage,
+  likeMessage,
+  respondToMessage,
+  getMessageById,
+  UpdateSingleMessage,
+  DeleteMessage,
+};
