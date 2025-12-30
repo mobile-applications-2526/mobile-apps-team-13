@@ -1,5 +1,5 @@
-import { Address } from './address';
-import { Neighborhood } from './neighborhood';
+import {Address} from './address';
+import {Neighborhood} from './neighborhood';
 
 /**
  * User type definition

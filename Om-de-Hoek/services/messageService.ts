@@ -1,9 +1,5 @@
-import {
-  Message,
-  MessageResponseCommand,
-  UpdateMessageCommand,
-} from "@/types/message";
-import { fetchData } from "./requestService";
+import {Message, MessageResponseCommand, UpdateMessageCommand,} from "@/types/message";
+import {fetchData} from "./requestService";
 
 const getAllMessagesByLoggedInUser = async (
   token: string | null

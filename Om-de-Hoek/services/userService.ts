@@ -1,5 +1,5 @@
 import {User, UserUpdateCommand} from "@/types/user";
-import { fetchData } from "./requestService";
+import {fetchData} from "./requestService";
 
 const loggedInuser = async (token: string | null) : Promise<User> => {
     return await fetchData(`/user/loggedin`, {

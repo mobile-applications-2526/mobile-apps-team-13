@@ -1,14 +1,11 @@
-import { useState } from "react";
-import { Text, View, Platform, Pressable, Modal } from "react-native";
-import DateTimePicker, {
-  type DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
-import { PressableButton } from "@/components/PressableButton";
-import { Color } from "@/types/StyleOptions";
+import {useEffect, useState} from "react";
+import {Modal, Platform, Pressable, Text, View} from "react-native";
+import DateTimePicker, {type DateTimePickerEvent,} from "@react-native-community/datetimepicker";
+import {PressableButton} from "@/components/PressableButton";
+import {Color} from "@/types/StyleOptions";
 import AuthHeader from "@/components/auth/AuthHeader";
-import { useTranslation } from "react-i18next";
-import { useEffect } from "react";
-import { Calendar } from "lucide-react-native";
+import {useTranslation} from "react-i18next";
+import {Calendar} from "lucide-react-native";
 
 type Props = {
   onNext: () => void;

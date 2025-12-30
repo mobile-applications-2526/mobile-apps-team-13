@@ -1,9 +1,9 @@
 import {useCallback, useMemo, useState} from "react";
-import { Text, View } from "react-native";
-import { PressableButton } from "@/components/PressableButton";
-import { Color } from "@/types/StyleOptions";
+import {Text, View} from "react-native";
+import {PressableButton} from "@/components/PressableButton";
+import {Color} from "@/types/StyleOptions";
 import AuthHeader from "@/components/auth/AuthHeader";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import LabeledInput from "@/components/settings/LabeledInput";
 
 type Props = {

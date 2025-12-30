@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import { ChevronDown } from "lucide-react-native";
+import {Text, TouchableOpacity, View} from "react-native";
+import {ChevronDown} from "lucide-react-native";
 
 type Props = {
     label: string;

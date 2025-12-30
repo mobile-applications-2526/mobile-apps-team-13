@@ -1,5 +1,5 @@
-import { View, Text } from "react-native";
-import { CircleCheck } from "lucide-react-native";
+import {Text, View} from "react-native";
+import {CircleCheck} from "lucide-react-native";
 
 export const ValidationRow = ({
   isValid,

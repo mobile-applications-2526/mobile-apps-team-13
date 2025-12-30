@@ -1,13 +1,13 @@
-import { useAuth } from "@/components/auth/context/AuthContext";
+import {useAuth} from "@/components/auth/context/AuthContext";
 import SettingsHeader from "@/components/settings/SettingsHeader";
 import messageService from "@/services/messageService";
-import { UnauthorizedError } from "@/types/Errors/UnauthorizedError";
-import { Message, UpdateMessageCommand } from "@/types/message";
-import { Color } from "@/types/StyleOptions";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { ActivityIndicator, Text } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import {UnauthorizedError} from "@/types/Errors/UnauthorizedError";
+import {Message, UpdateMessageCommand} from "@/types/message";
+import {Color} from "@/types/StyleOptions";
+import {useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
+import {ActivityIndicator, Text} from "react-native";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import ManageNotificationCard from "@/components/card/ManageNotificationCard";
 
 const manageNotifications = () => {

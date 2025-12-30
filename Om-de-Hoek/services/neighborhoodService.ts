@@ -1,5 +1,5 @@
-import { fetchData } from "./requestService";
-import { Neighborhood } from "@/types/neighborhood";
+import {fetchData} from "./requestService";
+import {Neighborhood} from "@/types/neighborhood";
 
 const fetchRecommendedNeighborhoods = async (token: string) : Promise<Neighborhood[]> => {
   return await fetchData(`/neighborhood/recommended`, {

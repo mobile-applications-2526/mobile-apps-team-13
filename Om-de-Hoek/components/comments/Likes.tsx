@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { View, Text, Pressable } from "react-native";
-import { Heart } from "lucide-react-native";
-import { Color } from "@/types/StyleOptions";
+import React, {useState} from "react";
+import {Pressable, Text, View} from "react-native";
+import {Heart} from "lucide-react-native";
+import {Color} from "@/types/StyleOptions";
 
 type Props = {
   initialCount: number;

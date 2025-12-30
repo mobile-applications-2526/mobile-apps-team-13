@@ -1,5 +1,5 @@
-import { AuthResponse, LoginBody, RegisterRequestBody } from "@/types/auth";
-import { fetchData } from "./requestService";
+import {AuthResponse, LoginBody, RegisterRequestBody} from "@/types/auth";
+import {fetchData} from "./requestService";
 
 const authRegister = async (data: RegisterRequestBody) : Promise<void> => {
   await fetchData("auth/register", {

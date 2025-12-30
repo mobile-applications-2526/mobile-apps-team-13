@@ -1,8 +1,8 @@
-import { Stack } from "expo-router";
-import { Image, Text, View, Pressable } from "react-native";
+import {Stack} from "expo-router";
+import {Image, Pressable, Text, View} from "react-native";
 import React from "react";
-import { ChevronLeft } from "lucide-react-native";
-import { useTranslation } from "react-i18next";
+import {ChevronLeft} from "lucide-react-native";
+import {useTranslation} from "react-i18next";
 
 type Props = {
   title: string;

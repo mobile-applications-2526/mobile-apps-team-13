@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import {View} from 'react-native';
 
 
 export const ProgressIndicator = ({ totalSteps, currentStep }: {totalSteps: number, currentStep: number}) => {

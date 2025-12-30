@@ -1,4 +1,4 @@
-import { Borough } from '@/types/borough';
+import {Borough} from '@/types/borough';
 
 /**
  * Municipality type representing a local government area.

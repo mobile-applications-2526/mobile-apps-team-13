@@ -11,8 +11,5 @@ export default function Back ({icon, onBack}: Props){
         <TouchableOpacity onPress={onBack} className="mr-4">
             {icon}
         </TouchableOpacity>
-
-
         )
-
     }

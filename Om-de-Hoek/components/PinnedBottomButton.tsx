@@ -1,6 +1,6 @@
-import { TouchableOpacity, View, Text } from "react-native";
-import { Check } from "lucide-react-native";
-import { useTranslation } from "react-i18next";
+import {Text, TouchableOpacity, View} from "react-native";
+import {Check} from "lucide-react-native";
+import {useTranslation} from "react-i18next";
 
 type Props = {
   count?: number;

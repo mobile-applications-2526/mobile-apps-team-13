@@ -1,7 +1,7 @@
 import neighborhoodService from "@/services/neighborhoodService";
-import { Neighborhood } from "@/types/neighborhood";
-import { useEffect, useState } from "react";
-import { ActivityIndicator, ScrollView, View } from "react-native";
+import {Neighborhood} from "@/types/neighborhood";
+import {useEffect, useState} from "react";
+import {ActivityIndicator, ScrollView, View} from "react-native";
 import ListNeighborhoods from "./ListNeighborhoods";
 import PinnedBottomButton from "../PinnedBottomButton";
 

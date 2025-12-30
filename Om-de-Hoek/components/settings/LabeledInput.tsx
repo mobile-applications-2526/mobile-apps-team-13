@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  TextInput,
-  KeyboardTypeOptions,
-  Pressable,
-} from "react-native";
+import {KeyboardTypeOptions, Pressable, Text, TextInput, View,} from "react-native";
 
 type Props = {
   label?: string;

@@ -1,9 +1,5 @@
-import {
-  Address,
-  CreateAddressCommand,
-  UpdateAddressCommand,
-} from "@/types/address";
-import { fetchData } from "@/services/requestService";
+import {Address, CreateAddressCommand, UpdateAddressCommand,} from "@/types/address";
+import {fetchData} from "@/services/requestService";
 
 const RegisterAddress = async (
   address: CreateAddressCommand,

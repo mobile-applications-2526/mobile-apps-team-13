@@ -1,15 +1,15 @@
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
-import { useEffect, useState } from "react";
-import { useRouter } from "expo-router";
+import {ActivityIndicator, FlatList, Text, View} from "react-native";
+import {useEffect, useState} from "react";
+import {useRouter} from "expo-router";
 import Header from "@/components/Header";
 import NotificationCard from "@/components/card/NotificationCard";
 import messageService from "@/services/messageService";
 import {Message, MessageSeverity} from "@/types/message";
-import { Info, MessageCircle, Siren, TriangleAlert } from "lucide-react-native";
-import { useAuth } from "@/components/auth/context/AuthContext";
-import { useTranslation } from "react-i18next";
+import {Info, MessageCircle, Siren, TriangleAlert} from "lucide-react-native";
+import {useAuth} from "@/components/auth/context/AuthContext";
+import {useTranslation} from "react-i18next";
 import FloatingActionButton from "@/components/FloatingActionButton";
-import { UnauthorizedError } from "@/types/Errors/UnauthorizedError";
+import {UnauthorizedError} from "@/types/Errors/UnauthorizedError";
 import {getFromStorage} from "@/utils/StorageHandler";
 
 export default function TabTwoScreen() {

@@ -1,5 +1,5 @@
-import { User } from './user';
-import { Borough } from './borough';
+import {User} from './user';
+import {Borough} from './borough';
 
 /**
  * Neighborhood type representing a local area within a borough.
