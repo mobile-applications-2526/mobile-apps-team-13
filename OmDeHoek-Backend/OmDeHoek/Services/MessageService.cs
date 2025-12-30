@@ -201,14 +201,16 @@ public class MessageService(
         return messages.Select(m => new MessageDto(m, m.LikedBy.Any(lb => lb.UserId == userId && lb.IsLiked))).ToList();
     }
     
-    public async Task<MessageDto> GetMessageById(Guid messageId){
+    public async Task<MessageDto> GetMessageById(Guid messageId, string token){
+        
+        var userId = tokenService.GetUserIdFromToken(token);
 
         var message = await uow.MessageRepository.GetMessageByIdAsync(messageId);
 
         if (message is null)
             throw new ResourceNotFoundException($"Message with Id {messageId} does not exist.", "MessageId");
 
-        return new MessageDto(message);
+        return new MessageDto(message, message.LikedBy.Any(lb => lb.UserId == userId && lb.IsLiked));
     }
 
     public async Task<MessageDto> UpdateMessage(string token, UpdateMessage updateMessage)

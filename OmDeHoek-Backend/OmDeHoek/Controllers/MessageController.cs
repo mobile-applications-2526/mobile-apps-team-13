@@ -164,8 +164,10 @@ public class MessageController(MessageService service) : ControllerBase
     {
         try
         {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             var result = await service.GetMessageById(
-                messageId: messageId
+                messageId: messageId,
+                token: token
             );
             return Ok(result);
         }
