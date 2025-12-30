@@ -16,19 +16,26 @@ export type MessageSeverity = "Informational" | "Warning" | "Critical";
  * @property {boolean} likedByUser - Indicates whether the current user has liked the message.
  */
 export type Message = {
-    userName: string;
-    userTag: string;
-    title: string;
-    content: string;
-    createdAt: Date;
-    severity: MessageSeverity;
-    reactions: Comment[];
-    totalLikes: number;
-    id: string;
-    likedByUser: boolean;
-}
+  userName: string;
+  userTag: string;
+  title: string;
+  content: string;
+  createdAt: Date;
+  severity: MessageSeverity;
+  reactions: Comment[];
+  totalLikes: number;
+  id: string;
+  likedByUser: boolean;
+};
 
 export type MessageResponseCommand = {
-    messageId: string;
-    content: string;
-}
+  messageId: string;
+  content: string;
+};
+
+export type UpdateMessageCommand = {
+  title: string;
+  content: string;
+  severity: MessageSeverity;
+  id: string;
+};
