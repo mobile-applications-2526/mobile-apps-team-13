@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import { Text, View, Pressable } from "react-native";
-import { PressableButton } from "@/components/PressableButton";
-import { Color } from "@/types/StyleOptions";
-import { Eye, EyeClosed } from "lucide-react-native";
-import { ValidationRow } from "@/components/ValidationRow";
+import {useEffect, useState} from "react";
+import {Pressable, Text, View} from "react-native";
+import {PressableButton} from "@/components/PressableButton";
+import {Color} from "@/types/StyleOptions";
+import {Eye, EyeClosed} from "lucide-react-native";
+import {ValidationRow} from "@/components/ValidationRow";
 import AuthHeader from "@/components/auth/AuthHeader";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import LabeledInput from "@/components/settings/LabeledInput";
 
 type Props = {

@@ -1,5 +1,5 @@
-import { Municipality } from '@/types/municipality';
-import { Neighborhood } from '@/types/neighborhood';
+import {Municipality} from '@/types/municipality';
+import {Neighborhood} from '@/types/neighborhood';
 
 /**
  * Borough type representing a subdivision of a municipality.

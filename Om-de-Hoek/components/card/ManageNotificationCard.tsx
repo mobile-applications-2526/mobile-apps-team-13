@@ -1,18 +1,11 @@
-import { Message, MessageSeverity } from "@/types/message";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import {
-  Alert,
-  View,
-  Text,
-  TouchableOpacity,
-  Pressable,
-  TouchableWithoutFeedback,
-  Modal,
-} from "react-native";
+import {Message, MessageSeverity} from "@/types/message";
+import {useState} from "react";
+import {useTranslation} from "react-i18next";
+import {Alert, Modal, Pressable, Text, TouchableOpacity, TouchableWithoutFeedback, View,} from "react-native";
 import LabeledInput from "../settings/LabeledInput";
-import { Check, ChevronDown, ChevronRight, Trash } from "lucide-react-native";
-import { Color } from "@/types/StyleOptions";
+import {Check, ChevronDown, ChevronRight, Trash} from "lucide-react-native";
+import {Color} from "@/types/StyleOptions";
+
 type Props = {
   notification: Message;
   isOpened: boolean;

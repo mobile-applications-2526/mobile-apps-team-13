@@ -1,10 +1,10 @@
-import { useRef, useState } from "react";
-import { Text, View } from "react-native";
+import {useRef, useState} from "react";
+import {Text, View} from "react-native";
 import PhoneInput from "react-native-phone-number-input";
-import { PressableButton } from "@/components/PressableButton";
-import { Color } from "@/types/StyleOptions";
+import {PressableButton} from "@/components/PressableButton";
+import {Color} from "@/types/StyleOptions";
 import AuthHeader from "@/components/auth/AuthHeader";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 
 type Props = {
   onNext: () => void;

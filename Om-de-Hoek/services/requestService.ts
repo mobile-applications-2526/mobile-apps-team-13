@@ -1,5 +1,5 @@
-import { UnauthorizedError } from "@/types/Errors/UnauthorizedError";
-import { InvalidDataException } from "@/types/Errors/InvalidDataException";
+import {UnauthorizedError} from "@/types/Errors/UnauthorizedError";
+import {InvalidDataException} from "@/types/Errors/InvalidDataException";
 
 const API_URL = process.env.EXPO_PUBLIC_API_PATH;
 

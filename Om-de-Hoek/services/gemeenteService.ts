@@ -1,5 +1,5 @@
-import { fetchData } from "./requestService";
-import { Municipality } from "@/types/municipality";
+import {fetchData} from "./requestService";
+import {Municipality} from "@/types/municipality";
 
 const fetchGemeenten = async (taal: string = "Nl"): Promise<Municipality[]> => {
   const data = await fetchData(`gemeente?taal=${taal}`);

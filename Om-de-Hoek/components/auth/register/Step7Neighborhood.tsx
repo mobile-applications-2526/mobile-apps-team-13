@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
-import { View } from "react-native";
-import { useTranslation } from "react-i18next";
+import {View} from "react-native";
+import {useTranslation} from "react-i18next";
 import NeighborhoodsWithPostalCode from "@/components/neighborhood/NeighborhoodsWithPostalCode";
 
 type Props = {

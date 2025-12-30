@@ -1,5 +1,5 @@
-import { TouchableOpacity, View, Text } from "react-native";
-import { ChevronRight } from "lucide-react-native";
+import {Text, TouchableOpacity, View} from "react-native";
+import {ChevronRight} from "lucide-react-native";
 
 type Props = {
   icon: React.ReactNode;

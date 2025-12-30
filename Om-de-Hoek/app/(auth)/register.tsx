@@ -1,26 +1,16 @@
-import { useEffect, useRef, useState } from "react";
-import type {
-  AuthResponse,
-  RegisterBody,
-  RegisterRequestBody,
-} from "@/types/auth";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Keyboard,
-  View,
-} from "react-native";
-import { useRouter } from "expo-router";
-import { Step1Email } from "@/components/auth/register/Step1Email";
-import { Step2Name } from "@/components/auth/register/Step2Name";
-import { Step3BirthDate } from "@/components/auth/register/Step3BirthDate";
-import { Step4Address } from "@/components/auth/register/Step4Address";
-import { Step5PhoneNumber } from "@/components/auth/register/Step5PhoneNumber";
-import { Step6Password } from "@/components/auth/register/Step6Password";
+import {useEffect, useRef, useState} from "react";
+import type {AuthResponse, RegisterBody, RegisterRequestBody,} from "@/types/auth";
+import {Keyboard, ScrollView, View,} from "react-native";
+import {useRouter} from "expo-router";
+import {Step1Email} from "@/components/auth/register/Step1Email";
+import {Step2Name} from "@/components/auth/register/Step2Name";
+import {Step3BirthDate} from "@/components/auth/register/Step3BirthDate";
+import {Step4Address} from "@/components/auth/register/Step4Address";
+import {Step5PhoneNumber} from "@/components/auth/register/Step5PhoneNumber";
+import {Step6Password} from "@/components/auth/register/Step6Password";
 import Step7Neighborhood from "@/components/auth/register/Step7Neighborhood";
 import ProgressBar from "@/components/auth/register/ProgressBar";
-import { useAuth } from "@/components/auth/context/AuthContext";
+import {useAuth} from "@/components/auth/context/AuthContext";
 import authService from "@/services/authService";
 import addressService from "@/services/addressService";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";

@@ -1,9 +1,5 @@
-import {
-  Message,
-  MessageResponseCommand,
-  UpdateMessageCommand,
-} from "@/types/message";
-import { fetchData } from "./requestService";
+import {Message, MessageResponseCommand, UpdateMessageCommand,} from "@/types/message";
+import {fetchData} from "./requestService";
 
 const getAllMessagesByLoggedInUser = async (
   token: string | null
@@ -25,6 +21,9 @@ const fetchMessageFeed = async (
     pageSize?: number;
     postalCode?: string;
     buurtSectorCode?: string;
+    includeInformational?: boolean;
+    includeWarning?: boolean;
+    includeCritical?: boolean;
   }
 ): Promise<Message[]> => {
   const params = new URLSearchParams();
@@ -38,6 +37,12 @@ const fetchMessageFeed = async (
   if (options?.postalCode) params.append("postcode", options.postalCode);
   if (options?.buurtSectorCode)
     params.append("buurtSectorCode", options.buurtSectorCode);
+
+  if(options !== undefined) {
+      params.append("includeInformational", String(!!options.includeInformational));
+      params.append("includeWarning", String(!!options.includeWarning));
+      params.append("includeCritical", String(!!options.includeCritical));
+  }
 
   const query = params.toString();
 

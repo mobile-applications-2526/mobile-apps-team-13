@@ -1,4 +1,4 @@
-import { Switch, Text, View } from "react-native";
+import {Switch, Text, View} from "react-native";
 
 type Props = {
   label?: string;

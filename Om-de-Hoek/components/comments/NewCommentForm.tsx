@@ -1,11 +1,9 @@
-import { useState } from "react";
-import { View, TextInput, Text, Alert, Pressable } from "react-native";
-import { useAuth } from "@/components/auth/context/AuthContext";
-import { useRouter } from "expo-router";
-import { Send } from "lucide-react-native";
-import { Color } from "@/types/StyleOptions";
+import {useState} from "react";
+import {useAuth} from "@/components/auth/context/AuthContext";
+import {Send} from "lucide-react-native";
+import {Color} from "@/types/StyleOptions";
 import messageService from "@/services/messageService";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import LabeledInput from "../settings/LabeledInput";
 
 type Props = {

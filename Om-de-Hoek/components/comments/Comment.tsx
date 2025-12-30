@@ -1,8 +1,7 @@
-import { View, Text, Image, Alert } from "react-native";
-import { Trash2 } from "lucide-react-native";
-import type { Comment as CommentType } from "@/types/comment";
-import { Color } from "@/types/StyleOptions";
-import { useTranslation } from "react-i18next";
+import {Text, View} from "react-native";
+import type {Comment as CommentType} from "@/types/comment";
+import {Color} from "@/types/StyleOptions";
+import {useTranslation} from "react-i18next";
 
 type Props = {
   comment: CommentType;

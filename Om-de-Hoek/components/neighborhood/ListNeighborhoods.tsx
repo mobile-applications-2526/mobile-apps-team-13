@@ -1,12 +1,12 @@
 import NeighborhoodGlassCard from "../card/NeighborhoodGlassCard";
-import { useState } from "react";
+import {useState} from "react";
 import neighborhoodService from "@/services/neighborhoodService";
-import { useAuth } from "../auth/context/AuthContext";
-import { View, Text } from "react-native";
-import { useTranslation } from "react-i18next";
+import {useAuth} from "../auth/context/AuthContext";
+import {Text, View} from "react-native";
+import {useTranslation} from "react-i18next";
 import LabeledInput from "../settings/LabeledInput";
-import { Search } from "lucide-react-native";
-import { Neighborhood } from "@/types/neighborhood";
+import {Search} from "lucide-react-native";
+import {Neighborhood} from "@/types/neighborhood";
 
 
 type Props = {

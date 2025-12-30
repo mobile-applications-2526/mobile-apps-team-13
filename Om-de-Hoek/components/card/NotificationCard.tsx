@@ -1,13 +1,8 @@
-import { useRouter } from "expo-router";
-import { ChevronRight } from "lucide-react-native";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  useWindowDimensions,
-} from "react-native";
-import { Message } from "@/types/message";
-import { useTranslation } from "react-i18next";
+import {useRouter} from "expo-router";
+import {ChevronRight} from "lucide-react-native";
+import {Text, TouchableOpacity, useWindowDimensions, View,} from "react-native";
+import {Message} from "@/types/message";
+import {useTranslation} from "react-i18next";
 
 type Props = {
   icon?: React.ReactNode;

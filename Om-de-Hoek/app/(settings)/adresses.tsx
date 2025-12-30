@@ -1,20 +1,16 @@
-import { useEffect, useState } from "react";
-import {
-  Address,
-  CreateAddressCommand,
-  UpdateAddressCommand,
-} from "@/types/address";
+import {useEffect, useState} from "react";
+import {Address, CreateAddressCommand, UpdateAddressCommand,} from "@/types/address";
 import addressService from "@/services/addressService";
-import { useAuth } from "@/components/auth/context/AuthContext";
+import {useAuth} from "@/components/auth/context/AuthContext";
 import AdressCard from "@/components/card/AdressCard";
 import SettingsHeader from "@/components/settings/SettingsHeader";
-import { useTranslation } from "react-i18next";
-import { UnauthorizedError } from "@/types/Errors/UnauthorizedError";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import {useTranslation} from "react-i18next";
+import {UnauthorizedError} from "@/types/Errors/UnauthorizedError";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import FloatingActionButton from "@/components/FloatingActionButton";
-import { Plus } from "lucide-react-native";
-import { Color } from "@/types/StyleOptions";
-import { Text } from "react-native";
+import {Plus} from "lucide-react-native";
+import {Color} from "@/types/StyleOptions";
+import {Text} from "react-native";
 
 const AddressSettings = () => {
   const [addresses, setAddresses] = useState<Address[]>([]);

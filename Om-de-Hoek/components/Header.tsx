@@ -1,5 +1,5 @@
-import { ArrowLeft } from "lucide-react-native";
-import { Text, View } from "react-native";
+import {ArrowLeft} from "lucide-react-native";
+import {Text, View} from "react-native";
 import Back from "./Back";
 
 type Props = {

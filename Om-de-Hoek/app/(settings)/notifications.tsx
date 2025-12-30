@@ -1,17 +1,52 @@
-import { View, Text, Switch } from "react-native";
+import {Text, View} from "react-native";
 import SettingsTitles from "@/components/settings/SettingsTitles";
 import Back from "@/components/Back";
-import { ArrowLeft, Bell } from "lucide-react-native";
-import { useRouter } from "expo-router";
+import {ArrowLeft, Bell} from "lucide-react-native";
+import {useRouter} from "expo-router";
 import MenuItem from "@/components/settings/MenuItem";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import SwitchButton from "@/components/settings/SwitchButton";
+import {useEffect, useState} from "react";
+import {getFromStorage, saveInStorage} from "@/utils/StorageHandler";
 
 const PROFILE_PATH = "/(tabs)/profile";
 
 export default function MyNotificationsPage() {
+    const [viewInfo, setViewInfo] = useState(true);
+    const [viewWarnings, setViewWarnings] = useState(true);
+    const [viewCritical, setViewCritical] = useState(true);
+
   const router = useRouter();
   const { t } = useTranslation();
+
+    const readPreferences = async () => {
+        try {
+            const infoPref =
+                await getFromStorage("viewInfo", "true");
+            const warningsPref =
+                await getFromStorage("viewWarnings", "true");
+            const criticalPref =
+                await getFromStorage("viewCritical", "true");
+
+            setViewInfo(infoPref === "true");
+            setViewWarnings(warningsPref === "true");
+            setViewCritical(criticalPref === "true");
+        } catch (e) {
+            console.error("Failed to fetch notification preferences.", e);
+        }
+    };
+
+    const storePreference = async (key: string, value: boolean) => {
+        try {
+            await saveInStorage(key, JSON.stringify(value));
+        } catch (e) {
+            console.error("Failed to save notification preference.", e);
+        }
+    };
+
+    useEffect(() => {
+        readPreferences();
+    }, [])
 
   return (
     <View className="flex-1 bg-white px-6">
@@ -37,15 +72,28 @@ export default function MyNotificationsPage() {
         </Text>
         <SwitchButton
           label="Informatief"
-          value={true}
-          onValueChange={() => {}}
+          value={viewInfo}
+          onValueChange={(e) => {
+            setViewInfo(e);
+            storePreference("viewInfo", e);
+          }}
         />
         <SwitchButton
           label="Waarschuwing"
-          value={false}
-          onValueChange={() => {}}
+          value={viewWarnings}
+          onValueChange={(e) => {
+            setViewWarnings(e);
+            storePreference("viewWarnings", e);
+          }}
         />
-        <SwitchButton label="Kritiek" value={true} onValueChange={() => {}} />
+        <SwitchButton
+            label="Kritiek"
+            value={viewCritical}
+            onValueChange={(e) => {
+                setViewCritical(e);
+                storePreference("viewCritical", e);
+            }}
+        />
       </View>
     </View>
   );

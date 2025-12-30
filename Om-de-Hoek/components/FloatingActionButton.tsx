@@ -1,4 +1,4 @@
-import { ActivityIndicator, TouchableOpacity } from "react-native";
+import {ActivityIndicator, TouchableOpacity} from "react-native";
 
 type Props = {
   icon?: React.ReactNode;
