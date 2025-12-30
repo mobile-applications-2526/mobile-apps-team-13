@@ -1,4 +1,6 @@
-import { Color } from "@/types/StyleOptions";
+import {Color} from "@/types/StyleOptions";
+import {Pressable, Text} from "react-native";
+import {useState} from "react";
 
 type Props = {
   onPress: () => Promise<void>;
@@ -15,8 +17,6 @@ type Props = {
     | undefined;
 };
 
-import { Pressable, Text, GestureResponderEvent } from "react-native";
-
 export const PressableButton = ({
   onPress,
   title,
@@ -26,11 +26,13 @@ export const PressableButton = ({
   borderColor = undefined,
   underlineStyle = "none",
 }: Props) => {
-  const onButtonPress = async (e: GestureResponderEvent) => {
-    const button = e.currentTarget;
-    button.setNativeProps({ style: { opacity: 0.6 } });
+
+    const [pressed, setPressed] = useState(false);
+
+  const onButtonPress = async () => {
+    setPressed(true);
     await onPress();
-    button.setNativeProps({ style: { opacity: 1 } });
+    setPressed(false);
   };
 
   return (
@@ -41,6 +43,7 @@ export const PressableButton = ({
         backgroundColor: background,
         borderColor: borderColor,
         borderWidth: borderColor ? 2 : 0,
+        opacity: disabled || pressed ? 0.6 : 1,
       }}
       disabled={disabled}
     >

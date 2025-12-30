@@ -95,7 +95,11 @@ export default function LabeledInput({
         {rightIcon && (
           <View className={`ml-2 ${multiline ? "mt-1" : ""}`}>
             {pressableRight ? (
-              <Pressable onPress={onRightIconPress}>{rightIcon}</Pressable>
+              <Pressable
+                  onPress={onRightIconPress}
+              >
+                  {rightIcon
+              }</Pressable>
             ) : (
               rightIcon
             )}
