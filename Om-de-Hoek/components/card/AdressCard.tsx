@@ -90,18 +90,19 @@ const AdressCard = ({
             )}
           </View>
           <View className="flex-col gap-3">
+            <View className="flex-1">
+              <LabeledInput
+                value={updatedAddress.street}
+                onChange={(text) => updateField("street", text)}
+                label={t("register.address.mandatoryStreet")}
+                onFocus={() => setFocusedField("street")}
+                onBlur={() => setFocusedField(null)}
+                isFocused={focusedField === "street"}
+              />
+            </View>
+
             <View className="flex-row gap-3">
-              <View className="flex-1">
-                <LabeledInput
-                  value={updatedAddress.street}
-                  onChange={(text) => updateField("street", text)}
-                  label={t("register.address.mandatoryStreet")}
-                  onFocus={() => setFocusedField("street")}
-                  onBlur={() => setFocusedField(null)}
-                  isFocused={focusedField === "street"}
-                />
-              </View>
-              <View className="w-1/3">
+              <View className="w-2/5">
                 <LabeledInput
                   value={updatedAddress.houseNumber ?? ""}
                   onChange={(text) => updateField("houseNumber", text)}
@@ -111,10 +112,7 @@ const AdressCard = ({
                   isFocused={focusedField === "houseNumber"}
                 />
               </View>
-            </View>
-
-            <View className="flex-row gap-3">
-              <View className="w-1/3">
+              <View className="flex-1">
                 <LabeledInput
                   value={updatedAddress.postalCode}
                   onChange={(text) => updateField("postalCode", text)}
@@ -124,16 +122,16 @@ const AdressCard = ({
                   isFocused={focusedField === "postalCode"}
                 />
               </View>
-              <View className="flex-1">
-                <LabeledInput
-                  value={updatedAddress.villageName}
-                  onChange={(text) => updateField("villageName", text)}
-                  label={t("register.address.mandatoryMunicipality")}
-                  onFocus={() => setFocusedField("villageName")}
-                  onBlur={() => setFocusedField(null)}
-                  isFocused={focusedField === "villageName"}
-                />
-              </View>
+            </View>
+            <View className="flex-1">
+              <LabeledInput
+                value={updatedAddress.villageName}
+                onChange={(text) => updateField("villageName", text)}
+                label={t("register.address.mandatoryMunicipality")}
+                onFocus={() => setFocusedField("villageName")}
+                onBlur={() => setFocusedField(null)}
+                isFocused={focusedField === "villageName"}
+              />
             </View>
           </View>
 

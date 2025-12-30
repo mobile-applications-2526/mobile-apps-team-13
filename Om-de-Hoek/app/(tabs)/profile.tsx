@@ -6,6 +6,7 @@ import SettingsTitles from "@/components/settings/SettingsTitles";
 import { Color } from "@/types/StyleOptions";
 import {
   BellRing,
+  MapPin,
   MapPinHouse,
   UserRoundPen,
   UsersRound,
@@ -66,7 +67,7 @@ export default function ProfilePage() {
       />
 
       <MenuItem
-        icon={<MapPinHouse color="#2548BC" size={20} fill="#2548Bc" />}
+        icon={<MapPin color="#2548BC" size={20} fill="#2548BC" />}
         label={t("settings.addresses.menu")}
         onPress={() => router.push("/adresses")}
       />
@@ -94,12 +95,13 @@ export default function ProfilePage() {
         label={t("settings.myneighborhoods")}
         onPress={() => router.push("/neighborhoods")}
       />
-
-      <PressableButton
-        onPress={handleSignOut}
-        title={t("settings.logout")}
-        background={Color.RED}
-      />
+      <View className="pt-6">
+        <PressableButton
+          onPress={handleSignOut}
+          title={t("settings.logout")}
+          background={Color.RED}
+        />
+      </View>
     </View>
   );
 }

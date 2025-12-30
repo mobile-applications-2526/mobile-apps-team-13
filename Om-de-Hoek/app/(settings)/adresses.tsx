@@ -209,13 +209,6 @@ const AddressSettings = () => {
           address={address}
           isOpened={openedAddresss?.adresId === address.adresId}
           startEditing={() => setOpenedAddresss(address)}
-          onChange={(updatedAddress) => {
-            setAddresses((prevAddresses) =>
-              prevAddresses.map((addr) =>
-                addr.adresId === updatedAddress.adresId ? updatedAddress : addr
-              )
-            );
-          }}
           onSave={async (updatedAddress) => {
             await handleUpdateAddress(updatedAddress);
             setOpenedAddresss(undefined);
