@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import Header from "@/components/Header";
 import NotificationCard from "@/components/card/NotificationCard";
 import messageService from "@/services/messageService";
-import { Message } from "@/types/message";
+import {Message, MessageSeverity} from "@/types/message";
 import { Info, MessageCircle, Siren, TriangleAlert } from "lucide-react-native";
 import { useAuth } from "@/components/auth/context/AuthContext";
 import { useTranslation } from "react-i18next";
@@ -76,7 +76,12 @@ export default function TabTwoScreen() {
     }
   };
 
-  const getSeverityConfig = (severity: Message["severity"]) => {
+  const getSeverityConfig = (severity: MessageSeverity) : {
+    title: string;
+    icon: React.ReactNode;
+    cardBackground: string;
+    iconBackground: string;
+  } => {
     switch (severity) {
       case "Critical":
         return {
@@ -113,7 +118,7 @@ export default function TabTwoScreen() {
           <ActivityIndicator size="large" color="#2548BC" />
         </View>
       ) : (
-        <View className="mt-10 px-6">
+        <View className="mt-10 px-6 pb-20 flex-1">
           <Text className="text-gray font-comfortaa-regular mb-2">
             {t("notifications.subtitle")}
           </Text>
@@ -130,6 +135,8 @@ export default function TabTwoScreen() {
                   key={item.id}
                   icon={getSeverityConfig(item.severity).icon}
                   message={item}
+                  containerClass={getSeverityConfig(item.severity).cardBackground}
+                  iconContainerClass={getSeverityConfig(item.severity).iconBackground}
                 />
               )}
               onRefresh={async () => await loadMessages()}

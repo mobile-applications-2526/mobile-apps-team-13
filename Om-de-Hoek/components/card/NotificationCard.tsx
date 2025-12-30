@@ -81,7 +81,7 @@ const NotificationCard: React.FC<Props> = ({
 
   return (
     <TouchableOpacity
-      className={`mx-0 my-2 rounded-3xl bg-white p-4 shadow-sm ${containerClass}`}
+      className={`mx-0 my-2 rounded-3xl p-4 shadow-sm ${containerClass}`}
       style={{
         shadowColor: "#000",
         shadowOpacity: 0.05,
