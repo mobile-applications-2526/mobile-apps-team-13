@@ -193,5 +193,14 @@
     "informational": "Informational",
     "warning": "Warning",
     "critical": "Emergency"
+  },
+  "time": {
+    "justnow": "just now",
+    "minutesago": "{{count}} minute ago",
+    "minutesagoplural": "{{count}} minutes ago",
+    "hoursago": "{{count}} hour ago",
+    "hoursagoplural": "{{count}} hours ago",
+    "daysago": "{{count}} day ago",
+    "daysagoplural": "{{count}} days ago"
   }
 }
