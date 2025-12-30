@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {Alert, FlatList, Pressable, Text, View} from "react-native";
+import {Alert, Pressable, Text, View} from "react-native";
 import {ChevronDown, ChevronRight} from "lucide-react-native";
 import Comment from "./Comment";
 import NewCommentForm from "./NewCommentForm";
@@ -102,16 +102,13 @@ const CommentsSection: React.FC<Props> = ({
               {t("notifications.details.comments.empty")}
             </Text>
           ) : (
-                <FlatList
-                    data={comments}
-                    renderItem={({item}) => (
-                        <Comment
-                            comment={item as CommentType}
-                            currentUserTag={currentUserTag}
-                        />
-                    )}
-                    keyExtractor={(item) => comments.indexOf(item).toString()}
-                />
+              comments.map((item, index) =>
+                  <Comment
+                      comment={item}
+                      key={index}
+                      currentUserTag={currentUserTag}
+                  />
+              )
           )}
         </>
       )}
