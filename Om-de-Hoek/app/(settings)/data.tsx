@@ -1,18 +1,11 @@
-import {
-  ActivityIndicator,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  View,
-} from "react-native";
-import { Lock, Save } from "lucide-react-native";
+import {ActivityIndicator, Alert, KeyboardAvoidingView, Platform, View,} from "react-native";
+import {Lock, Save} from "lucide-react-native";
 import LabeledInput from "@/components/settings/LabeledInput";
-import { useEffect, useMemo, useState } from "react";
-import { useAuth } from "@/components/auth/context/AuthContext";
+import {useEffect, useMemo, useState} from "react";
+import {useAuth} from "@/components/auth/context/AuthContext";
 import UserService from "@/services/userService";
-import { useTranslation } from "react-i18next";
-import { User } from "@/types/user";
+import {useTranslation} from "react-i18next";
+import {UserUpdateCommand} from "@/types/user";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import SettingsHeader from "@/components/settings/SettingsHeader";
 
@@ -84,7 +77,7 @@ export default function MyDataPage() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      const userPayload: User = {
+      const userPayload: UserUpdateCommand = {
         userName: username,
         firstName,
         lastName,

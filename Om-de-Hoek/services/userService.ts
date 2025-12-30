@@ -1,4 +1,4 @@
-import { User } from "@/types/user";
+import {User, UserUpdateCommand} from "@/types/user";
 import { fetchData } from "./requestService";
 
 const loggedInuser = async (token: string | null) : Promise<User> => {
@@ -11,7 +11,7 @@ const loggedInuser = async (token: string | null) : Promise<User> => {
     });
 };
 
-const updateUser = async (user: User, token: string | null) : Promise<User> => {
+const updateUser = async (user: UserUpdateCommand, token: string | null) : Promise<User> => {
     return await fetchData(`/user/update`, {
         method: "PUT",
         headers: {

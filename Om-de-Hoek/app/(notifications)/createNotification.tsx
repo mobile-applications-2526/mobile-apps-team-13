@@ -7,7 +7,7 @@ import {useEffect, useState} from "react";
 import {Pressable, ScrollView, Switch, Text, View} from "react-native";
 import {useAuth} from "@/components/auth/context/AuthContext";
 import userService from "@/services/userService";
-import {Neighborhoods} from "@/types/neighborhood";
+import {Neighborhood} from "@/types/neighborhood";
 import {useTranslation} from "react-i18next";
 import Header from "@/components/Header";
 import LabeledInput from "@/components/settings/LabeledInput";
@@ -48,7 +48,7 @@ export default function CreateNotification({
   const [selectedType, setSelectedType] = useState<
     "Informational" | "Warning" | "Critical"
   >(typeProp ?? "Informational");
-  const [neighborhoods, setNeighborhoods] = useState<Neighborhoods[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
   const [selectedNeighborhoodCode, setSelectedNeighborhoodCode] = useState<
     string | null
   >(null);
