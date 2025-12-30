@@ -4,8 +4,8 @@ import {PressableButton} from "@/components/PressableButton";
 import MenuItem from "@/components/settings/MenuItem";
 import SettingsTitles from "@/components/settings/SettingsTitles";
 import {Color} from "@/types/StyleOptions";
-import {BellRing, MapPin, UserRoundPen, UsersRound, Wrench,} from "lucide-react-native";
-import {useRouter} from "expo-router";
+import {BellRing, ExternalLink, MapPin, UserRoundPen, UsersRound, Wrench,} from "lucide-react-native";
+import {Link, useRouter} from "expo-router";
 import {useEffect, useState} from "react";
 import UserService from "@/services/userService";
 import {useTranslation} from "react-i18next";
@@ -101,6 +101,14 @@ export default function ProfilePage() {
           background={Color.RED}
         />
       </View>
+        <View className="items-center mt-12 mb-6">
+            <View className="flex-row space-x-1">
+            <Link href="https://forms.gle/UHL2Jp7o4kgP62Bs9" className="text-blue underline">
+                {t("feedback")}
+            </Link>
+            <ExternalLink size={12} color={Color.BLUE}/>
+            </View>
+        </View>
     </View>
   );
 }
