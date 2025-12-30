@@ -19,7 +19,7 @@ const NotificationCard: React.FC<Props> = ({
   const router = useRouter();
 
   const title = message.title;
-  const subtitle = message.content;
+  const userTag = message.userTag;
   const time = new Date(message.createdAt).toLocaleString("nl-BE");
 
   const handlePress = () => {
@@ -56,7 +56,7 @@ const NotificationCard: React.FC<Props> = ({
         <View className="flex-1 justify-center gap-0.5">
           <View className="flex-row items-baseline gap-2">
             <Text className="text-black font-comfortaa-bold text-lg leading-tight">
-              {title}
+              @{userTag}
             </Text>
             {time && (
               <Text className="text-gray font-comfortaa-medium text-xs">
@@ -69,7 +69,7 @@ const NotificationCard: React.FC<Props> = ({
             className="text-black font-comfortaa-regular text-sm leading-tight"
             numberOfLines={1}
           >
-            {subtitle}
+            {title}
           </Text>
         </View>
 
