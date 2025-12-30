@@ -1,53 +1,40 @@
-import { useEffect, useState } from "react";
-import { View, Text, FlatList, Pressable, Alert } from "react-native";
-import { ChevronDown, ChevronRight } from "lucide-react-native";
+import {useState} from "react";
+import {Alert, FlatList, Pressable, Text, View} from "react-native";
+import {ChevronDown, ChevronRight} from "lucide-react-native";
 import Comment from "./Comment";
 import NewCommentForm from "./NewCommentForm";
-import type { Comment as CommentType } from "@/types/comment";
-import { useAuth } from "../auth/context/AuthContext";
+import type {Comment as CommentType} from "@/types/comment";
+import {useAuth} from "../auth/context/AuthContext";
 import messageService from "@/services/messageService";
 import Likes from "./Likes";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
+import {Message} from "@/types/message";
 
 type Props = {
-  notificationId: string;
-  initialComments: CommentType[];
-  initialLikes?: number;
-  initialLiked?: boolean;
   currentUserTag?: string;
+  message: Message;
   onLikeChange?: (liked: boolean, count: number) => void;
+  expand?: boolean;
+  onExpand?: () => void;
 };
 
 const CommentsSection: React.FC<Props> = ({
-  notificationId,
-  initialComments,
-  initialLikes = 0,
   currentUserTag = "",
-  initialLiked = false,
   onLikeChange,
+  message,
+    expand,
+    onExpand
 }) => {
-  const [comments, setComments] = useState<CommentType[]>(initialComments);
-  const [expanded, setExpanded] = useState(false);
-  const [likesCount, setLikesCount] = useState<number>(initialLikes);
-  const [liked, setLiked] = useState<boolean>(initialLiked);
+  const [comments, setComments] = useState<CommentType[]>(message.reactions);
+  const [expanded, setExpanded] = useState(expand || false);
+  const [likesCount, setLikesCount] = useState<number>(message.totalLikes);
+  const [liked, setLiked] = useState<boolean>(message.likedByUser);
+
   const { token } = useAuth();
 
   const { t } = useTranslation();
 
-  useEffect(() => {
-    // Voorlopige hardcoded comments
-
-    const hardcoded: CommentType[] = [
-      {
-        author: "Jan Peeters",
-        content: "Ik heb dit ook gezien, bedankt voor de melding!",
-      },
-      {
-        author: "Martine Peelmans",
-        content: "Is er al iemand die weet wat doen?",
-      },
-    ];
-  }, [notificationId]);
+  const notificationId = message.id;
 
   const handleLikeToggle = async (nextLiked: boolean, count: number) => {
     const prevLiked = liked;
@@ -75,6 +62,11 @@ const CommentsSection: React.FC<Props> = ({
     setComments((prev) => [...prev, comment]);
   };
 
+  const handleExpanded = () => {
+      setExpanded(!expanded);
+        onExpand?.();
+    };
+
   return (
     <View className="mt-6">
       <Likes
@@ -84,7 +76,7 @@ const CommentsSection: React.FC<Props> = ({
       />
 
       <Pressable
-        onPress={() => setExpanded((s) => !s)}
+        onPress={handleExpanded}
         className="flex-row justify-between items-center mb-3"
       >
         <Text className="font-comfortaa-bold text-lg text-black">
@@ -110,15 +102,16 @@ const CommentsSection: React.FC<Props> = ({
               {t("notifications.details.comments.empty")}
             </Text>
           ) : (
-            <View className="space-y-3">
-              {comments.map((c, i) => (
-                <Comment
-                  key={i}
-                  comment={c as CommentType}
-                  currentUserTag={currentUserTag}
+                <FlatList
+                    data={comments}
+                    renderItem={({item}) => (
+                        <Comment
+                            comment={item as CommentType}
+                            currentUserTag={currentUserTag}
+                        />
+                    )}
+                    keyExtractor={(item) => comments.indexOf(item).toString()}
                 />
-              ))}
-            </View>
           )}
         </>
       )}

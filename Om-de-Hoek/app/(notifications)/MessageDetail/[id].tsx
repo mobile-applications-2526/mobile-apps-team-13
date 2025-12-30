@@ -1,6 +1,6 @@
 import {router, useLocalSearchParams} from "expo-router";
 import {useEffect, useState} from "react";
-import {ActivityIndicator, Text, View,} from "react-native";
+import {ActivityIndicator, RefreshControl, Text, View,} from "react-native";
 import {Message} from "@/types/message";
 import Back from "@/components/Back";
 import {ArrowLeft} from "lucide-react-native";
@@ -18,6 +18,8 @@ export default function MessageDetailScreen() {
   const [message, setMessage] = useState<Message | null>(null);
   const [userTag, setUserTag] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+    const [commentsExpanded, setCommentsExpanded] = useState<boolean>(false);
 
   const { id } = useLocalSearchParams<{
     id: string;
@@ -27,30 +29,40 @@ export default function MessageDetailScreen() {
   const { t } = useTranslation();
   const { token, refreshTokens } = useAuth();
 
-  useEffect(() => {
-     fetchMessage().then();
+    useEffect(() => {
+        const loadInitialData = async () => {
+            try {
+                await Promise.all([fetchMessage(), fetchUserName()]);
+            } catch (error) {
+                console.error("Failed to load initial data:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadInitialData();
+    }, [isLoading]);
 
     const fetchUserName = async () => {
-      try {
-        const userData = await userService.loggedInuser(token);
+        try {
+            const userData = await userService.loggedInuser(token);
 
-        setUserTag(userData.userName);
-      } catch (error) {
-        console.error("Failed to fetch user data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchUserName().then();
-  }, []);
+            setUserTag(userData.userName);
+        } catch (error) {
+            console.error("Failed to fetch user data:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
   const fetchMessage = async (counter: number = 0) => {
       try {
           if (id) {
               const messageId = Array.isArray(id) ? id[0] : id;
+              console.log("Fetching message with ID:", messageId);
               const fetchedMessage = await messageService.getMessageById(token, messageId);
-              setMessage(fetchedMessage);
+              console.log("Fetched message:", fetchedMessage);
+              setMessage({...fetchedMessage});
           }
       }
       catch (e) {
@@ -62,6 +74,14 @@ export default function MessageDetailScreen() {
               await fetchMessage(counter + 1);
           }
       }
+  }
+
+  const handleReload = async () => {
+      setIsRefreshing(true);
+      setIsLoading(true);
+      console.log("Refreshing message...");
+      await fetchMessage();
+      setIsRefreshing(false);
   }
 
   const getSeverityConfig = (severity: Message["severity"]) => {
@@ -89,9 +109,6 @@ export default function MessageDetailScreen() {
       : message.userTag;
   };
 
-  if (!message)
-    return <Text className="p-4">{t("notifications.details.error")}</Text>;
-
   if (isLoading) {
     return (
       <View className="flex-1 justify-center items-center bg-white">
@@ -100,12 +117,19 @@ export default function MessageDetailScreen() {
     );
   }
 
+  if (!message)
+    return <Text className="p-4">{t("notifications.details.error")}</Text>;
+
   return (
       <KeyboardAwareScrollView
         style={{ flex: 1, backgroundColor: "white" }}
         contentContainerStyle={{ flexGrow: 1, paddingBottom: 100, paddingHorizontal: 24 }}
         enableOnAndroid={true}
         extraScrollHeight={20}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={handleReload} />
+        }
+
       >
         <View className="absolute left-6 top-8">
           <Back
@@ -127,11 +151,10 @@ export default function MessageDetailScreen() {
           content={message.content}
         />
         <CommentSection
-          notificationId={message.id}
-          initialComments={message.reactions}
-          initialLikes={message.totalLikes}
           currentUserTag={userTag}
-          initialLiked={message.likedByUser}
+          message={message}
+          expand={commentsExpanded}
+          onExpand={() => setCommentsExpanded(!commentsExpanded)}
         />
       </KeyboardAwareScrollView>
   );
