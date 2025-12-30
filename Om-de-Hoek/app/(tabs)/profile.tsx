@@ -95,12 +95,13 @@ export default function ProfilePage() {
         label={t("settings.myneighborhoods")}
         onPress={() => router.push("/neighborhoods")}
       />
-
-      <PressableButton
-        onPress={handleSignOut}
-        title={t("settings.logout")}
-        background={Color.RED}
-      />
+      <View className="pt-6">
+        <PressableButton
+          onPress={handleSignOut}
+          title={t("settings.logout")}
+          background={Color.RED}
+        />
+      </View>
     </View>
   );
 }
