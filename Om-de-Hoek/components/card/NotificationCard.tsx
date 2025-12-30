@@ -1,8 +1,13 @@
 import { useRouter } from "expo-router";
 import { ChevronRight } from "lucide-react-native";
-import {View, Text, TouchableOpacity, useWindowDimensions} from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+} from "react-native";
 import { Message } from "@/types/message";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   icon?: React.ReactNode;
@@ -28,56 +33,55 @@ const NotificationCard: React.FC<Props> = ({
     router.push(`/(notifications)/MessageDetail/${message.id}`);
   };
 
-  const formatTime = (timeString: Date) : string => {
-        const date = new Date(timeString);
-        const now = new Date();
+  const formatTime = (timeString: Date): string => {
+    const date = new Date(timeString);
+    const now = new Date();
 
-        const diffInSecs = Math.floor((now.getTime() - date.getTime()) / 1000);
+    const diffInSecs = Math.floor((now.getTime() - date.getTime()) / 1000);
 
-        if (diffInSecs < 60) {
-            return t('time.justnow');
-        }
-        const diffInMins = Math.floor(diffInSecs / 60);
-        if (diffInMins < 60) {
-            return diffInMins === 1 ?
-                t('time.minutesago', {count: diffInMins}) :
-                t('time.minutesagoplural', {count: diffInMins});
-        }
-        const diffInHours = Math.floor(diffInMins / 60);
-        if (diffInHours < 24) {
-            return diffInHours === 1 ?
-                t('time.hoursago', {count: diffInHours}) :
-                t('time.hoursagoplural', {count: diffInHours});
-        }
-        const diffInDays = Math.floor(diffInHours / 24);
-        if (diffInDays < 7) {
-            return diffInDays === 1 ?
-                t('time.daysago', {count: diffInDays}) :
-                t('time.daysagoplural', {count: diffInDays});
-        }
-        return date.toLocaleDateString("nl-BE");
-  }
-
-    const time = message.createdAt ? formatTime(message.createdAt) : null;
-
-    const getShortenedUserTag = () => {
-        const name = `@${userTag}`;
-        if(!time) return name;
-
-        const maxLength = width < 400 ? 26 : 35;
-
-        const timeCharWeight = 0.7;
-        const effectiveTimeLength = Math.ceil(time.length * timeCharWeight);
-
-        const allowedNameLength = maxLength - effectiveTimeLength;
-
-        if(name.length <= allowedNameLength) {
-            return name;
-        }
-
-        return name.slice(0, allowedNameLength - 3) + '...';
-
+    if (diffInSecs < 60) {
+      return t("time.justnow");
     }
+    const diffInMins = Math.floor(diffInSecs / 60);
+    if (diffInMins < 60) {
+      return diffInMins === 1
+        ? t("time.minutesago", { count: diffInMins })
+        : t("time.minutesagoplural", { count: diffInMins });
+    }
+    const diffInHours = Math.floor(diffInMins / 60);
+    if (diffInHours < 24) {
+      return diffInHours === 1
+        ? t("time.hoursago", { count: diffInHours })
+        : t("time.hoursagoplural", { count: diffInHours });
+    }
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays < 7) {
+      return diffInDays === 1
+        ? t("time.daysago", { count: diffInDays })
+        : t("time.daysagoplural", { count: diffInDays });
+    }
+    return date.toLocaleDateString("nl-BE");
+  };
+
+  const time = message.createdAt ? formatTime(message.createdAt) : null;
+
+  const getShortenedUserTag = () => {
+    const name = `@${userTag}`;
+    if (!time) return name;
+
+    const maxLength = width < 400 ? 26 : 35;
+
+    const timeCharWeight = 0.7;
+    const effectiveTimeLength = Math.ceil(time.length * timeCharWeight);
+
+    const allowedNameLength = maxLength - effectiveTimeLength;
+
+    if (name.length <= allowedNameLength) {
+      return name;
+    }
+
+    return name.slice(0, allowedNameLength - 3) + "...";
+  };
 
   return (
     <TouchableOpacity
@@ -103,7 +107,7 @@ const NotificationCard: React.FC<Props> = ({
         <View className="flex-1 justify-center gap-0.5">
           <View className="flex-row items-baseline gap-2 justify-between">
             <Text className="text-black font-comfortaa-bold text-m leading-tight">
-                {getShortenedUserTag()}
+              {getShortenedUserTag()}
             </Text>
             {time && (
               <Text className="text-gray font-comfortaa-medium text-xs">
