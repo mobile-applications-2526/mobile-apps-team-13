@@ -202,6 +202,7 @@ const AddressSettings = () => {
           {t("common.addressEmpty")}
         </Text>
       )}
+
       {addresses.map((address) => (
         <AdressCard
           key={address.adresId}
