@@ -208,6 +208,7 @@
     "morning": "Good morning",
     "afternoon": "Good afternoon",
     "lateafternoon": "Good late afternoon",
-    "evening": "Good evening"
+    "evening": "Good evening",
+    "subtitle": "Here's what's happening in your neighborhood today."
   }
 }

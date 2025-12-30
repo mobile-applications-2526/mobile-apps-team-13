@@ -130,7 +130,7 @@ export default function TabTwoScreen() {
   return (
     <View className="flex-1 bg-white">
       <View className="items-center">
-        <Header title={getGreeting()} subtitle="holder" />
+        <Header title={getGreeting()} subtitle={t('greetings.subtitle')} />
       </View>
 
       {isLoading ? (
