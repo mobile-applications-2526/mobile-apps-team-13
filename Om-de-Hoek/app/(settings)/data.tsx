@@ -1,13 +1,31 @@
-import {ActivityIndicator, Alert, KeyboardAvoidingView, Platform, View,} from "react-native";
-import {Lock, Save} from "lucide-react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  View,
+  Text,
+} from "react-native";
+import {
+  AtSign,
+  Calendar,
+  Lock,
+  Mail,
+  Phone,
+  Save,
+  User,
+} from "lucide-react-native";
 import LabeledInput from "@/components/settings/LabeledInput";
-import {useEffect, useMemo, useState} from "react";
-import {useAuth} from "@/components/auth/context/AuthContext";
+import { useEffect, useMemo, useState } from "react";
+import { useAuth } from "@/components/auth/context/AuthContext";
 import UserService from "@/services/userService";
-import {useTranslation} from "react-i18next";
-import {UserUpdateCommand} from "@/types/user";
-import FloatingActionButton from "@/components/FloatingActionButton";
+import { useTranslation } from "react-i18next";
+import { UserUpdateCommand } from "@/types/user";
 import SettingsHeader from "@/components/settings/SettingsHeader";
+import { Color } from "@/types/StyleOptions";
+import FloatingActionButton from "@/components/FloatingActionButton";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function MyDataPage() {
   const { token } = useAuth();
@@ -104,106 +122,114 @@ export default function MyDataPage() {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 bg-white"
-    >
-      <View className="flex-1 relative">
-        <View className="flex-1 px-6">
-          <SettingsHeader
-            title={t("settings.data.title")}
-            subtitle={t("settings.data.subtitle")}
-          />
+    <View className="flex-1 bg-white relative">
+      <KeyboardAwareScrollView
+        style={{ flex: 1, backgroundColor: Color.WHITE }}
+        contentContainerStyle={{
+          paddingBottom: 100,
+          paddingHorizontal: 24,
+        }}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid={true}
+        extraScrollHeight={115}
+      >
+        <SettingsHeader
+          title={t("settings.data.title")}
+          subtitle={t("settings.data.subtitle")}
+        />
 
-          {isLoading ? (
-            <View className="mt-10">
-              <ActivityIndicator size="large" color="#2548BC" />
-            </View>
-          ) : (
-            <View>
-              <LabeledInput
-                label={t("settings.data.username")}
-                value={username.startsWith("@") ? username : `@${username}`}
-                onChange={(text) => setUsername(text.replace("@", ""))}
-                editable
-                isFocused={focusedField === "username"}
-                onFocus={() => setFocusedField("username")}
-                onBlur={() => setFocusedField(null)}
-              />
+        {isLoading ? (
+          <View className="mt-10">
+            <ActivityIndicator size="large" color="#2548BC" />
+          </View>
+        ) : (
+          <>
+            <LabeledInput
+              label={t("settings.data.username")}
+              value={username}
+              onChange={setUsername}
+              editable
+              isFocused={focusedField === "username"}
+              onFocus={() => setFocusedField("username")}
+              onBlur={() => setFocusedField(null)}
+              leftIcon={<AtSign size={18} color={"#2548BC"} />}
+            />
 
-              <View className="flex-row gap-3">
-                <View className="flex-1">
-                  <LabeledInput
-                    label={t("settings.data.firstname")}
-                    value={firstName}
-                    onChange={setFirstName}
-                    editable
-                    isFocused={focusedField === "firstname"}
-                    onFocus={() => setFocusedField("firstname")}
-                    onBlur={() => setFocusedField(null)}
-                  />
-                </View>
-
-                <View className="flex-1">
-                  <LabeledInput
-                    label={t("settings.data.lastname")}
-                    value={lastName}
-                    onChange={setLastName}
-                    editable
-                    isFocused={focusedField === "lastname"}
-                    onFocus={() => setFocusedField("lastname")}
-                    onBlur={() => setFocusedField(null)}
-                  />
-                </View>
-              </View>
-
-              <LabeledInput
-                label={t("settings.data.email")}
-                value={email}
-                onChange={setEmail}
-                editable
-                keyboardType="email-address"
-                isFocused={focusedField === "email"}
-                onFocus={() => setFocusedField("email")}
-                onBlur={() => setFocusedField(null)}
-              />
-
-              <View className="relative">
+            <View className="flex-row gap-3">
+              <View className="flex-1">
                 <LabeledInput
-                  label={t("settings.data.birthdate")}
-                  value={birthDate}
-                  onChange={setBirthDate}
-                  editable={false}
-                  containerStyle="bg-gray-50 border-gray-200"
+                  label={t("settings.data.firstname")}
+                  value={firstName}
+                  onChange={setFirstName}
+                  editable
+                  isFocused={focusedField === "firstname"}
+                  onFocus={() => setFocusedField("firstname")}
+                  onBlur={() => setFocusedField(null)}
+                  leftIcon={<User size={18} color={"#2548BC"} />}
                 />
-                <View className="absolute right-4 top-9 items-center justify-center">
-                  <Lock size={16} color="#828282" />
-                </View>
               </View>
 
-              <LabeledInput
-                label={t("settings.data.phone")}
-                value={phoneNumber}
-                onChange={setPhoneNumber}
-                editable
-                keyboardType="phone-pad"
-                isFocused={focusedField === "phone"}
-                onFocus={() => setFocusedField("phone")}
-                onBlur={() => setFocusedField(null)}
-              />
+              <View className="flex-1">
+                <LabeledInput
+                  label={t("settings.data.lastname")}
+                  value={lastName}
+                  onChange={setLastName}
+                  editable
+                  isFocused={focusedField === "lastname"}
+                  onFocus={() => setFocusedField("lastname")}
+                  onBlur={() => setFocusedField(null)}
+                  leftIcon={<User size={18} color={"#2548BC"} />}
+                />
+              </View>
             </View>
-          )}
-        </View>
 
-        {!isLoading && (
-          <FloatingActionButton
-            onPress={handleSave}
-            isLoading={isSaving}
-            disabled={!hasChanges}
-            icon={<Save color="white" size={24} />}
-          />
+            <LabeledInput
+              label={t("settings.data.email")}
+              value={email}
+              onChange={setEmail}
+              editable
+              keyboardType="email-address"
+              isFocused={focusedField === "email"}
+              onFocus={() => setFocusedField("email")}
+              onBlur={() => setFocusedField(null)}
+              leftIcon={<Mail size={18} color={"#2548BC"} />}
+            />
+
+            <View className="relative">
+              <LabeledInput
+                label={t("settings.data.birthdate")}
+                value={birthDate}
+                onChange={setBirthDate}
+                editable={false}
+                leftIcon={<Calendar size={18} color={"#9CA3AF"} />}
+              />
+              <View className="absolute right-4 top-10">
+                <Lock size={16} color="#9CA3AF" />
+              </View>
+            </View>
+
+            <LabeledInput
+              label={t("settings.data.phone")}
+              value={phoneNumber}
+              onChange={setPhoneNumber}
+              editable
+              keyboardType="phone-pad"
+              isFocused={focusedField === "phone"}
+              onFocus={() => setFocusedField("phone")}
+              onBlur={() => setFocusedField(null)}
+              leftIcon={<Phone size={18} color={"#2548BC"} />}
+            />
+
+            <FloatingActionButton
+              icon={<Save color={hasChanges ? "white" : "#9CA3AF"} size={24} />}
+              onPress={handleSave}
+              isLoading={isSaving}
+              disabled={!hasChanges || isSaving}
+            />
+          </>
         )}
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
+    </View>
   );
 }
