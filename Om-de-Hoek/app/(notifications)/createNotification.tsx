@@ -266,7 +266,7 @@ export default function CreateNotification({
         </TouchableWithoutFeedback>
       </Modal>
       <View className="relative mt-2 mb-4">
-        <View className="absolute left-0">
+        <View className="absolute left-6 top-8">
           <Back
             icon={<ArrowLeft color="#100D08" size={20} />}
             onBack={() => router.push(HOME_PATH)}
