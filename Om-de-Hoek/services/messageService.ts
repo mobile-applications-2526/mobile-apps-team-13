@@ -78,4 +78,17 @@ const respondToMessage = async (token: string, payload: MessageResponseCommand) 
   });
 };
 
-export default { fetchMessageFeed, sendMessage, likeMessage, respondToMessage };
+
+const getMessageById = async (token: string | null, messageId: string): Promise<Message> => {
+  const data = await fetchData(`/message/${messageId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  return data as Message;
+};
+
+export default { fetchMessageFeed, sendMessage, likeMessage, respondToMessage, getMessageById };

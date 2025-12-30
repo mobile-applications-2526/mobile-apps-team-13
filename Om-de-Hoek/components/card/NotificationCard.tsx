@@ -23,13 +23,7 @@ const NotificationCard: React.FC<Props> = ({
   const time = new Date(message.createdAt).toLocaleString("nl-BE");
 
   const handlePress = () => {
-    router.push({
-      pathname: "/(notifications)/MessageDetail/[id]",
-      params: {
-        id: encodeURIComponent(message.id),
-        message: encodeURIComponent(JSON.stringify(message)),
-      },
-    });
+    router.push(`/(notifications)/MessageDetail/${message.id}`);
   };
 
   return (

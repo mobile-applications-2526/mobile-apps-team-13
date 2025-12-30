@@ -1,61 +1,35 @@
-import { router, useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
-import {
-  ScrollView,
-  Text,
-  View,
-  KeyboardAvoidingView,
-  Platform,
-  ActivityIndicator,
-} from "react-native";
-import { Message } from "@/types/message";
+import {router, useLocalSearchParams} from "expo-router";
+import {useEffect, useState} from "react";
+import {ActivityIndicator, Text, View,} from "react-native";
+import {Message} from "@/types/message";
 import Back from "@/components/Back";
-import { ArrowLeft, Key } from "lucide-react-native";
+import {ArrowLeft} from "lucide-react-native";
 import Header from "@/components/Header";
-import { NotificationMessage } from "@/components/NotificationMessage";
+import {NotificationMessage} from "@/components/NotificationMessage";
 import CommentSection from "@/components/comments/CommentSection";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import userService from "@/services/userService";
-import { useAuth } from "@/components/auth/context/AuthContext";
+import {useAuth} from "@/components/auth/context/AuthContext";
+import messageService from "@/services/messageService";
+import {UnauthorizedError} from "@/types/Errors/UnauthorizedError";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 
 export default function MessageDetailScreen() {
-  const { message: messageParam } = useLocalSearchParams<{
-    message?: string;
-  }>();
   const [message, setMessage] = useState<Message | null>(null);
   const [userTag, setUserTag] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const { id } = useLocalSearchParams<{
+    id: string;
+  }>();
+
   const HOME_PATH = "/";
   const { t } = useTranslation();
-  const { token } = useAuth();
+  const { token, refreshTokens } = useAuth();
 
   useEffect(() => {
-    const loadMessageFromParams = () => {
-      if (messageParam) {
-        try {
-          const parsed = JSON.parse(
-            decodeURIComponent(String(messageParam))
-          ) as Message; //hellyeah
-          setMessage(parsed);
-        } catch (e) {
-          console.error("Failed to parse message param:", e);
-          setMessage(null);
-        } finally {
-          setIsLoading(false);
-        }
-      } else {
-        console.warn(
-          "No message param provided; MessageDetail expects a 'message' route param."
-        );
-        setMessage(null);
-      }
-    };
+     fetchMessage().then();
 
-    loadMessageFromParams();
-  }, [messageParam]);
-
-  useEffect(() => {
     const fetchUserName = async () => {
       try {
         const userData = await userService.loggedInuser(token);
@@ -68,8 +42,27 @@ export default function MessageDetailScreen() {
       }
     };
 
-    fetchUserName();
+    fetchUserName().then();
   }, []);
+
+  const fetchMessage = async (counter: number = 0) => {
+      try {
+          if (id) {
+              const messageId = Array.isArray(id) ? id[0] : id;
+              const fetchedMessage = await messageService.getMessageById(token, messageId);
+              setMessage(fetchedMessage);
+          }
+      }
+      catch (e) {
+          if (e instanceof UnauthorizedError && counter < 3) {
+              console.warn("Token expired, refreshing tokens...");
+              await refreshTokens()
+              const waiter = new Promise(resolve => setTimeout(resolve, 1000));
+              await waiter;
+              await fetchMessage(counter + 1);
+          }
+      }
+  }
 
   const getSeverityConfig = (severity: Message["severity"]) => {
     switch (severity) {
@@ -108,17 +101,13 @@ export default function MessageDetailScreen() {
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1, backgroundColor: "white" }}
-    >
-      <ScrollView
-        className="p-4 bg-white pt-12"
-        style={{ flex: 1, paddingHorizontal: 24 }}
-        contentContainerStyle={{ paddingBottom: 100 }}
-        showsVerticalScrollIndicator={false}
+      <KeyboardAwareScrollView
+        style={{ flex: 1, backgroundColor: "white" }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 100, paddingHorizontal: 24 }}
+        enableOnAndroid={true}
+        extraScrollHeight={20}
       >
-        <View className="absolute left-0">
+        <View className="absolute left-6 top-8">
           <Back
             icon={<ArrowLeft color="#100D08" size={20} />}
             onBack={() => router.push(HOME_PATH)}
@@ -144,7 +133,6 @@ export default function MessageDetailScreen() {
           currentUserTag={userTag}
           initialLiked={message.likedByUser}
         />
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
   );
 }
