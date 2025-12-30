@@ -69,7 +69,7 @@
       "uppercase": "Minimal one uppercase letter",
       "special": "Minimal one special character",
       "password": "Password",
-        "lowercase": "Minimal one lowercase letter "
+      "lowercase": "Minimal one lowercase letter "
     },
     "neighborhood": {
       "title": "Neighborhoods in",
@@ -158,7 +158,7 @@
       "messageinput": "Message *",
       "messageplaceholder": "Type here...",
       "submit": "Send notification",
-      "selectneighborhood": "Select neighborhood",
+      "selectneighborhood": "Neighborhood *",
       "close": "Close"
     },
     "details": {
@@ -178,6 +178,7 @@
     "next": "Next",
     "back": "Back",
     "save": "Save",
+    "undo": "Undo",
     "edit": "Edit",
     "delete": "Delete",
     "confirm": "Confirm",
