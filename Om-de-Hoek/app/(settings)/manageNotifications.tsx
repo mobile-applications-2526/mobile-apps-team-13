@@ -128,13 +128,6 @@ const manageNotifications = () => {
             notification={notification}
             isOpened={openedNotification?.id === notification.id}
             startEditing={() => setOpenedNotification(notification)}
-            onChange={(updatedNotification) => {
-              setMessages((prevMessages) =>
-                prevMessages.map((msg) =>
-                  msg.id === updatedNotification.id ? updatedNotification : msg
-                )
-              );
-            }}
             onSave={async (updatedNotification) => {
               await handleUpdateMessage(updatedNotification);
               setOpenedNotification(undefined);
