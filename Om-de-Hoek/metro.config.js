@@ -7,7 +7,8 @@ const config = getDefaultConfig(__dirname);
 config.resolver.resolveRequest = (context, moduleName, platform) => {
   const webMocks = [
     'react-native-country-picker-modal',
-    'react-async-hook'
+    'react-async-hook',
+    'react-native-phone-number-input',
   ];
 
   if (platform === 'web' && webMocks.includes(moduleName)) {
