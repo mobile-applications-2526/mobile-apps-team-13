@@ -242,4 +242,30 @@ public class MessageService(
             throw;
         }
     }
+
+    public async Task DeleteMessage(string token, Guid messageId)
+    {
+        var userId = tokenService.GetUserIdFromToken(token);
+        var message = await uow.MessageRepository.GetById(messageId);
+        
+        if (message is null)
+            throw new ResourceNotFoundException($"Message with Id {messageId} does not exist.", "MessageId");
+        if (message.UserId != userId)
+            throw new ForbiddenActionException("User is not the owner of the message", "User");
+
+        try
+        {
+            await uow.StartTransaction();
+            
+            uow.MessageRepository.Delete(message);
+            
+            await uow.Save();
+            await uow.CommitTransaction();
+        }
+        catch (Exception)
+        {
+            await uow.RollbackTransaction();
+            throw;
+        }
+    }
 }
