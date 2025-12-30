@@ -10,12 +10,22 @@ import { useAuth } from "@/components/auth/context/AuthContext";
 import { useTranslation } from "react-i18next";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import { UnauthorizedError } from "@/types/Errors/UnauthorizedError";
+import {getFromStorage} from "@/utils/StorageHandler";
 
 export default function TabTwoScreen() {
   const router = useRouter();
   const { token, refreshTokens } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [filters, setFilters] = useState<{
+      includeInformational: boolean;
+      includeWarning: boolean;
+      includeCritical: boolean;
+  }>({
+      includeInformational: true,
+      includeWarning: true,
+      includeCritical: true,
+  });
 
   const { t } = useTranslation();
 
@@ -24,6 +34,7 @@ export default function TabTwoScreen() {
       const data = await messageService.fetchMessageFeed(token, {
         page: 0,
         pageSize: 20,
+          ...filters
       });
       setMessages(data);
     } catch (error) {
@@ -36,6 +47,7 @@ export default function TabTwoScreen() {
         const data = await messageService.fetchMessageFeed(token, {
           page: 0,
           pageSize: 20,
+            ...filters
         });
         setMessages(data);
       } else {
@@ -46,8 +58,21 @@ export default function TabTwoScreen() {
     }
   };
 
+  const loadFilters = async () => {
+      const viewInfo = (await getFromStorage("viewInfo", "true")) === "true";
+      const viewWarnings = (await getFromStorage("viewWarnings", "true")) === "true";
+      const viewCritical = (await getFromStorage("viewCritical", "true")) === "true";
+
+      setFilters({
+          includeInformational: viewInfo,
+          includeWarning: viewWarnings,
+          includeCritical: viewCritical,
+      });
+  }
+
   useEffect(() => {
-    loadMessages();
+      loadFilters()
+          .then(() =>  loadMessages());
   }, [token]);
 
   const loadNextMessages = async () => {
@@ -59,6 +84,7 @@ export default function TabTwoScreen() {
       const data = await messageService.fetchMessageFeed(token, {
         page: nextPage,
         pageSize: 20,
+            ...filters
       });
       setMessages((prevMessages) => [...prevMessages, ...data]);
     } catch (error) {
@@ -71,6 +97,7 @@ export default function TabTwoScreen() {
         const data = await messageService.fetchMessageFeed(token, {
           page: nextPage,
           pageSize: 20,
+            ...filters
         });
         setMessages((prevMessages) => [...prevMessages, ...data]);
       }
