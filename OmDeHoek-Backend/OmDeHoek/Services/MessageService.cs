@@ -210,4 +210,36 @@ public class MessageService(
 
         return new MessageDto(message);
     }
+
+    public async Task<MessageDto> UpdateMessage(string token, UpdateMessage updateMessage)
+    {
+        var userId = tokenService.GetUserIdFromToken(token);
+        var message = await uow.MessageRepository.GetById(updateMessage.Id);
+        
+        if (message is null)
+            throw new ResourceNotFoundException($"Message with Id {updateMessage.Id} does not exist.", "MessageId");
+        if (message.UserId != userId)
+            throw new ForbiddenActionException("User is not the owner of the message", "User");
+
+        try
+        {
+            await uow.StartTransaction();
+            
+            message.Content = string.IsNullOrWhiteSpace(updateMessage.Content) ? message.Content : updateMessage.Content;
+            message.Title = string.IsNullOrWhiteSpace(updateMessage.Title) ? message.Title : updateMessage.Title;
+            message.Severity = updateMessage.Severity ?? message.Severity;
+            
+            uow.MessageRepository.Update(message);
+            
+            await uow.Save();
+            await uow.CommitTransaction();
+            
+            return new MessageDto(message);
+        }
+        catch (Exception)
+        {
+            await uow.RollbackTransaction();
+            throw;
+        }
+    }
 }

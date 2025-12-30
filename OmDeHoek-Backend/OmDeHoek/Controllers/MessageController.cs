@@ -162,4 +162,22 @@ public class MessageController(MessageService service) : ControllerBase
             return ExceptionHandler.HandleException(e);
         }
     }
+    
+    [HttpPut]
+    [Authorize]
+    public async Task<ActionResult<MessageDto>> UpdateMessage([FromBody] UpdateMessage updateMessage){
+        try
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var result = await service.UpdateMessage(
+                token: token,
+                updateMessage: updateMessage
+            );
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return ExceptionHandler.HandleException(e);
+        }
+    }
 }
