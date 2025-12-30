@@ -61,6 +61,11 @@ public class MessageRepository(DataContext ctx) : GenericRepository<Message>(ctx
                 .ThenInclude(c => c.User)
             .Include(m => m.LikedBy)
             .FirstOrDefaultAsync(m => m.Id == messageId);
+        
+        if (message?.Comments != null)
+        {
+            message.Comments = message.Comments.OrderByDescending(c => c.CreatedAt).ToList();
+        }
 
         return message;
     }
