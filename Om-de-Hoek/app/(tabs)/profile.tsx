@@ -6,6 +6,7 @@ import SettingsTitles from "@/components/settings/SettingsTitles";
 import { Color } from "@/types/StyleOptions";
 import {
   BellRing,
+  MapPin,
   MapPinHouse,
   UserRoundPen,
   UsersRound,
@@ -66,7 +67,7 @@ export default function ProfilePage() {
       />
 
       <MenuItem
-        icon={<MapPinHouse color="#2548BC" size={20} fill="#2548Bc" />}
+        icon={<MapPin color="#2548BC" size={20} fill="#2548BC" />}
         label={t("settings.addresses.menu")}
         onPress={() => router.push("/adresses")}
       />
