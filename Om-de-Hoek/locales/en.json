@@ -68,7 +68,8 @@
       "number": "Minimal one number",
       "uppercase": "Minimal one uppercase letter",
       "special": "Minimal one special character",
-      "password": "Password"
+      "password": "Password",
+        "lowercase": "Minimal one lowercase letter "
     },
     "neighborhood": {
       "title": "Neighborhoods in",
@@ -77,7 +78,8 @@
       "join": "Join",
       "leave": "Leave",
       "searchplaceholder": "Search for a neighborhood...",
-      "notfound": "No neighborhood found with "
+      "notfound": "No neighborhood found with ",
+      "next": "Ready (selected {{count}} neighborhood(s))"
     },
     "continue": "Continue"
   },

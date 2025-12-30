@@ -68,7 +68,8 @@
       "number": "Minimaal één cijfer",
       "uppercase": "Minimaal één hoofdletter",
       "special": "Minimaal één speciaal karakter",
-      "password": "Wachtwoord"
+      "password": "Wachtwoord",
+      "lowercase": "Minimaal één kleine letter "
     },
     "neighborhood": {
       "title": "Buurten in",
@@ -77,7 +78,8 @@
       "join": "Deelnemen",
       "leave": "Verlaten",
       "searchplaceholder": "Zoek een buurt...",
-      "notfound": "Geen buurt gevonden met "
+      "notfound": "Geen buurt gevonden met ",
+      "next": "Klaar ({{count}} buurt(en) geselecteerd)"
     },
     "continue": "Verdergaan"
   },

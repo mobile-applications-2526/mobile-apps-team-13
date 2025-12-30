@@ -14,7 +14,7 @@ export default function ProgressBar({ currentStep, totalSteps }: Props) {
   };
 
   return (
-    <View className="flex-row items-center justify-center gap-2 py-8 px-4">
+    <View className="flex-row items-center justify-center gap-2 pt-4 pb-12 px-4 bg-[#00000000]">
       {Array.from({ length: totalSteps }).map((_, index) => (
         <View
           key={index}
