@@ -16,6 +16,7 @@ export default function TabTwoScreen() {
   const { token, refreshTokens } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
   const { t } = useTranslation();
 
   const loadMessages = async () => {
@@ -118,7 +119,7 @@ export default function TabTwoScreen() {
           <ActivityIndicator size="large" color="#2548BC" />
         </View>
       ) : (
-        <View className="mt-10 px-6 pb-20 flex-1">
+        <View className="mt-10 px-6 flex-1">
           <Text className="text-gray font-comfortaa-regular mb-2">
             {t("notifications.subtitle")}
           </Text>
@@ -144,6 +145,9 @@ export default function TabTwoScreen() {
               onEndReached={async () => await loadNextMessages()}
               onEndReachedThreshold={0.5}
               showsVerticalScrollIndicator={false}
+              contentContainerStyle={
+                { paddingBottom: 100 }
+              }
             ></FlatList>
           )}
         </View>
