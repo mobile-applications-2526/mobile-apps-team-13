@@ -158,7 +158,7 @@
       "messageinput": "Bericht *",
       "messageplaceholder": "Typ hier...",
       "submit": "Verzenden",
-      "selectneighborhood": "Selecteer buurt",
+      "selectneighborhood": "Buurt *",
       "close": "Sluiten"
     },
     "details": {
@@ -178,6 +178,7 @@
     "next": "Volgende",
     "back": "Terug",
     "save": "Opslaan",
+    "undo": "Ongedaan maken",
     "edit": "Aanpassen",
     "delete": "Verwijderen",
     "confirm": "Bevestigen",
