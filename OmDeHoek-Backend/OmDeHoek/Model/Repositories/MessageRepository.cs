@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OmDeHoek.Model.Data;
 using OmDeHoek.Model.Entities;
+using OmDeHoek.Model.Enums;
 
 namespace OmDeHoek.Model.Repositories;
 
@@ -11,7 +12,8 @@ public class MessageRepository(DataContext ctx) : GenericRepository<Message>(ctx
         int pageSize, 
         string userId,
         string? postcode, 
-        string? buurtSectorCode)
+        string? buurtSectorCode,
+        List<MessageSeverity>? severities = null)
     {
         IQueryable<Message> query = DbSet.AsNoTracking();
 
@@ -23,6 +25,11 @@ public class MessageRepository(DataContext ctx) : GenericRepository<Message>(ctx
         if (!string.IsNullOrEmpty(buurtSectorCode))
         {
             query = query.Where(m => m.BuurtSectorCode == buurtSectorCode);
+        }
+        
+        if (severities != null)
+        {
+            query = query.Where(m => severities.Contains(m.Severity));
         }
         
         query = query.Where(m => m.Buurt!.Bewoners.Any(ub => ub.UserId == userId) || 

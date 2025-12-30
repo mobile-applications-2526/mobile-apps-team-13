@@ -49,6 +49,9 @@ public class MessageController(MessageService service) : ControllerBase
     /// <param name="pageSize">The number of messages per page (default: 20).</param>
     /// <param name="postcode">Optional postcode to filter messages.</param>
     /// <param name="buurtSectorCode">Optional buurt sector code to filter messages.</param>
+    /// <param name="includeInformational">Optional flag to include informational messages. Defaults to true</param>
+    /// <param name="includeWarning">Optional flag to include warning messages. Defaults to true</param>
+    /// <param name="includeCritical">Optional flag to include critical messages. Defaults to true</param>
     /// <returns>>An <see>
     ///         <cref>ActionResult{List{MessageDto}}</cref>
     ///     </see>
@@ -62,14 +65,26 @@ public class MessageController(MessageService service) : ControllerBase
         [FromQuery] int page = 0,
         [FromQuery] int pageSize = 20,
         [FromQuery] string? postcode = null,
-        [FromQuery] string? buurtSectorCode = null
+        [FromQuery] string? buurtSectorCode = null,
+        [FromQuery] bool includeInformational = true,
+        [FromQuery] bool includeWarning = true,
+        [FromQuery] bool includeCritical = true
     )
     {
         try
         {
             var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            var result = await service.GetFeedMessages(token: token, page: page, pageSize: pageSize, postcode: postcode,
-                buurtSectorCode: buurtSectorCode);
+            var result = await service.GetFeedMessages(
+                token: token, 
+                page: page, 
+                pageSize: 
+                pageSize, 
+                postcode: postcode,
+                buurtSectorCode: buurtSectorCode,
+                includeInformational: includeInformational,
+                includeWarning: includeWarning,
+                includeCritical: includeCritical
+                );
             return Ok(result);
         }
         catch (Exception e)

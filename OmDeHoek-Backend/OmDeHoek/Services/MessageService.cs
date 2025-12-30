@@ -2,6 +2,7 @@
 using OmDeHoek.Model.Commands.Message;
 using OmDeHoek.Model.DTO.Message;
 using OmDeHoek.Model.Entities;
+using OmDeHoek.Model.Enums;
 using OmDeHoek.Model.Exceptions;
 
 namespace OmDeHoek.Services;
@@ -79,8 +80,16 @@ public class MessageService(
         }
     }
 
-    public async Task<List<MessageDto>> GetFeedMessages(string token, int page, int pageSize, string? postcode,
-        string? buurtSectorCode)
+    public async Task<List<MessageDto>> GetFeedMessages(
+        string token, 
+        int page, 
+        int pageSize, 
+        string? postcode,
+        string? buurtSectorCode,
+        bool includeInformational,
+        bool includeWarning,
+        bool includeCritical
+        )
     {
         var userId = tokenService.GetUserIdFromToken(token);
 
@@ -105,9 +114,14 @@ public class MessageService(
                 throw new ResourceNotFoundException($"No buurt found with sector code {buurtSectorCode}",
                     "BuurtSectorCode");
         }
+        
+        List<MessageSeverity> allowedSeverities = new();
+        if (includeInformational) allowedSeverities.Add(MessageSeverity.Informational);
+        if (includeWarning) allowedSeverities.Add(MessageSeverity.Warning);
+        if (includeCritical) allowedSeverities.Add(MessageSeverity.Critical);
 
         var messages =
-            await uow.MessageRepository.GetFeedMessagesAsync(page, pageSize, userId, postcode, buurtSectorCode);
+            await uow.MessageRepository.GetFeedMessagesAsync(page, pageSize, userId, postcode, buurtSectorCode, allowedSeverities);
 
         return messages.Select(m => new MessageDto(m, m.LikedBy.Any(lb => lb.UserId == userId && lb.IsLiked))).ToList();
     }
