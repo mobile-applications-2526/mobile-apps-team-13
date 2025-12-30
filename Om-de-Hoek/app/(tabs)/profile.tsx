@@ -54,7 +54,7 @@ export default function ProfilePage() {
   const handleSignOut = async () => {
     router.push("/login");
     await signOut();
-  }
+  };
 
   return (
     <View className="flex-1 bg-white px-6">
@@ -66,7 +66,7 @@ export default function ProfilePage() {
       />
 
       <MenuItem
-        icon={<MapPinHouse color="#1548BC" size={20} fill="#2548Bc" />}
+        icon={<MapPinHouse color="#2548BC" size={20} fill="#2548Bc" />}
         label={t("settings.addresses.menu")}
         onPress={() => router.push("/adresses")}
       />
