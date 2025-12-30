@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OmDeHoek.Model.Commands.Message;
+using OmDeHoek.Model.DTO;
 using OmDeHoek.Model.DTO.Message;
 using OmDeHoek.Services;
 using OmDeHoek.Utils;
@@ -124,7 +125,13 @@ public class MessageController(MessageService service) : ControllerBase
             return ExceptionHandler.HandleException(e);
         }
     }
-
+    
+    /// <summary>
+    ///     Retrieves a paginated list of messages posted by the logged-in user.
+    /// </summary>
+    /// <param name="page">The page number to retrieve (default: 0).</param>
+    /// <param name="pageSize">The number of messages per page (default: 20).</param>
+    /// <returns>An <see cref="ActionResult{List{MessageDto}}"/> containing the list of messages.</returns>
     [HttpGet("byLoggedInUser")]
     [Authorize]
     public async Task<ActionResult<List<MessageDto>>> GetMessagesByLoggedInUser([FromQuery] int page = 0,
@@ -146,16 +153,76 @@ public class MessageController(MessageService service) : ControllerBase
         }
     }
 
+    /// <summary>
+    ///     Get a message by its ID
+    /// </summary>
+    /// <param name="messageId">The id of the message to fetch</param>
+    /// <returns>The message with the given id</returns>
     [HttpGet("{messageId}")]
     [Authorize]
     public async Task<ActionResult<MessageDto>> GetMessageById(Guid messageId)
     {
         try
         {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
             var result = await service.GetMessageById(
-                messageId: messageId
+                messageId: messageId,
+                token: token
             );
             return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return ExceptionHandler.HandleException(e);
+        }
+    }
+    
+    /// <summary>
+    ///     Updateds existing message
+    /// </summary>
+    /// <param name="updateMessage">
+    /// The message update details.
+    /// </param>
+    /// <returns> The updated message </returns>
+    [HttpPut]
+    [Authorize]
+    public async Task<ActionResult<MessageDto>> UpdateMessage([FromBody] UpdateMessage updateMessage){
+        try
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var result = await service.UpdateMessage(
+                token: token,
+                updateMessage: updateMessage
+            );
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            return ExceptionHandler.HandleException(e);
+        }
+    }
+
+    /// <summary>
+    ///     Deletes a message by its ID for the authenticated user.
+    /// </summary>
+    /// <param name="messageId">
+    /// The ID of the message to delete.
+    /// </param>
+    /// <returns>
+    ///   An <see cref="ActionResult"/> indicating success or an error response
+    /// </returns>
+    [HttpDelete("{messageId}")]
+    [Authorize]
+    public async Task<ActionResult> DeleteMessage(Guid messageId)
+    {
+        try
+        {
+            var token = HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer ", "");
+            await service.DeleteMessage(
+                token: token,
+                messageId: messageId
+            );
+            return Ok(new MessageResponseDto("Successfully deleted Message"));
         }
         catch (Exception e)
         {

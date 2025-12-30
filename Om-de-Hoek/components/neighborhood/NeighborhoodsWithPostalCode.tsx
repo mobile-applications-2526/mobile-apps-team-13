@@ -1,5 +1,5 @@
 import neighborhoodService from "@/services/neighborhoodService";
-import { Neighborhoods } from "@/types/neighborhood";
+import { Neighborhood } from "@/types/neighborhood";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, ScrollView, View } from "react-native";
 import ListNeighborhoods from "./ListNeighborhoods";
@@ -12,7 +12,7 @@ type Props = {
 };
 
 const NeighborhoodsWithPostalCode = ({ postalCode, token, onNext }: Props) => {
-  const [neighborhoods, setNeighborhoods] = useState<Neighborhoods[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
   const [counter, setCounter] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 

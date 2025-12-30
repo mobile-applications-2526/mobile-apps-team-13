@@ -1,19 +1,15 @@
-import { ActivityIndicator, ScrollView, View } from "react-native";
+import {ActivityIndicator, ScrollView, View} from "react-native";
 import SettingsHeader from "@/components/settings/SettingsHeader";
-import { useRouter } from "expo-router";
-import { useAuth } from "@/components/auth/context/AuthContext";
-import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
-import { Neighborhoods } from "@/types/neighborhood";
+import {useAuth} from "@/components/auth/context/AuthContext";
+import {useTranslation} from "react-i18next";
+import {useEffect, useState} from "react";
+import {Neighborhood} from "@/types/neighborhood";
 import neighborhoodService from "@/services/neighborhoodService";
 import ListNeighborhoods from "@/components/neighborhood/ListNeighborhoods";
 
-const PROFILE_PATH = "/(tabs)/profile";
-
 export default function JoinNeighborhoodsPage() {
-  const [neighborhoods, setNeighborhoods] = useState<Neighborhoods[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const router = useRouter();
   const { token } = useAuth();
   const { t } = useTranslation();
 

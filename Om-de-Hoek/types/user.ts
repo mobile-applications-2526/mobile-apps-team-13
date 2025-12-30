@@ -26,3 +26,11 @@ export type User = {
   role: string;
   id: string;
 };
+
+export type UserUpdateCommand = {
+  phoneNumber?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  userName?: string;
+};

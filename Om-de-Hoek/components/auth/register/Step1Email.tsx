@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import {useCallback, useMemo, useState} from "react";
 import { Text, View } from "react-native";
 import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
@@ -22,10 +22,12 @@ export const Step1Email = ({ onNext, onChange, value, onBack }: Props) => {
     return emailRegex.test(("" + (value || "")).toLowerCase());
   }, [value]);
 
-  const handleEmailChange = (text: string) => {
-    const loweredText = text.toLowerCase();
-    onChange(loweredText);
-  };
+  const handleEmailChange = useCallback(
+    (text: string) => {
+        onChange(text.toLowerCase());
+    },
+    [onChange]
+  )
 
   return (
     <View className="flex-1 justify-center">

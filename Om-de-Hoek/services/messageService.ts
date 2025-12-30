@@ -101,6 +101,21 @@ const respondToMessage = async (
   });
 };
 
+const getMessageById = async (
+  token: string | null,
+  messageId: string
+): Promise<Message> => {
+  const data = await fetchData(`/message/${messageId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  return data as Message;
+};
+
 const UpdateSingleMessage = async (
   message: UpdateMessageCommand,
   token: string
@@ -134,6 +149,7 @@ export default {
   sendMessage,
   likeMessage,
   respondToMessage,
+  getMessageById,
   UpdateSingleMessage,
   DeleteMessage,
 };
