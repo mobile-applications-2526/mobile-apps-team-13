@@ -42,7 +42,7 @@
       "title": "Wat is uw adres?",
       "subtitle": "Waar mogen we komen eten?",
       "street": "Straatnaam",
-      "housenumber": "Huisnummer (optioneel)",
+      "housenumber": "Huisnr.",
       "municipality": "Gemeente",
       "postalcode": "Postcode",
       "mandatoryStreet": "Straatnaam *",
@@ -123,9 +123,19 @@
         "title": "Deelnemen",
         "subtitle": "aan een buurt"
       }
+    },
+    "notifications": {
+      "title": "Mijn",
+      "subtitle": "Meldingen",
+      "manage": "Meldingen beheren"
+    },
+    "manageNotifications": {
+      "title": "Beheer",
+      "subtitle": "Mijn meldingen"
     }
   },
   "notifications": {
+    "edit": "Melding aanpassen",
     "subtitle": "Laatste meldingen",
     "empty": "Geen meldingen beschikbaar",
     "create": "Maak een melding",
@@ -140,9 +150,10 @@
         "emergency": "Noodgeval"
       },
       "neighborhood": "Alleen mijn buurt",
-      "titleinput": "Titel:",
+      "titleinput": "Titel *",
+      "severityinput": "Ernst *",
       "titleplaceholder": "Bv. Wegenwerken aan de straat",
-      "messageinput": "Bericht:",
+      "messageinput": "Bericht *",
       "messageplaceholder": "Typ hier...",
       "submit": "Verzenden",
       "selectneighborhood": "Selecteer buurt",
@@ -172,6 +183,13 @@
     "loading": "Laden...",
     "sure": "Weet je het zeker?",
     "addressConfirmation": "Wil je dit adres definitief verwijderen?",
-    "addressEmpty": "Geen adressen beschikbaar. Voel je vrij om er een toe te voegen."
+    "addressEmpty": "Geen adressen beschikbaar. Voel je vrij om er een toe te voegen.",
+    "notificationConfirmation": "Wil je deze melding definitief verwijderen?",
+    "notificationEmpty": "Geen meldingen beschikbaar. Voel je vrij om er een te maken."
+  },
+  "severity": {
+    "informational": "Informatief",
+    "warning": "Waarschuwing",
+    "critical": "Noodgeval"
   }
 }
