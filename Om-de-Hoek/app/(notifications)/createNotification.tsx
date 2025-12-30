@@ -1,14 +1,14 @@
 import Back from "@/components/Back";
-import {PressableButton} from "@/components/PressableButton";
-import {Color} from "@/types/StyleOptions";
-import {useRouter} from "expo-router";
-import {ArrowLeft} from "lucide-react-native";
-import {useEffect, useState} from "react";
-import {Pressable, ScrollView, Switch, Text, View} from "react-native";
-import {useAuth} from "@/components/auth/context/AuthContext";
+import { PressableButton } from "@/components/PressableButton";
+import { Color } from "@/types/StyleOptions";
+import { useRouter } from "expo-router";
+import { ArrowLeft } from "lucide-react-native";
+import { useEffect, useState } from "react";
+import { Pressable, ScrollView, Switch, Text, View } from "react-native";
+import { useAuth } from "@/components/auth/context/AuthContext";
 import userService from "@/services/userService";
-import {Neighborhoods} from "@/types/neighborhood";
-import {useTranslation} from "react-i18next";
+import { Neighborhood } from "@/types/neighborhood";
+import { useTranslation } from "react-i18next";
 import Header from "@/components/Header";
 import LabeledInput from "@/components/settings/LabeledInput";
 import Dropdown from "@/components/Dropdown";
@@ -48,7 +48,7 @@ export default function CreateNotification({
   const [selectedType, setSelectedType] = useState<
     "Informational" | "Warning" | "Critical"
   >(typeProp ?? "Informational");
-  const [neighborhoods, setNeighborhoods] = useState<Neighborhoods[]>([]);
+  const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
   const [selectedNeighborhoodCode, setSelectedNeighborhoodCode] = useState<
     string | null
   >(null);
@@ -152,8 +152,8 @@ export default function CreateNotification({
 
   return (
     <ScrollView
-        className="flex-1 bg-white px-6"
-        contentContainerStyle={{ paddingBottom: 100 }}
+      className="flex-1 bg-white px-6"
+      contentContainerStyle={{ paddingBottom: 100 }}
     >
       <View className="relative mt-2 mb-4">
         <View className="absolute left-0">
