@@ -1,10 +1,10 @@
-import {Alert, Pressable, Text, TouchableOpacity, View} from "react-native";
-import {Address} from "@/types/address";
-import {ChevronRight, Trash} from "lucide-react-native";
-import {useState} from "react";
+import { Alert, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Address } from "@/types/address";
+import { ChevronRight, Trash } from "lucide-react-native";
+import { useState } from "react";
 import LabeledInput from "@/components/settings/LabeledInput";
-import {useTranslation} from "react-i18next";
-import {Color} from "@/types/StyleOptions";
+import { useTranslation } from "react-i18next";
+import { Color } from "@/types/StyleOptions";
 
 type Props = {
   address: Address;
@@ -98,6 +98,9 @@ const AdressCard = ({
                 onFocus={() => setFocusedField("street")}
                 onBlur={() => setFocusedField(null)}
                 isFocused={focusedField === "street"}
+                keyboardType="default"
+                autoCapitalize="words"
+                placeholder={t("register.address.street")}
               />
             </View>
 
@@ -106,10 +109,13 @@ const AdressCard = ({
                 <LabeledInput
                   value={updatedAddress.houseNumber ?? ""}
                   onChange={(text) => updateField("houseNumber", text)}
-                  label={t("register.address.housenumber")}
+                  label={t("register.address.optionalHousenumber")}
                   onFocus={() => setFocusedField("houseNumber")}
                   onBlur={() => setFocusedField(null)}
                   isFocused={focusedField === "houseNumber"}
+                  keyboardType="default"
+                  autoCapitalize="none"
+                  placeholder={t("register.address.housenumber")}
                 />
               </View>
               <View className="flex-1">
@@ -120,6 +126,9 @@ const AdressCard = ({
                   onFocus={() => setFocusedField("postalCode")}
                   onBlur={() => setFocusedField(null)}
                   isFocused={focusedField === "postalCode"}
+                  keyboardType="number-pad"
+                  autoCapitalize="none"
+                  placeholder={t("register.address.postalcode")}
                 />
               </View>
             </View>
@@ -131,6 +140,9 @@ const AdressCard = ({
                 onFocus={() => setFocusedField("villageName")}
                 onBlur={() => setFocusedField(null)}
                 isFocused={focusedField === "villageName"}
+                keyboardType="default"
+                autoCapitalize="words"
+                placeholder={t("register.address.municipality")}
               />
             </View>
           </View>

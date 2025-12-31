@@ -1,9 +1,9 @@
-import React, {useState} from "react";
-import {Text, View} from "react-native";
-import {PressableButton} from "@/components/PressableButton";
-import {Color} from "@/types/StyleOptions";
+import React, { useState } from "react";
+import { Text, View } from "react-native";
+import { PressableButton } from "@/components/PressableButton";
+import { Color } from "@/types/StyleOptions";
 import AuthHeader from "@/components/auth/AuthHeader";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 import LabeledInput from "@/components/settings/LabeledInput";
 
 type Props = {
@@ -47,7 +47,7 @@ export const Step2Name = ({
       </Text>
 
       <LabeledInput
-        label={t("register.name.firstname")}
+        label={t("register.name.mandatoryFirstname")}
         value={first}
         onChange={handleFirstChange}
         keyboardType="default"
@@ -55,10 +55,11 @@ export const Step2Name = ({
         onFocus={() => setFocusedField("firstName")}
         onBlur={() => setFocusedField(null)}
         placeholder={t("register.name.firstname")}
+        autoCapitalize="words"
       />
 
       <LabeledInput
-        label={t("register.name.lastname")}
+        label={t("register.name.mandatoryLastname")}
         value={last}
         onChange={handleLastChange}
         keyboardType="default"
@@ -66,6 +67,7 @@ export const Step2Name = ({
         onFocus={() => setFocusedField("lastName")}
         onBlur={() => setFocusedField(null)}
         placeholder={t("register.name.lastname")}
+        autoCapitalize="words"
       />
 
       <PressableButton

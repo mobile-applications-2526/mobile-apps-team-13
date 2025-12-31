@@ -1,9 +1,9 @@
-import React, {useState} from "react";
-import {Text, View} from "react-native";
-import {PressableButton} from "@/components/PressableButton";
-import {Color} from "@/types/StyleOptions";
+import React, { useState } from "react";
+import { Text, View } from "react-native";
+import { PressableButton } from "@/components/PressableButton";
+import { Color } from "@/types/StyleOptions";
 import AuthHeader from "@/components/auth/AuthHeader";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 import LabeledInput from "@/components/settings/LabeledInput";
 
 export interface AddressData {
@@ -86,7 +86,7 @@ export const Step4Address = ({
       </Text>
 
       <LabeledInput
-        label={t("register.address.street")}
+        label={t("register.address.mandatoryStreet")}
         value={street}
         onChange={handleStreet}
         keyboardType="default"
@@ -94,10 +94,11 @@ export const Step4Address = ({
         onFocus={() => setFocusedField("streetName")}
         onBlur={() => setFocusedField(null)}
         placeholder={t("register.address.street")}
+        autoCapitalize="words"
       />
 
       <LabeledInput
-        label={t("register.address.housenumber")}
+        label={t("register.address.optionalHousenumber")}
         value={house}
         onChange={handleHouse}
         keyboardType="default"
@@ -105,10 +106,11 @@ export const Step4Address = ({
         onFocus={() => setFocusedField("houseNumber")}
         onBlur={() => setFocusedField(null)}
         placeholder={t("register.address.housenumber")}
+        autoCapitalize="none"
       />
 
       <LabeledInput
-        label={t("register.address.municipality")}
+        label={t("register.address.mandatoryMunicipality")}
         value={municipality}
         onChange={handleMunicipality}
         keyboardType="default"
@@ -116,17 +118,19 @@ export const Step4Address = ({
         onFocus={() => setFocusedField("municipality")}
         onBlur={() => setFocusedField(null)}
         placeholder={t("register.address.municipality")}
+        autoCapitalize="words"
       />
 
       <LabeledInput
-        label={t("register.address.postalcode")}
+        label={t("register.address.mandatoryPostalcode")}
         value={postal}
         onChange={handlePostal}
-        keyboardType="default"
+        keyboardType="number-pad"
         isFocused={focusedField === "postalCode"}
         onFocus={() => setFocusedField("postalCode")}
         onBlur={() => setFocusedField(null)}
         placeholder={t("register.address.postalcode")}
+        autoCapitalize="none"
       />
 
       <PressableButton

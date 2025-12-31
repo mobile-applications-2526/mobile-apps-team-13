@@ -1,11 +1,11 @@
-import {useEffect, useState} from "react";
-import {Pressable, Text, View} from "react-native";
-import {PressableButton} from "@/components/PressableButton";
-import {Color} from "@/types/StyleOptions";
-import {Eye, EyeClosed} from "lucide-react-native";
-import {ValidationRow} from "@/components/ValidationRow";
+import { useEffect, useState } from "react";
+import { Pressable, Text, View } from "react-native";
+import { PressableButton } from "@/components/PressableButton";
+import { Color } from "@/types/StyleOptions";
+import { Eye, EyeClosed } from "lucide-react-native";
+import { ValidationRow } from "@/components/ValidationRow";
 import AuthHeader from "@/components/auth/AuthHeader";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 import LabeledInput from "@/components/settings/LabeledInput";
 
 type Props = {
@@ -59,11 +59,11 @@ export const Step6Password = ({
     setIsValid(overallValid);
 
     const requirements = [
-        minLengthValid,
-        numberValid,
-        uppercaseValid,
-        specialCharValid,
-        lowerCaseValid,
+      minLengthValid,
+      numberValid,
+      uppercaseValid,
+      specialCharValid,
+      lowerCaseValid,
     ];
 
     const score = requirements.filter(Boolean).length;
@@ -120,14 +120,14 @@ export const Step6Password = ({
           text={t("register.password.special")}
         />
         <ValidationRow
-            isValid={hasLowercase}
-            text={t("register.password.lowercase")}
+          isValid={hasLowercase}
+          text={t("register.password.lowercase")}
         />
       </View>
 
       <View className="relative justify-center">
         <LabeledInput
-          label={t("register.password.password")}
+          label={t("register.password.mandatoryPassword")}
           value={password}
           onChange={(text) => {
             setPassword(text);
@@ -140,6 +140,7 @@ export const Step6Password = ({
           keyboardType="default"
           placeholder={t("register.password.password")}
           secureTextEntry={!isPasswordVisible}
+          autoCapitalize="none"
           rightIcon={
             <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
               {isPasswordVisible ? (
