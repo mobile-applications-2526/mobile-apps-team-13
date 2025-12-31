@@ -63,6 +63,14 @@ export const Step3BirthDate = ({
     year: "numeric",
   });
 
+  const getMaxBirthDate = () => {
+    const date = new Date();
+    date.setFullYear(date.getFullYear() - 13);
+    return date;
+  };
+
+  const MAX_BIRTH_DATE = getMaxBirthDate();
+
   return (
     <View className="flex-1 justify-center">
       <AuthHeader title={"maak een account aan"} onBack={onBack} />
@@ -135,7 +143,7 @@ export const Step3BirthDate = ({
                   mode="date"
                   display="spinner"
                   onChange={onDateChange}
-                  maximumDate={new Date()}
+                  maximumDate={MAX_BIRTH_DATE}
                   textColor="#100D08"
                   themeVariant="light"
                 />
@@ -154,7 +162,7 @@ export const Step3BirthDate = ({
             display="spinner"
             onChange={onDateChange}
             minimumDate={new Date(1900, 0, 1)}
-            maximumDate={new Date()}
+            maximumDate={MAX_BIRTH_DATE}
             textColor="#100D08"
             style={{ width: 320, height: 180 }}
             positiveButton={{
