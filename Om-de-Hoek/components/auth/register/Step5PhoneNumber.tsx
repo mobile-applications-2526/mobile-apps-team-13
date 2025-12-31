@@ -1,10 +1,10 @@
-import {useRef, useState} from "react";
-import {Text, View} from "react-native";
+import { useRef, useState } from "react";
+import { Text, View } from "react-native";
 import PhoneInput from "react-native-phone-number-input";
-import {PressableButton} from "@/components/PressableButton";
-import {Color} from "@/types/StyleOptions";
+import { PressableButton } from "@/components/PressableButton";
+import { Color } from "@/types/StyleOptions";
 import AuthHeader from "@/components/auth/AuthHeader";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   onNext: () => void;
@@ -41,7 +41,7 @@ export const Step5PhoneNumber = ({
       </Text>
 
       <View className="mb-4">
-        <Text className="mb-1 font-comfortaa-regular text-[#828282] font-bold text-base ml-1">
+        <Text className="mb-2 font-comfortaa-bold text-[#828282] text-base ml-1">
           {t("register.phone.label")}
         </Text>
 
@@ -51,9 +51,6 @@ export const Step5PhoneNumber = ({
           defaultCode="BE"
           layout="second"
           placeholder={t("register.phone.placeholder")}
-          onChangeText={(text) => {
-            onChange(text);
-          }}
           onChangeFormattedText={(text) => {
             onChange(text);
           }}
@@ -63,21 +60,24 @@ export const Step5PhoneNumber = ({
             borderRadius: 12,
             borderWidth: 2,
             borderColor: isFocused ? "#2548BC" : "transparent",
-            height: 56,
-            paddingVertical: 0,
+            height: 58,
+            paddingHorizontal: 16,
+            alignItems: "center",
           }}
           textContainerStyle={{
             backgroundColor: "transparent",
             paddingVertical: 0,
-            paddingHorizontal: 0,
+            paddingHorizontal: 16,
             borderTopRightRadius: 12,
             borderBottomRightRadius: 12,
           }}
           textInputStyle={{
+            flex: 1,
             fontFamily: "comfortaa-regular",
             fontSize: 16,
             color: "#100D08",
             height: 50,
+            lineHeight: 24,
             paddingVertical: 0,
           }}
           codeTextStyle={{
@@ -97,6 +97,8 @@ export const Step5PhoneNumber = ({
             onFocus: () => setIsFocused(true),
             onBlur: () => setIsFocused(false),
             selectionColor: "#2548BC",
+            keyboardType: "phone-pad",
+            returnKeyType: "done",
           }}
           withDarkTheme={false}
           withShadow={false}

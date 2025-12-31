@@ -1,11 +1,13 @@
-import {useEffect, useState} from "react";
-import {Modal, Platform, Pressable, Text, View} from "react-native";
-import DateTimePicker, {type DateTimePickerEvent,} from "@react-native-community/datetimepicker";
-import {PressableButton} from "@/components/PressableButton";
-import {Color} from "@/types/StyleOptions";
+import { useEffect, useState } from "react";
+import { Modal, Platform, Pressable, Text, View } from "react-native";
+import DateTimePicker, {
+  type DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
+import { PressableButton } from "@/components/PressableButton";
+import { Color } from "@/types/StyleOptions";
 import AuthHeader from "@/components/auth/AuthHeader";
-import {useTranslation} from "react-i18next";
-import {Calendar} from "lucide-react-native";
+import { useTranslation } from "react-i18next";
+import { Calendar } from "lucide-react-native";
 
 type Props = {
   onNext: () => void;
@@ -72,8 +74,8 @@ export const Step3BirthDate = ({
       </Text>
 
       <View className="mb-4">
-        <Text className="mb-1 font-comfortaa-regular text-[#828282] font-bold text-base ml-1">
-          {t("register.birthdate.birthdate")}
+        <Text className="mb-2 font-comfortaa-bold text-[#828282] text-base ml-1">
+          {t("register.birthdate.mandatoryBirthdate")}
         </Text>
 
         <Pressable onPress={showDatePicker}>
@@ -86,7 +88,7 @@ export const Step3BirthDate = ({
           >
             <Text
               className={`
-                flex-1 font-comfortaa-regular text-base
+                flex-1 font-comfortaa-regular text-base py-3
                 ${isDateSelected ? "text-[#100D08]" : "text-[#828282]"}
               `}
               numberOfLines={1}
