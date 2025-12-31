@@ -1,15 +1,15 @@
-import Back from "@/components/Back";
 import { PressableButton } from "@/components/PressableButton";
 import { Color } from "@/types/StyleOptions";
 import { useRouter } from "expo-router";
 import {
-  ArrowLeft,
   Check,
   ChevronDown,
   ChevronRight,
+  MapPinned,
 } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Modal,
   Pressable,
   ScrollView,
@@ -28,6 +28,7 @@ import messageService from "@/services/messageService";
 import { MessageSeverity } from "@/types/message";
 import SwitchButton from "@/components/settings/SwitchButton";
 import InputPageView from "@/components/InputPageView";
+import EmptyState from "@/components/EmptyState";
 
 type Props = {
   onChange?: (name: {
@@ -78,6 +79,7 @@ export default function CreateNotification({
   const [showSeverityPicker, setShowSeverityPicker] = useState<boolean>(false);
   const [showNeighborhoodPicker, setShowNeighborhoodPicker] =
     useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -94,6 +96,8 @@ export default function CreateNotification({
         }
       } catch (e) {
         console.error("Failed to load logged in user:", e);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -285,87 +289,106 @@ export default function CreateNotification({
           onBack={() => router.push(HOME_PATH)}
         />
       </View>
-      <View>
-        <Pressable onPress={() => setShowSeverityPicker(true)}>
-          <View pointerEvents="none">
+
+      {isLoading ? (
+        <View className="flex-1 justify-center items-center mt-20">
+          <ActivityIndicator size="large" color="#2548BC" />
+        </View>
+      ) : neighborhoods.length === 0 ? (
+        <View className="mt-10">
+          <EmptyState
+            title="Nog geen buurt"
+            message="Je moet lid zijn van minstens één buurt om een melding te kunnen maken."
+            icon={<MapPinned size={48} color="#9CA3AF" />}
+            actionLabel="Sluit je aan bij een buurt"
+            onAction={async () => router.push("/(settings)/joinNeighborhood")}
+          />
+        </View>
+      ) : (
+        <View>
+          <View>
+            <Pressable onPress={() => setShowSeverityPicker(true)}>
+              <View pointerEvents="none">
+                <LabeledInput
+                  value={t(`severity.${selectedType.toLowerCase()}`)}
+                  label={t("notifications.creation.severityinput")}
+                  dropdown={true}
+                  onChange={() => {}}
+                  rightIcon={
+                    showSeverityPicker ? (
+                      <ChevronDown color="#828282" />
+                    ) : (
+                      <ChevronRight color="#828282" />
+                    )
+                  }
+                />
+              </View>
+            </Pressable>
+          </View>
+
+          <View className="mt-4">
+            {neighborhoods.length > 0 && (
+              <Pressable onPress={() => setShowNeighborhoodPicker(true)}>
+                <View pointerEvents="none">
+                  <LabeledInput
+                    value={getSelectedNeighborhoodName()}
+                    label={t("notifications.creation.selectneighborhood")}
+                    dropdown={true}
+                    onChange={() => {}}
+                    rightIcon={
+                      showNeighborhoodPicker ? (
+                        <ChevronDown color="#828282" />
+                      ) : (
+                        <ChevronRight color="#828282" />
+                      )
+                    }
+                  />
+                </View>
+              </Pressable>
+            )}
+          </View>
+
+          <SwitchButton
+            label={t("notifications.creation.neighborhood")}
+            value={onlyMyNeighborhood}
+            onValueChange={toggleOnlyMyNeighborhood}
+          />
+
+          <View className="flex-1 mt-4">
             <LabeledInput
-              value={t(`severity.${selectedType.toLowerCase()}`)}
-              label={t("notifications.creation.severityinput")}
-              dropdown={true}
-              onChange={() => {}}
-              rightIcon={
-                showSeverityPicker ? (
-                  <ChevronDown color="#828282" />
-                ) : (
-                  <ChevronRight color="#828282" />
-                )
-              }
+              label={t("notifications.creation.titleinput")}
+              placeholder={t("notifications.creation.titleplaceholder")}
+              value={title}
+              onChange={handleTitleChange}
+              isFocused={focusedField === "title"}
+              onFocus={() => setFocusedField("title")}
+              onBlur={() => setFocusedField(null)}
+              keyboardType="default"
+            />
+
+            <LabeledInput
+              label={t("notifications.creation.messageinput")}
+              placeholder={t("notifications.creation.messageplaceholder")}
+              value={content}
+              onChange={handleContentChange}
+              isFocused={focusedField === "content"}
+              onFocus={() => setFocusedField("content")}
+              onBlur={() => setFocusedField(null)}
+              keyboardType="default"
+              multiline={true}
+              numberOfLines={10}
+              containerStyle="h-80"
+            />
+
+            <PressableButton
+              onPress={async () => handleSendNotification()}
+              disabled={!isValid}
+              title={t("notifications.creation.submit")}
+              background={isValid ? Color.BLUE : Color.GRAY}
             />
           </View>
-        </Pressable>
-      </View>
-
-      <View className="mt-4">
-        {neighborhoods.length > 0 && (
-          <Pressable onPress={() => setShowNeighborhoodPicker(true)}>
-            <View pointerEvents="none">
-              <LabeledInput
-                value={getSelectedNeighborhoodName()}
-                label={t("notifications.creation.selectneighborhood")}
-                dropdown={true}
-                onChange={() => {}}
-                rightIcon={
-                  showNeighborhoodPicker ? (
-                    <ChevronDown color="#828282" />
-                  ) : (
-                    <ChevronRight color="#828282" />
-                  )
-                }
-              />
-            </View>
-          </Pressable>
-        )}
-      </View>
-
-      <SwitchButton
-        label={t("notifications.creation.neighborhood")}
-        value={onlyMyNeighborhood}
-        onValueChange={toggleOnlyMyNeighborhood}
-      />
-
-      <View className="flex-1 mt-4">
-        <LabeledInput
-          label={t("notifications.creation.titleinput")}
-          placeholder={t("notifications.creation.titleplaceholder")}
-          value={title}
-          onChange={handleTitleChange}
-          isFocused={focusedField === "title"}
-          onFocus={() => setFocusedField("title")}
-          onBlur={() => setFocusedField(null)}
-          keyboardType="default"
-        />
-
-        <LabeledInput
-          label={t("notifications.creation.messageinput")}
-          placeholder={t("notifications.creation.messageplaceholder")}
-          value={content}
-          onChange={handleContentChange}
-          isFocused={focusedField === "content"}
-          onFocus={() => setFocusedField("content")}
-          onBlur={() => setFocusedField(null)}
-          keyboardType="default"
-          multiline={true}
-          numberOfLines={10}
-          containerStyle="h-80"
-        />
-
-        <PressableButton
-          onPress={async () => handleSendNotification()}
-          disabled={!isValid}
-          title={t("notifications.creation.submit")}
-          background={isValid ? Color.BLUE : Color.GRAY}
-        />
-      </View>
+        </View>
+      )}
     </InputPageView>
   );
 }
