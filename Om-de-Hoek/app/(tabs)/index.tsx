@@ -5,13 +5,20 @@ import Header from "@/components/Header";
 import NotificationCard from "@/components/card/NotificationCard";
 import messageService from "@/services/messageService";
 import { Message, MessageSeverity } from "@/types/message";
-import { Info, MessageCircle, Siren, TriangleAlert } from "lucide-react-native";
+import {
+  BellOff,
+  Info,
+  MessageCircle,
+  Siren,
+  TriangleAlert,
+} from "lucide-react-native";
 import { useAuth } from "@/components/auth/context/AuthContext";
 import { useTranslation } from "react-i18next";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import { UnauthorizedError } from "@/types/Errors/UnauthorizedError";
 import HomeHeader from "@/components/HomeHeader";
 import { getFromStorage } from "@/utils/StorageHandler";
+import EmptyState from "@/components/EmptyState";
 
 export default function TabTwoScreen() {
   const router = useRouter();
@@ -168,37 +175,40 @@ export default function TabTwoScreen() {
         </View>
       ) : (
         <View className="mt-10 px-6 flex-1">
-          <Text className="text-gray font-comfortaa-regular text-base mb-2">
-            {t("notifications.subtitle")}
-          </Text>
-
           {messages.length === 0 ? (
-            <Text className="text-gray-500 mt-4">
-              {t("notifications.empty")}
-            </Text>
+            <EmptyState
+              title={t("settings.notifications.empty.title")}
+              message={t("settings.notifications.empty.message")}
+              icon={<BellOff size={48} color="#9CA3AF" strokeWidth={1.5} />}
+            />
           ) : (
-            <FlatList
-              data={messages}
-              renderItem={({ item }) => (
-                <NotificationCard
-                  key={item.id}
-                  icon={getSeverityConfig(item.severity).icon}
-                  message={item}
-                  containerClass={
-                    getSeverityConfig(item.severity).cardBackground
-                  }
-                  iconContainerClass={
-                    getSeverityConfig(item.severity).iconBackground
-                  }
-                />
-              )}
-              onRefresh={async () => await loadMessages()}
-              refreshing={isLoading}
-              onEndReached={async () => await loadNextMessages()}
-              onEndReachedThreshold={0.5}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingBottom: 100 }}
-            ></FlatList>
+            <>
+              <Text className="text-gray font-comfortaa-regular text-base mb-2">
+                {t("notifications.subtitle")}
+              </Text>
+              <FlatList
+                data={messages}
+                renderItem={({ item }) => (
+                  <NotificationCard
+                    key={item.id}
+                    icon={getSeverityConfig(item.severity).icon}
+                    message={item}
+                    containerClass={
+                      getSeverityConfig(item.severity).cardBackground
+                    }
+                    iconContainerClass={
+                      getSeverityConfig(item.severity).iconBackground
+                    }
+                  />
+                )}
+                onRefresh={async () => await loadMessages()}
+                refreshing={isLoading}
+                onEndReached={async () => await loadNextMessages()}
+                onEndReachedThreshold={0.5}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: 100 }}
+              ></FlatList>
+            </>
           )}
         </View>
       )}

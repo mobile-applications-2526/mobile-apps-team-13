@@ -1,16 +1,21 @@
-import {useEffect, useState} from "react";
-import {Address, CreateAddressCommand, UpdateAddressCommand,} from "@/types/address";
+import { useEffect, useState } from "react";
+import {
+  Address,
+  CreateAddressCommand,
+  UpdateAddressCommand,
+} from "@/types/address";
 import addressService from "@/services/addressService";
-import {useAuth} from "@/components/auth/context/AuthContext";
+import { useAuth } from "@/components/auth/context/AuthContext";
 import AdressCard from "@/components/card/AdressCard";
 import SettingsHeader from "@/components/settings/SettingsHeader";
-import {useTranslation} from "react-i18next";
-import {UnauthorizedError} from "@/types/Errors/UnauthorizedError";
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import { useTranslation } from "react-i18next";
+import { UnauthorizedError } from "@/types/Errors/UnauthorizedError";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import FloatingActionButton from "@/components/FloatingActionButton";
-import {Plus} from "lucide-react-native";
-import {Color} from "@/types/StyleOptions";
-import {Text} from "react-native";
+import { MapPin, Plus } from "lucide-react-native";
+import { Color } from "@/types/StyleOptions";
+import { Text } from "react-native";
+import EmptyState from "@/components/EmptyState";
 
 const AddressSettings = () => {
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -194,9 +199,13 @@ const AddressSettings = () => {
       />
 
       {addresses.length === 0 && !addingNew && !isLoading && (
-        <Text className="text-center font-comfortaa-medium text-base text-red mt-10">
-          {t("common.addressEmpty")}
-        </Text>
+        <EmptyState
+          title={t("settings.addresses.empty.title")}
+          message={t("settings.addresses.empty.message")}
+          icon={<MapPin size={48} color="#9CA3AF" />}
+          actionLabel={t("settings.addresses.empty.action")}
+          onAction={async () => setAddingNew(true)}
+        />
       )}
 
       {addresses.map((address) => (
@@ -217,7 +226,7 @@ const AddressSettings = () => {
           }}
         />
       ))}
-      {!addingNew && (
+      {!addingNew && addresses.length > 0 && (
         <FloatingActionButton
           icon={<Plus color="white" size={28} strokeWidth={2.5} />}
           onPress={() => setAddingNew(true)}

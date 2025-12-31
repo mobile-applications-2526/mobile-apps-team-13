@@ -1,15 +1,16 @@
-import {ActivityIndicator, ScrollView, View} from "react-native";
-import {Plus} from "lucide-react-native";
-import {useRouter} from "expo-router";
-import {useEffect, useState} from "react";
+import { ActivityIndicator, ScrollView, View } from "react-native";
+import { MapPinned, Plus } from "lucide-react-native";
+import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import userService from "@/services/userService";
-import {useAuth} from "@/components/auth/context/AuthContext";
+import { useAuth } from "@/components/auth/context/AuthContext";
 import neighborhoodService from "@/services/neighborhoodService";
-import {Neighborhood} from "@/types/neighborhood";
-import {useTranslation} from "react-i18next";
+import { Neighborhood } from "@/types/neighborhood";
+import { useTranslation } from "react-i18next";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import SettingsHeader from "@/components/settings/SettingsHeader";
 import ListNeighborhoods from "@/components/neighborhood/ListNeighborhoods";
+import EmptyState from "@/components/EmptyState";
 
 export default function MyNeighborhoodsPage() {
   const [neighborhoods, setNeighborhoods] = useState<Neighborhood[]>([]);
@@ -72,6 +73,15 @@ export default function MyNeighborhoodsPage() {
                 size="large"
                 color="#2548BC"
                 animating={true}
+                className="mt-10"
+              />
+            ) : neighborhoods.length === 0 ? (
+              <EmptyState
+                title={t("settings.neighborhoods.empty.title")}
+                message={t("settings.neighborhoods.empty.message")}
+                icon={<MapPinned size={48} color="#9CA3AF" />}
+                actionLabel={t("settings.neighborhoods.empty.action")}
+                onAction={() => router.push("/(settings)/joinNeighborhood")}
               />
             ) : (
               <ListNeighborhoods
@@ -83,11 +93,14 @@ export default function MyNeighborhoodsPage() {
             )}
           </View>
         </ScrollView>
-        <FloatingActionButton
-          icon={<Plus color="white" size={28} strokeWidth={2.5} />}
-          onPress={() => router.push("/(settings)/joinNeighborhood")}
-          isLoading={isLoading}
-        />
+
+        {neighborhoods.length > 0 && (
+          <FloatingActionButton
+            icon={<Plus color="white" size={28} strokeWidth={2.5} />}
+            onPress={() => router.push("/(settings)/joinNeighborhood")}
+            isLoading={isLoading}
+          />
+        )}
       </View>
     </>
   );
