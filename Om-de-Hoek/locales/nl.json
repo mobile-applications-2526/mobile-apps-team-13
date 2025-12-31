@@ -23,7 +23,8 @@
       "title": "Maak een account",
       "subtitle": "En ontdek je buurt.",
       "email": "E-mail",
-      "mandatoryEmail": "E-mail *"
+      "mandatoryEmail": "E-mail *",
+      "alreadyInUse": "Dit e-mailadres is al in gebruik"
     },
     "name": {
       "title": "Wat is uw naam?",

@@ -23,7 +23,8 @@
       "title": "Create an account",
       "subtitle": "And discover your neighborhood.",
       "email": "Email",
-      "mandatoryEmail": "Email *"
+      "mandatoryEmail": "Email *",
+      "alreadyInUse": "This email address is already in use"
     },
     "name": {
       "title": "What is your name?",
