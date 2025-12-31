@@ -1,15 +1,23 @@
-import {ActivityIndicator, Alert, View,} from "react-native";
-import {AtSign, Calendar, Lock, Mail, Phone, Save, User,} from "lucide-react-native";
+import { ActivityIndicator, Alert, View } from "react-native";
+import {
+  AtSign,
+  Calendar,
+  Lock,
+  Mail,
+  Phone,
+  Save,
+  User,
+} from "lucide-react-native";
 import LabeledInput from "@/components/settings/LabeledInput";
-import {useEffect, useMemo, useState} from "react";
-import {useAuth} from "@/components/auth/context/AuthContext";
+import { useEffect, useMemo, useState } from "react";
+import { useAuth } from "@/components/auth/context/AuthContext";
 import UserService from "@/services/userService";
-import {useTranslation} from "react-i18next";
-import {UserUpdateCommand} from "@/types/user";
+import { useTranslation } from "react-i18next";
+import { UserUpdateCommand } from "@/types/user";
 import SettingsHeader from "@/components/settings/SettingsHeader";
-import {Color} from "@/types/StyleOptions";
+import { Color } from "@/types/StyleOptions";
 import FloatingActionButton from "@/components/FloatingActionButton";
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function MyDataPage() {
   const { token } = useAuth();
@@ -178,6 +186,7 @@ export default function MyDataPage() {
               onFocus={() => setFocusedField("email")}
               onBlur={() => setFocusedField(null)}
               leftIcon={<Mail size={18} color={"#2548BC"} />}
+              autoCapitalize="none"
             />
 
             <View className="relative">
