@@ -7,6 +7,8 @@
     "subtitle": "Log in en verwittig je buren.",
     "email": "E-mail",
     "password": "Wachtwoord",
+    "mandatoryEmail": "E-mail *",
+    "mandatoryPassword": "Wachtwoord *",
     "error": {
       "empty": "Vul alle velden in.",
       "invalidcredentials": "E-mail of wachtwoord is onjuist.",
@@ -20,18 +22,21 @@
     "email": {
       "title": "Maak een account",
       "subtitle": "En ontdek je buurt.",
-      "email": "E-mail"
+      "email": "E-mail",
+      "mandatoryEmail": "E-mail *"
     },
     "name": {
       "title": "Wat is uw naam?",
       "subtitle": "Vertel ons hoe we u mogen aanspreken.",
       "firstname": "Voornaam",
-      "lastname": "Achternaam"
+      "lastname": "Achternaam",
+      "mandatoryFirstname": "Voornaam *",
+      "mandatoryLastname": "Achternaam *"
     },
     "birthdate": {
       "title": "Wat is uw geboortedatum?",
       "subtitle": "Wanneer mag u ons trakteren op taart?",
-      "birthdate": "Kies uw geboortedatum",
+      "mandatoryBirthdate": "Geboortedatum *",
       "datepicker": {
         "title": "Selecteer geboortedatum",
         "confirm": "Bevestigen",
@@ -42,10 +47,11 @@
       "title": "Wat is uw adres?",
       "subtitle": "Waar mogen we komen eten?",
       "street": "Straatnaam",
-      "housenumber": "Huisnr.",
+      "housenumber": "111",
       "municipality": "Gemeente",
-      "postalcode": "Postcode",
+      "postalcode": "0000",
       "mandatoryStreet": "Straatnaam *",
+      "optionalHousenumber": "Huis Nr.",
       "mandatoryMunicipality": "Gemeente *",
       "mandatoryPostalcode": "Postcode *",
       "edit": "Adres aanpassen"
@@ -53,7 +59,7 @@
     "phone": {
       "title": "Wat is uw telefoonnummer?",
       "subtitle": "Waar kan men u in geval van nood bereiken?",
-      "label": "Telefoonnummer (optioneel)",
+      "label": "Telefoonnummer",
       "placeholder": "111 222 333",
       "country": "Vul de naam van uw land in"
     },
@@ -69,6 +75,7 @@
       "uppercase": "Minimaal één hoofdletter",
       "special": "Minimaal één speciaal karakter",
       "password": "Wachtwoord",
+      "mandatoryPassword": "Wachtwoord *",
       "lowercase": "Minimaal één kleine letter "
     },
     "neighborhood": {
@@ -79,7 +86,7 @@
       "leave": "Verlaten",
       "searchplaceholder": "Zoek een buurt...",
       "notfound": "Geen buurt gevonden met ",
-      "next": "Klaar ({{count}} buurt(en) geselecteerd)"
+      "next": "{{count}} buurt(en) geselecteerd"
     },
     "continue": "Verdergaan"
   },
@@ -93,7 +100,12 @@
     "addresses": {
       "menu": "Mijn adressen",
       "title": "Mijn",
-      "subtitle": "Adressen"
+      "subtitle": "Adressen",
+      "empty": {
+        "title": "Geen adressen gevonden",
+        "message": "Geen adressen beschikbaar. Voel je vrij om er een toe te voegen!",
+        "action": "Adres toevoegen"
+      }
     },
     "data": {
       "title": "Mijn",
@@ -121,6 +133,11 @@
     "neighborhoods": {
       "title": "Mijn",
       "subtitle": "Buurten",
+      "empty": {
+        "title": "Geen buurten gevonden",
+        "message": "Geen buurten beschikbaar. Voel je vrij om aan te sluiten bij een buurt!",
+        "action": "Sluit je aan bij een buurt"
+      },
       "join": {
         "title": "Deelnemen",
         "subtitle": "aan een buurt"
@@ -129,11 +146,16 @@
     "notifications": {
       "title": "Mijn",
       "subtitle": "Meldingen",
-      "manage": "Meldingen beheren"
+      "manage": "Meldingen beheren",
+      "empty": {
+        "title": "Geen meldingen gevonden",
+        "message": "Geen meldingen beschikbaar. Voel je vrij om er een te maken!",
+        "action": "Nieuwe melding maken"
+      }
     },
     "manageNotifications": {
-      "title": "Beheer",
-      "subtitle": "Mijn meldingen"
+      "title": "Meldingen",
+      "subtitle": "beheren"
     }
   },
   "notifications": {
