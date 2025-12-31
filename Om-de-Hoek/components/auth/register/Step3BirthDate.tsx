@@ -177,6 +177,9 @@ export const Step3BirthDate = ({
         </View>
       )}
 
+      <Text className="text-[12px] text-gray text-center font-comfortaa-medium mb-4">
+        {t("register.birthdate.ageRequirement")}
+      </Text>
       <PressableButton
         onPress={async () => onNext()}
         disabled={!isDateSelected}
