@@ -1,4 +1,10 @@
-import {KeyboardTypeOptions, Pressable, Text, TextInput, View,} from "react-native";
+import {
+  KeyboardTypeOptions,
+  Pressable,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 type Props = {
   label?: string;
@@ -20,6 +26,7 @@ type Props = {
   pressableRight?: boolean;
   pressableLeft?: boolean;
   onRightIconPress?: () => void;
+  autoCapitalize?: "none" | "sentences" | "words" | "characters";
 };
 
 export default function LabeledInput({
@@ -41,6 +48,7 @@ export default function LabeledInput({
   numberOfLines,
   pressableRight = false,
   onRightIconPress,
+  autoCapitalize,
 }: Props) {
   return (
     <View className="mb-6">
@@ -84,16 +92,14 @@ export default function LabeledInput({
           multiline={multiline}
           numberOfLines={numberOfLines}
           style={{ textAlignVertical: multiline ? "top" : "center" }}
+          autoCapitalize={autoCapitalize}
+          selection={isFocused ? undefined : { start: 0, end: 0 }}
         />
 
         {rightIcon && (
           <View className={`ml-2 ${multiline ? "mt-1" : ""}`}>
             {pressableRight ? (
-              <Pressable
-                  onPress={onRightIconPress}
-              >
-                  {rightIcon
-              }</Pressable>
+              <Pressable onPress={onRightIconPress}>{rightIcon}</Pressable>
             ) : (
               rightIcon
             )}
