@@ -6,6 +6,8 @@
     "title": "Welcome back!",
     "subtitle": "Log in and notify your neighbors.",
     "email": "Email",
+    "mandatoryEmail": "Email *",
+    "mandatoryPassword": "Password *",
     "password": "Password",
     "error": {
       "empty": "Fill in all fields.",
@@ -20,18 +22,21 @@
     "email": {
       "title": "Create an account",
       "subtitle": "And discover your neighborhood.",
-      "email": "Email"
+      "email": "Email",
+      "mandatoryEmail": "Email *"
     },
     "name": {
       "title": "What is your name?",
       "subtitle": "Tell us how we may address you.",
       "firstname": "First name",
-      "lastname": "Last name"
+      "lastname": "Last name",
+      "mandatoryFirstname": "First name *",
+      "mandatoryLastname": "Last name *"
     },
     "birthdate": {
       "title": "What is your birthdate?",
       "subtitle": "When can you treat us to cake?",
-      "birthdate": "Choose your birthdate",
+      "mandatoryBirthdate": "Birthdate *",
       "datepicker": {
         "title": "Select birthdate",
         "confirm": "Confirm",
@@ -42,10 +47,11 @@
       "title": "What is your address?",
       "subtitle": "Where can we come to eat?",
       "street": "Street name",
-      "housenumber": "House Nr.",
+      "housenumber": "111",
       "municipality": "Municipality",
-      "postalcode": "Postal code",
+      "postalcode": "0000",
       "mandatoryStreet": "Street name *",
+      "optionalHousenumber": "House Nr.",
       "mandatoryMunicipality": "Municipality *",
       "mandatoryPostalcode": "Postal code *",
       "edit": "Edit address"
@@ -53,7 +59,7 @@
     "phone": {
       "title": "What is your phone number?",
       "subtitle": "Where can you be reached in case of emergency?",
-      "label": "Phone number (optional)",
+      "label": "Phone number",
       "placeholder": "111 222 333",
       "country": "Enter the name of your country"
     },
@@ -69,6 +75,7 @@
       "uppercase": "Minimal one uppercase letter",
       "special": "Minimal one special character",
       "password": "Password",
+      "mandatoryPassword": "Password *",
       "lowercase": "Minimal one lowercase letter "
     },
     "neighborhood": {
@@ -79,7 +86,7 @@
       "leave": "Leave",
       "searchplaceholder": "Search for a neighborhood...",
       "notfound": "No neighborhood found with ",
-      "next": "Ready (selected {{count}} neighborhood(s))"
+      "next": "selected {{count}} neighborhood(s)"
     },
     "continue": "Continue"
   },
@@ -93,7 +100,12 @@
     "addresses": {
       "menu": "My addresses",
       "title": "My",
-      "subtitle": "Addresses"
+      "subtitle": "Addresses",
+      "empty": {
+        "title": "No addresses found",
+        "message": "No addresses available. Feel free to add one!",
+        "action": "Add address"
+      }
     },
     "data": {
       "title": "My",
@@ -121,6 +133,11 @@
     "neighborhoods": {
       "title": "My",
       "subtitle": "Neighborhoods",
+      "empty": {
+        "title": "No neighborhoods found",
+        "message": "No neighborhoods available. Feel free to join a neighborhood!",
+        "action": "Join a neighborhood"
+      },
       "join": {
         "title": "Join",
         "subtitle": "a neighborhood"
@@ -129,11 +146,16 @@
     "notifications": {
       "title": "My",
       "subtitle": "Notifications",
-      "manage": "Manage notifications"
+      "manage": "Manage notifications",
+      "empty": {
+        "title": "No notifications found",
+        "message": "No notifications available. Feel free to create one!",
+        "action": "Create new notification"
+      }
     },
     "manageNotifications": {
       "title": "Manage",
-      "subtitle": "My notifications"
+      "subtitle": "notifications"
     }
   },
   "notifications": {
