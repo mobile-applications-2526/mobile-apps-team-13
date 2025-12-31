@@ -1,16 +1,22 @@
-import {Text, View} from "react-native";
+import { Text, View } from "react-native";
 
 type Props = {
-    title: string;
-    subtitle: string;
-}
+  title: string;
+  subtitle?: string;
+};
 
+export default function SettingsTitles({ title, subtitle }: Props) {
+  return (
+    <View className="w-full px-6 mt-8 mb-4">
+      {subtitle && (
+        <Text className="font-comfortaa-bold text-sm text-gray uppercase tracking-widest mb-1">
+          {subtitle}
+        </Text>
+      )}
 
-export default function SettingsTitles ({ title, subtitle }: Props) {
-    return (
-        <View className="mt-10 mb-8">
-            <Text className="font-comfortaa-bold text-black text-[24px]">{title}</Text>
-            <Text className="font-comfortaa-medium text-gray text-[14px] ml-8">{subtitle}</Text>
-        </View>
-    )
+      <Text className="font-comfortaa-bold text-4xl text-black leading-tight">
+        {title}
+      </Text>
+    </View>
+  );
 }
