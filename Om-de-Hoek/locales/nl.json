@@ -36,6 +36,7 @@
     "birthdate": {
       "title": "Wat is uw geboortedatum?",
       "subtitle": "Wanneer mag u ons trakteren op taart?",
+      "ageRequirement": "U moet minstens 13 jaar oud zijn om u te registreren.",
       "mandatoryBirthdate": "Geboortedatum *",
       "datepicker": {
         "title": "Selecteer geboortedatum",
