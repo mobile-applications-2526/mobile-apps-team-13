@@ -11,9 +11,10 @@ type Props = {
   onChange: (email: string) => void;
   value: string;
   onBack?: () => void;
+  error?: string | null;
 };
 
-export const Step1Email = ({ onNext, onChange, value, onBack }: Props) => {
+export const Step1Email = ({ onNext, onChange, value, onBack, error }: Props) => {
   const [isFocused, setIsFocused] = useState(false);
   const { t } = useTranslation();
 
@@ -50,6 +51,12 @@ export const Step1Email = ({ onNext, onChange, value, onBack }: Props) => {
         placeholder={t("register.email.email")}
         autoCapitalize="none"
       />
+
+      {error && (
+        <Text className="text-red text-[13px] font-comfortaa-medium mb-4">
+          {error}
+        </Text>
+      )}
 
       <PressableButton
         onPress={async () => onNext()}

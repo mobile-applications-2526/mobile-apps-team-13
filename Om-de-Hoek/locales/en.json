@@ -23,7 +23,8 @@
       "title": "Create an account",
       "subtitle": "And discover your neighborhood.",
       "email": "Email",
-      "mandatoryEmail": "Email *"
+      "mandatoryEmail": "Email *",
+      "alreadyInUse": "This email address is already in use"
     },
     "name": {
       "title": "What is your name?",
@@ -36,6 +37,7 @@
     "birthdate": {
       "title": "What is your birthdate?",
       "subtitle": "When can you treat us to cake?",
+      "ageRequirement": "You must be at least 13 years old to register.",
       "mandatoryBirthdate": "Birthdate *",
       "datepicker": {
         "title": "Select birthdate",
