@@ -1,17 +1,17 @@
-import {Pressable, Text, View} from "react-native";
-import React, {useState} from "react";
-import {LoginBody} from "@/types/auth";
-import {useAuth} from "@/components/auth/context/AuthContext";
-import {Href, router} from "expo-router";
+import { Pressable, Text, View } from "react-native";
+import React, { useState } from "react";
+import { LoginBody } from "@/types/auth";
+import { useAuth } from "@/components/auth/context/AuthContext";
+import { Href, router } from "expo-router";
 import authService from "@/services/authService";
-import {CustomError} from "@/types/Errors/CustomError";
+import { CustomError } from "@/types/Errors/CustomError";
 import AuthHeader from "@/components/auth/AuthHeader";
-import {PressableButton} from "@/components/PressableButton";
-import {Color} from "@/types/StyleOptions";
+import { PressableButton } from "@/components/PressableButton";
+import { Color } from "@/types/StyleOptions";
 import InputPageView from "@/components/InputPageView";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 import LabeledInput from "@/components/settings/LabeledInput";
-import {Eye, EyeClosed} from "lucide-react-native";
+import { Eye, EyeClosed } from "lucide-react-native";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -93,7 +93,7 @@ export default function LoginPage() {
         </Text>
 
         <LabeledInput
-          label={t("login.email")}
+          label={t("login.mandatoryEmail")}
           value={credentials.email}
           onChange={handleEmailChange}
           editable={true}
@@ -105,7 +105,7 @@ export default function LoginPage() {
         />
 
         <LabeledInput
-          label={t("login.password")}
+          label={t("login.mandatoryPassword")}
           value={credentials.password}
           onChange={handlePasswordChange}
           editable={true}
@@ -115,6 +115,7 @@ export default function LoginPage() {
           keyboardType="default"
           placeholder={t("login.password")}
           secureTextEntry={!isPasswordVisible}
+          autoCapitalize="none"
           rightIcon={
             <Pressable onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
               {isPasswordVisible ? (
