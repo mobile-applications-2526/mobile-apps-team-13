@@ -29,6 +29,7 @@ import { MessageSeverity } from "@/types/message";
 import SwitchButton from "@/components/settings/SwitchButton";
 import InputPageView from "@/components/InputPageView";
 import EmptyState from "@/components/EmptyState";
+import SettingsHeader from "@/components/settings/SettingsHeader";
 
 type Props = {
   onChange?: (name: {
@@ -283,9 +284,9 @@ export default function CreateNotification({
         </TouchableWithoutFeedback>
       </Modal>
       <View className="relative mt-2 mb-4 items-center">
-        <Header
-          title={t("notifications.creation.title")}
-          subtitle={t("notifications.creation.subtitle")}
+        <SettingsHeader
+          title={t("notifications.creation.notification")}
+          subtitle={t("notifications.creation.title")}
           onBack={() => router.push(HOME_PATH)}
         />
       </View>

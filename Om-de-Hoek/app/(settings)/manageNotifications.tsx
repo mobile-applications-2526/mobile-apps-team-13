@@ -113,8 +113,8 @@ const manageNotifications = () => {
       extraScrollHeight={115}
     >
       <SettingsHeader
-        title={t("settings.manageNotifications.title")}
-        subtitle={t("settings.manageNotifications.subtitle")}
+        title={t("settings.settings")}
+        subtitle={t("settings.manageNotifications.title")}
       />
 
       {messages.length === 0 && !isLoading && (

@@ -65,8 +65,9 @@ export default function MyNeighborhoodsPage() {
         >
           <View className="px-6">
             <SettingsHeader
-              title={t("settings.neighborhoods.title")}
-              subtitle={t("settings.neighborhoods.subtitle")}
+              title={t("settings.settings")}
+              subtitle={t("settings.neighborhoods.title")}
+              onBack={() => router.push("/profile")}
             />
             {isLoading ? (
               <ActivityIndicator

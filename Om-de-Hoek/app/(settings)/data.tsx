@@ -18,6 +18,7 @@ import SettingsHeader from "@/components/settings/SettingsHeader";
 import { Color } from "@/types/StyleOptions";
 import FloatingActionButton from "@/components/FloatingActionButton";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { router } from "expo-router";
 
 export default function MyDataPage() {
   const { token } = useAuth();
@@ -127,8 +128,9 @@ export default function MyDataPage() {
         extraScrollHeight={115}
       >
         <SettingsHeader
-          title={t("settings.data.title")}
-          subtitle={t("settings.data.subtitle")}
+          title={t("settings.account")}
+          subtitle={t("settings.data.title")}
+          onBack={() => router.push("/profile")}
         />
 
         {isLoading ? (

@@ -16,6 +16,7 @@ import { MapPin, Plus } from "lucide-react-native";
 import { Color } from "@/types/StyleOptions";
 import { Text } from "react-native";
 import EmptyState from "@/components/EmptyState";
+import { router } from "expo-router";
 
 const AddressSettings = () => {
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -194,8 +195,9 @@ const AddressSettings = () => {
       extraScrollHeight={115}
     >
       <SettingsHeader
-        title={t("settings.addresses.title")}
-        subtitle={t("settings.addresses.subtitle")}
+        title={t("settings.locations")}
+        subtitle={t("settings.addresses.title")}
+        onBack={() => router.push("/profile")}
       />
 
       {addresses.length === 0 && !addingNew && !isLoading && (

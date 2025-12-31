@@ -1,15 +1,22 @@
-import {useAuth} from "@/components/auth/context/AuthContext";
-import {ActivityIndicator, Text, View} from "react-native";
-import {PressableButton} from "@/components/PressableButton";
+import { useAuth } from "@/components/auth/context/AuthContext";
+import { ActivityIndicator, Text, View } from "react-native";
+import { PressableButton } from "@/components/PressableButton";
 import MenuItem from "@/components/settings/MenuItem";
 import SettingsTitles from "@/components/settings/SettingsTitles";
-import {Color} from "@/types/StyleOptions";
-import {BellRing, ExternalLink, MapPin, UserRoundPen, UsersRound, Wrench,} from "lucide-react-native";
-import {Link, useRouter} from "expo-router";
-import {useEffect, useState} from "react";
+import { Color } from "@/types/StyleOptions";
+import {
+  BellRing,
+  ExternalLink,
+  MapPin,
+  UserRoundPen,
+  UsersRound,
+  Wrench,
+} from "lucide-react-native";
+import { Link, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import UserService from "@/services/userService";
-import {useTranslation} from "react-i18next";
-import {UnauthorizedError} from "@/types/Errors/UnauthorizedError";
+import { useTranslation } from "react-i18next";
+import { UnauthorizedError } from "@/types/Errors/UnauthorizedError";
 
 export default function ProfilePage() {
   const [firstName, setFirstName] = useState<string>("");
@@ -29,11 +36,11 @@ export default function ProfilePage() {
         setFirstName(data.firstName || "");
         setLastName(data.lastName || "");
       } catch (error) {
-          if (error instanceof UnauthorizedError){
-                console.warn("Error fetching user data: token expired");
-                await refreshTokens();
-                return;
-          }
+        if (error instanceof UnauthorizedError) {
+          console.warn("Error fetching user data: token expired");
+          await refreshTokens();
+          return;
+        }
         console.error("Failed to fetch user data", error);
       } finally {
         setIsLoading(false);
@@ -58,7 +65,10 @@ export default function ProfilePage() {
 
   return (
     <View className="flex-1 bg-white px-6">
-      <SettingsTitles title={firstName} subtitle={lastName} />
+      <SettingsTitles
+        title={t("profile.title")}
+        subtitle={firstName + " " + lastName}
+      />
       <MenuItem
         icon={<UserRoundPen color="#2548BC" size={20} fill="#2548BC" />}
         label={t("settings.mydata")}
@@ -101,14 +111,17 @@ export default function ProfilePage() {
           background={Color.RED}
         />
       </View>
-        <View className="items-center mt-12 mb-6">
-            <View className="flex-row space-x-1">
-            <Link href="https://forms.gle/UHL2Jp7o4kgP62Bs9" className="text-blue underline">
-                {t("feedback")}
-            </Link>
-            <ExternalLink size={12} color={Color.BLUE}/>
-            </View>
+      <View className="items-center mt-12 mb-6">
+        <View className="flex-row space-x-1">
+          <Link
+            href="https://forms.gle/UHL2Jp7o4kgP62Bs9"
+            className="text-blue underline"
+          >
+            {t("feedback")}
+          </Link>
+          <ExternalLink size={12} color={Color.BLUE} />
         </View>
+      </View>
     </View>
   );
 }

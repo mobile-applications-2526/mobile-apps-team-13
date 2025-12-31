@@ -1,9 +1,10 @@
-import {Modal, Pressable, Text, TouchableOpacity, View} from "react-native";
-import {Check, ChevronDown, ChevronRight} from "lucide-react-native";
-import {useState} from "react";
-import {useTranslation} from "react-i18next";
+import { Modal, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Check, ChevronDown, ChevronRight } from "lucide-react-native";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import SettingsHeader from "@/components/settings/SettingsHeader";
 import LabeledInput from "@/components/settings/LabeledInput";
+import { router } from "expo-router";
 
 export default function MyPreferencesPage() {
   const { t, i18n } = useTranslation();
@@ -26,8 +27,9 @@ export default function MyPreferencesPage() {
     <View className="flex-1 bg-white">
       <View className="flex-1 px-6">
         <SettingsHeader
-          title={t("settings.preferences.title")}
-          subtitle={t("settings.preferences.subtitle")}
+          title={t("settings.settings")}
+          subtitle={t("settings.preferences.title")}
+          onBack={() => router.push("/profile")}
         />
 
         {/*  voor later, wanneer we dark mode gaan gebruiken */}
