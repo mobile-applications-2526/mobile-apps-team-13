@@ -90,16 +90,21 @@
     },
     "continue": "Verdergaan"
   },
+  "profile": {
+    "title": "PROFIEL"
+  },
   "settings": {
     "mydata": "Mijn gegevens",
-    "settings": "Instellingen",
+    "account": "ACCOUNT",
+    "locations": "LOCATIES",
+    "settings": "INSTELLINGEN",
     "mypreferences": "Mijn voorkeuren",
     "mynotifications": "Mijn meldingen",
     "myneighborhoods": "Mijn buurten",
     "logout": "Uitloggen",
     "addresses": {
       "menu": "Mijn adressen",
-      "title": "Mijn",
+      "title": "MIJN ADRESSEN",
       "subtitle": "Adressen",
       "empty": {
         "title": "Geen adressen gevonden",
@@ -108,8 +113,7 @@
       }
     },
     "data": {
-      "title": "Mijn",
-      "subtitle": "Gegevens",
+      "title": "MIJN GEGEVENS",
       "username": "Gebruikersnaam",
       "firstname": "Voornaam",
       "lastname": "Achternaam",
@@ -119,8 +123,7 @@
       "address": "Adres"
     },
     "preferences": {
-      "title": "Mijn",
-      "subtitle": "Voorkeuren",
+      "title": "MIJN VOORKEUREN",
       "label": "Wijzig taal",
       "language": {
         "en": "Engels",
@@ -131,8 +134,7 @@
       "close": "sluiten"
     },
     "neighborhoods": {
-      "title": "Mijn",
-      "subtitle": "Buurten",
+      "title": "MIJN BUURTEN",
       "empty": {
         "title": "Geen buurten gevonden",
         "message": "Geen buurten beschikbaar. Voel je vrij om aan te sluiten bij een buurt!",
@@ -144,9 +146,8 @@
       }
     },
     "notifications": {
-      "title": "Mijn",
-      "subtitle": "Meldingen",
-      "manage": "Meldingen beheren",
+      "title": "MIJN MELDINGEN",
+      "manage": "Mijn meldingen beheren",
       "empty": {
         "title": "Geen meldingen gevonden",
         "message": "Geen meldingen beschikbaar. Voel je vrij om er een te maken!",
@@ -154,8 +155,7 @@
       }
     },
     "manageNotifications": {
-      "title": "Meldingen",
-      "subtitle": "beheren"
+      "title": "MIJN MELDINGEN BEHEREN"
     }
   },
   "notifications": {
@@ -165,8 +165,8 @@
     "create": "Maak een melding",
     "loadmessage": "Berichten laden...",
     "creation": {
-      "title": "Laat van",
-      "subtitle": "je horen",
+      "title": "LAAT VAN JE HOREN",
+      "notification": "MELDINGEN",
       "type": "Type melding",
       "tags": {
         "info": "Informatief",

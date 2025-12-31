@@ -90,17 +90,22 @@
     },
     "continue": "Continue"
   },
+  "profile": {
+    "title": "PROFILE"
+  },
+
   "settings": {
     "mydata": "My data",
-    "settings": "Settings",
+    "account": "ACCOUNT",
+    "locations": "LOCATIONS",
+    "settings": "SETTINGS",
     "mypreferences": "My preferences",
     "mynotifications": "My notifications",
     "myneighborhoods": "My neighborhoods",
     "logout": "Logout",
     "addresses": {
       "menu": "My addresses",
-      "title": "My",
-      "subtitle": "Addresses",
+      "title": "MY ADDRESSES",
       "empty": {
         "title": "No addresses found",
         "message": "No addresses available. Feel free to add one!",
@@ -108,8 +113,7 @@
       }
     },
     "data": {
-      "title": "My",
-      "subtitle": "Data",
+      "title": "MY DATA",
       "username": "Username",
       "firstname": "First name",
       "lastname": "Last name",
@@ -119,8 +123,7 @@
       "address": "Address"
     },
     "preferences": {
-      "title": "My",
-      "subtitle": "Preferences",
+      "title": "MY PREFERENCES",
       "label": "Change language",
       "language": {
         "en": "English",
@@ -131,8 +134,7 @@
       "close": "close"
     },
     "neighborhoods": {
-      "title": "My",
-      "subtitle": "Neighborhoods",
+      "title": "MY NEIGHBORHOODS",
       "empty": {
         "title": "No neighborhoods found",
         "message": "No neighborhoods available. Feel free to join a neighborhood!",
@@ -144,9 +146,8 @@
       }
     },
     "notifications": {
-      "title": "My",
-      "subtitle": "Notifications",
-      "manage": "Manage notifications",
+      "title": "MY NOTIFICATIONS",
+      "manage": "Manage my notifications",
       "empty": {
         "title": "No notifications found",
         "message": "No notifications available. Feel free to create one!",
@@ -154,8 +155,7 @@
       }
     },
     "manageNotifications": {
-      "title": "Manage",
-      "subtitle": "notifications"
+      "title": "MANAGE MY NOTIFICATIONS"
     }
   },
   "notifications": {
@@ -165,8 +165,8 @@
     "create": "Create notification",
     "loadmessage": "Loading messages...",
     "creation": {
-      "title": "Speak",
-      "subtitle": "Up",
+      "title": "SPEAK UP",
+      "notification": "NOTIFICATIONS",
       "type": "Type of notification",
       "tags": {
         "info": "Informative",
