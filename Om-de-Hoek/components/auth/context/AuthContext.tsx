@@ -36,9 +36,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 const savedRefreshToken = await SecureStore.getItemAsync('refreshToken');
 
                 if (savedToken && savedRefreshToken) {
-                    setToken(savedToken);
-                    setRefreshToken(savedRefreshToken)
-                    setAuthStatus('authenticated');
+                    const newToken = await authService.refreshToken(savedRefreshToken);
+                    await signIn(newToken.token, newToken.refreshToken);
                 } else {
                     setAuthStatus('unauthenticated');
                 }
