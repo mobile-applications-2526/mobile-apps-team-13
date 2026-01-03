@@ -102,6 +102,7 @@ export default function LoginPage() {
           onBlur={() => setFocusedField(null)}
           keyboardType="email-address"
           placeholder={t("login.email")}
+          autoCapitalize={"none"}
         />
 
         <LabeledInput
