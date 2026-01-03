@@ -1,6 +1,8 @@
 import {UnauthorizedError} from "@/types/Errors/UnauthorizedError";
 import {InvalidDataException} from "@/types/Errors/InvalidDataException";
+import {getFromStorage} from "@/utils/StorageHandler";
 
+const API_URL = process.env.EXPO_PUBLIC_API_PATH ?? await getFromStorage("API_PATH"); // Haal de API URL op uit opslag als env niet lukt (zoals in onze apk)
 
 /**
  * @description Fetch data from the API
@@ -11,7 +13,6 @@ import {InvalidDataException} from "@/types/Errors/InvalidDataException";
  * @throws Error for other non-ok responses
  */
 const fetchData = async (endpoint: string, options : RequestInit = {}) : Promise<any> => {
-    const API_URL = process.env.EXPO_PUBLIC_API_PATH;
     const response = await fetch(`${API_URL}/api/${endpoint}`, options);
 
   if (!response.ok) {
@@ -46,7 +47,6 @@ const statusCheck = async () : Promise<boolean> => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
   try {
-    const API_URL = process.env.EXPO_PUBLIC_API_PATH;
     const response = await fetch(`${API_URL}/status`,{
         signal: controller.signal,
     });

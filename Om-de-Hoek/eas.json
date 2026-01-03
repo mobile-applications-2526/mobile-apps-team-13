@@ -12,7 +12,11 @@
     "preview": {
       "distribution": "internal",
       "channel": "preview",
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "EAS_BUILD_PROFILE": "preview",
+        "EXPO_PUBLIC_API_URL": "https://omdehoek-h2d2ajcthyd9ash4.westeurope-01.azurewebsites.net"
+      }
     },
     "production": {
       "autoIncrement": true,

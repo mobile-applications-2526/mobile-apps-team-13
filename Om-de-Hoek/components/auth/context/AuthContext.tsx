@@ -2,6 +2,7 @@ import React, {createContext, useContext, useEffect, useState} from 'react';
 import * as SecureStore from 'expo-secure-store';
 import authService from "@/services/authService";
 import {statusCheck} from "@/services/requestService";
+import {saveInStorage} from "@/utils/StorageHandler";
 
 interface AuthContextData {
     signIn: (token: string, refreshToken: string) => Promise<void>;
@@ -38,6 +39,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 setAuthStatus("loading")
                 const savedToken = await SecureStore.getItemAsync('authToken');
                 const savedRefreshToken = await SecureStore.getItemAsync('refreshToken');
+
+                const API_PATH = process.env.EXPO_PUBLIC_API_URL;
+
+                if(API_PATH) {
+                   await saveInStorage("API_PATH", API_PATH);
+                }
 
                 let connectionAttempts = 0;
                 let connected = false;
