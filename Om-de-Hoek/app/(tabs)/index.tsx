@@ -1,7 +1,6 @@
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
-import Header from "@/components/Header";
 import NotificationCard from "@/components/card/NotificationCard";
 import messageService from "@/services/messageService";
 import { Message, MessageSeverity } from "@/types/message";
@@ -22,7 +21,7 @@ import EmptyState from "@/components/EmptyState";
 
 export default function TabTwoScreen() {
   const router = useRouter();
-  const { token, refreshTokens } = useAuth();
+  const { token, refreshTokens, authStatus } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState<{
@@ -81,8 +80,9 @@ export default function TabTwoScreen() {
   };
 
   useEffect(() => {
+    if(authStatus !== "authenticated") return;
     loadFilters().then(() => loadMessages());
-  }, [token]);
+  }, [token, authStatus]);
 
   const loadNextMessages = async () => {
     if (messages.length % 20 !== 0) {

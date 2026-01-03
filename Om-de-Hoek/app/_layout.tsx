@@ -10,6 +10,7 @@ import * as SplashScreen from "expo-splash-screen";
 import {useEffect} from "react";
 import {SafeAreaProvider, SafeAreaView} from "react-native-safe-area-context";
 import {AuthProvider, useAuth} from "@/components/auth/context/AuthContext";
+import {ActivityIndicator} from "react-native";
 
 configureReanimatedLogger({
   level: ReanimatedLogLevel.warn,
@@ -18,6 +19,7 @@ configureReanimatedLogger({
 
 const LOGIN_PATH = "/(auth)/login";
 const APP_PATH = "/(tabs)";
+const UNAVAILABLE_PATH = "/error/backendUnavailable";
 
 export { ErrorBoundary } from "expo-router";
 SplashScreen.preventAutoHideAsync();
@@ -60,10 +62,20 @@ function InitialLayout() {
     } else if (authStatus === "unauthenticated" && !inAuthGroup) {
       router.replace(LOGIN_PATH);
     }
+    else if (authStatus === "unavailable") {
+      router.replace(UNAVAILABLE_PATH);
+    }
   }, [authStatus, segments, loaded, rootNavigationState?.key]);
 
   if (!loaded) {
-    return null;
+    return(
+        <ActivityIndicator
+            size="large"
+            color="#2548BC"
+            animating={true}
+            className="mt-10"
+        />
+    )
   }
 
   return (

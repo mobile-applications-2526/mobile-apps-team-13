@@ -1,7 +1,6 @@
 import {UnauthorizedError} from "@/types/Errors/UnauthorizedError";
 import {InvalidDataException} from "@/types/Errors/InvalidDataException";
 
-const API_URL = process.env.EXPO_PUBLIC_API_PATH;
 
 /**
  * @description Fetch data from the API
@@ -12,6 +11,7 @@ const API_URL = process.env.EXPO_PUBLIC_API_PATH;
  * @throws Error for other non-ok responses
  */
 const fetchData = async (endpoint: string, options : RequestInit = {}) : Promise<any> => {
+    const API_URL = process.env.EXPO_PUBLIC_API_PATH;
     const response = await fetch(`${API_URL}/api/${endpoint}`, options);
 
   if (!response.ok) {
@@ -43,15 +43,26 @@ const fetchData = async (endpoint: string, options : RequestInit = {}) : Promise
  * @returns true if the API is reachable, false otherwise
  */
 const statusCheck = async () : Promise<boolean> => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
   try {
-    const response = await fetch(`${API_URL}/status`);
+    const API_URL = process.env.EXPO_PUBLIC_API_PATH;
+    const response = await fetch(`${API_URL}/status`,{
+        signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
     if (!response.ok) {
       console.error("Status check failed:", response.statusText);
       return false;
     }
     return true;
-  } catch (error) {
-    console.error("Status check error:", error);
+  } catch (error: any) {
+      if (error.name === 'AbortError') {
+          console.warn("Status check timed out");
+      }
+      else {
+          console.error("Status check error:", error);
+      }
     return false;
   }
 };
