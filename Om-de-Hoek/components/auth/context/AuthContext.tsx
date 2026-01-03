@@ -42,10 +42,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
                 const API_PATH = process.env.EXPO_PUBLIC_API_URL;
 
-                if(API_PATH) {
-                   await saveInStorage("API_PATH", API_PATH);
-                }
-
                 let connectionAttempts = 0;
                 let connected = false;
 
@@ -65,6 +61,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     console.error("Backend is not reachable after multiple attempts.");
                     setAuthStatus('unavailable');
                     return;
+                }
+
+                // pas opslaan als pad klopt
+                if(API_PATH) {
+                    await saveInStorage("API_PATH", API_PATH);
                 }
 
                 if (savedToken && savedRefreshToken) {
