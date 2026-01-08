@@ -65,7 +65,7 @@ export default function MyNotificationsPage() {
           Notificaties
         </Text>
         <SwitchButton
-          label="Informatief"
+          label={t("notifications.creation.tags.info")}
           value={viewInfo}
           onValueChange={(e) => {
             setViewInfo(e);
@@ -73,7 +73,7 @@ export default function MyNotificationsPage() {
           }}
         />
         <SwitchButton
-          label="Waarschuwing"
+          label={t("notifications.creation.tags.warning")}
           value={viewWarnings}
           onValueChange={(e) => {
             setViewWarnings(e);
@@ -81,7 +81,7 @@ export default function MyNotificationsPage() {
           }}
         />
         <SwitchButton
-          label="Kritiek"
+          label={t("notifications.creation.tags.emergency")}
           value={viewCritical}
           onValueChange={(e) => {
             setViewCritical(e);

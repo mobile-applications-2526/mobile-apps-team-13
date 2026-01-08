@@ -1,6 +1,6 @@
 import {router, useLocalSearchParams} from "expo-router";
 import {useEffect, useState} from "react";
-import {ActivityIndicator, RefreshControl, Text, View,} from "react-native";
+import {ActivityIndicator, Pressable, RefreshControl, Text, View,} from "react-native";
 import {Message} from "@/types/message";
 import Back from "@/components/Back";
 import {ArrowLeft} from "lucide-react-native";
@@ -128,11 +128,14 @@ export default function MessageDetailScreen() {
         }
         keyboardShouldPersistTaps="handled"
       >
-        <View className="absolute left-6 top-8">
-          <Back
-            icon={<ArrowLeft color="#100D08" size={20} />}
-            onBack={() => router.push(HOME_PATH)}
-          />
+        
+        <View className="mb-4">
+          <Pressable
+            onPress={() => router.push(HOME_PATH)}    
+            className="-ml-2 p-2 w-12 h-12 justify-center items-start rounded-full active:bg-gray-100"
+            >
+            <ArrowLeft size={32} color="black" strokeWidth={2.5} />
+          </Pressable>
         </View>
         <View className="items-center mt-2 mb-4">
           <Header

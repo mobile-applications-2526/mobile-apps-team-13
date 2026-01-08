@@ -173,7 +173,7 @@
       "tags": {
         "info": "Informatief",
         "warning": "Waarschuwing",
-        "emergency": "Noodgeval"
+        "emergency": "Kritiek"
       },
       "neighborhood": "Alleen mijn buurt",
       "titleinput": "Titel *",
