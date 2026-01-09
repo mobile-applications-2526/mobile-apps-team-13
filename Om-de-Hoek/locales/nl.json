@@ -148,6 +148,7 @@
       }
     },
     "notifications": {
+      "notifications": "Notificaties",
       "title": "MIJN MELDINGEN",
       "manage": "Mijn meldingen beheren",
       "empty": {
@@ -173,7 +174,7 @@
       "tags": {
         "info": "Informatief",
         "warning": "Waarschuwing",
-        "emergency": "Kritiek"
+        "emergency": "Noodgeval"
       },
       "neighborhood": "Alleen mijn buurt",
       "titleinput": "Titel *",

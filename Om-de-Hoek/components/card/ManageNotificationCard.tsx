@@ -1,10 +1,18 @@
-import {Message, MessageSeverity} from "@/types/message";
-import {useState} from "react";
-import {useTranslation} from "react-i18next";
-import {Alert, Modal, Pressable, Text, TouchableOpacity, TouchableWithoutFeedback, View,} from "react-native";
+import { Message, MessageSeverity } from "@/types/message";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  Alert,
+  Modal,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import LabeledInput from "../settings/LabeledInput";
-import {Check, ChevronDown, ChevronRight, Trash} from "lucide-react-native";
-import {Color} from "@/types/StyleOptions";
+import { Check, ChevronDown, ChevronRight, Trash } from "lucide-react-native";
+import { Color } from "@/types/StyleOptions";
 
 type Props = {
   notification: Message;
@@ -213,13 +221,13 @@ const ManageNotificationCard = ({
         >
           <View className="flex-col">
             <Text className="text-black font-comfortaa-bold text-base">
-              {notification.severity}
+              {t(`severity.${notification.severity.toLowerCase()}`)}
             </Text>
             <Text className="text-gray font-comfortaa-semibold text-md">
               {notification.title}
             </Text>
           </View>
-          <ChevronRight size={20} color="#CBD5E1" />
+          <ChevronRight size={20} color="#828282" />
         </TouchableOpacity>
       )}
     </View>

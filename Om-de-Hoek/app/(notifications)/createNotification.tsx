@@ -22,7 +22,6 @@ import { useAuth } from "@/components/auth/context/AuthContext";
 import userService from "@/services/userService";
 import { Neighborhood } from "@/types/neighborhood";
 import { useTranslation } from "react-i18next";
-import Header from "@/components/Header";
 import LabeledInput from "@/components/settings/LabeledInput";
 import messageService from "@/services/messageService";
 import { MessageSeverity } from "@/types/message";
