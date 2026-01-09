@@ -81,8 +81,8 @@
       "lowercase": "Minimal one lowercase letter "
     },
     "neighborhood": {
-      "title": "Neighborhoods in",
-      "subtitle": "the neighborhood",
+      "title": "the neighborhood",
+      "subtitle": "Neighborhoods in",
       "participants": "members",
       "join": "Join",
       "leave": "Leave",
@@ -143,11 +143,12 @@
         "action": "Join a neighborhood"
       },
       "join": {
-        "title": "Join",
-        "subtitle": "a neighborhood"
+        "title": "Neighborhood",
+        "subtitle": "Participate in a"
       }
     },
     "notifications": {
+      "notifications": "Notifications",
       "title": "MY NOTIFICATIONS",
       "manage": "Manage my notifications",
       "empty": {
@@ -171,7 +172,7 @@
       "notification": "NOTIFICATIONS",
       "type": "Type of notification",
       "tags": {
-        "info": "Informative",
+        "info": "Informational",
         "warning": "Warning",
         "emergency": "Emergency"
       },

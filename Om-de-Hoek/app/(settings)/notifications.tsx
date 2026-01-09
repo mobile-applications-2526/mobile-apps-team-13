@@ -62,7 +62,7 @@ export default function MyNotificationsPage() {
 
       <View className="mt-6 space-y-4">
         <Text className="text-black text-base font-comfortaa-bold">
-          Notificaties
+          {t("settings.notifications.notifications")}
         </Text>
         <SwitchButton
           label={t("notifications.creation.tags.info")}
